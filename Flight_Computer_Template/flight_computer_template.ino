@@ -40,7 +40,7 @@ int value = 0;
  * 3. Unpowered Flight: Burnout has occured (engines are no longer powering rocket)
  * 4. Ballistic Descent: Apogee has been reached
  * 5. Chute Descent: Pyros have fired and parachute is deployed
- * 6. Landing: Rocket is back on the ground
+ * 6. Land Safe: Rocket is back on the ground
  * 
  * For all our functions to access
  * Access states by typing rocket.yourStateHere
