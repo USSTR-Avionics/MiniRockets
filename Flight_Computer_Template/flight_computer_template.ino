@@ -29,6 +29,7 @@ float ax, ay, az;
 float timer = 0.0;
 float altitude = 0.0;
 int value = 0;
+unsigned long startingTime = 0;
 
 
 
@@ -94,13 +95,9 @@ void initAll() {
 
   //----LED----
   //Initialize
-
-  //Check Value
+  LED_initSensor();
   
   //----Buzzer----
-  //Initialize
-
-  //Check Value
 
   //----LoRa Module Placeholder----
   //Initialize
@@ -125,15 +122,22 @@ void groundIdleMode(bool state)
   if (state)
   {
 
-    //LED = GREEN
-    //BUZZER = BUZZING
+    ledON("GREEN");
+    //buzzerOn();
     
     // GET ACCELERATION FROM IMU
     if (abs(az) > LIFTOFF_THRESHOLD)
     {
-      // START TIMER
-      if ( (timer > 0.1) && (abs(az) > LIFTOFF_THRESHOLD))
+      // START TIMER: starting time is always 0 when running the code for the first time
+      if (startingTime = 0UL)
       {
+        startingTime = millis();
+      }
+      // new time - starting time > 0.1 sec and accelation > threshold
+      if ( (millis() - startingTime > 100) && (abs(az) > LIFTOFF_THRESHOLD))
+      {
+        // reset the timer and go to next state
+        startingTime = 0;
         rocket.poweredFlight = true;
         rocket.groundIdle = false;
       } 
@@ -149,9 +153,16 @@ void poweredFlightMode(bool state)
   {
     if (abs(az) < LIFTOFF_THRESHOLD)
     {
-      // START TIMER
-      if ( (timer > 0.1) && (abs(az) < LIFTOFF_THRESHOLD))
+      // START TIMER: starting time is always 0 when running the code for the first time
+      if (startingTime = 0UL)
       {
+        startingTime = millis();
+      }
+      // new time - starting time > 0.1 sec and accelation > threshold
+      if ( (millis() - startingTime > 100) && (abs(az) < LIFTOFF_THRESHOLD))
+      {
+        // reset the timer and go to next state
+        startingTime = 0;
         rocket.unpoweredFlight = true;
         rocket.poweredFlight = false;
       } 
@@ -193,12 +204,19 @@ void ballisticDescentMode(bool state)
       // Add a backup deployment height
       if (altitude < 304.8)
       {
-        // START TIMER
-        if ((timer > 0.1) && (altitude < 304.8))
-        {
+        // START TIMER: starting time is always 0 when running the code for the first time
+      if (startingTime = 0UL)
+      {
+        startingTime = millis();
+      }
+      // new time - starting time > 0.1 sec and accelation > threshold
+      if ( (millis() - startingTime > 100) && (altitude < 304.8))
+      {
+        // reset the timer and go to next state
+          startingTime = 0;
           rocket.chuteDescent = true;
           rocket.ballisticDescent = false;
-        }
+      }
         
       }
     }
@@ -213,12 +231,21 @@ void chuteDescentMode(bool state)
     // DEPLOY PARACHUTE
     if (altitude < 5)
       {
+        
         // START TIMER
-        if ((timer > 0.1) && (altitude < 5))
-        {
+        // START TIMER: starting time is always 0 when running the code for the first time
+      if (startingTime = 0UL)
+      {
+        startingTime = millis();
+      }
+      // new time - starting time > 0.1 sec and accelation > threshold
+      if ( (millis() - startingTime > 100) && (altitude < 5))
+      {
+        // reset the timer and go to next state
+          startingTime = 0;
           rocket.landSafe = true;
           rocket.chuteDescent = false;
-        }
+      }
       }
   
   }
@@ -232,8 +259,8 @@ void landSafeMode(bool state)
       // CHECK IF SD CARD CAN STILL BE WRITTEN TO
       // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
       // WRITE TO SD CARD
-      // BUZZER ON
-      // TURN ON GREEN LED
+      buzzerOn();
+      ledON("GREEN");
       
     }
 }
@@ -253,7 +280,6 @@ void setup() {
 }
 
 void loop() {
-  
   groundIdleMode(rocket.groundIdle);
   poweredFlightMode(rocket.poweredFlight);
   unpoweredFlightMode(rocket.unpoweredFlight);
@@ -261,6 +287,7 @@ void loop() {
   chuteDescentMode(rocket.chuteDescent);
   landSafeMode(rocket.landSafe);
   dataReadout();
+  
   
   // This is just here to test integration with C++
   /*
