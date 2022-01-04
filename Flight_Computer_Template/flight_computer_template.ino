@@ -123,7 +123,7 @@ void groundIdleMode(bool state)
   {
 
     ledON("GREEN");
-    //buzzerOn();
+    buzzerOn();
     
     // GET ACCELERATION FROM IMU
     if (abs(az) > LIFTOFF_THRESHOLD)
