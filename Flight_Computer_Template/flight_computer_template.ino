@@ -27,6 +27,7 @@ int decentCheck;
 float pressure = 0.0;
 float ax, ay, az;
 float timer = 0.0;
+int sensor1 = 0;
 float altitude = 0.0;
 int value = 0;
 unsigned long startingTime = 0;
@@ -124,6 +125,7 @@ void groundIdleMode(bool state)
 
     ledON("GREEN");
     buzzerOn();
+    sensor1 = analogRead(A0);
     
     // GET ACCELERATION FROM IMU
     if (abs(az) > LIFTOFF_THRESHOLD)
@@ -266,16 +268,18 @@ void landSafeMode(bool state)
 }
 
 void dataReadout() {
-  Serial.print(pressure);
-  Serial.print(",");
-  Serial.print(altitude);
-  delay(500);
+  // Sensor Interface Display Code
+  char text[40];
+  sprintf(text,"%d,%d,%d",sensor1,pressure,altitude);
+  Serial.println(text);
+  // Delay 10 ms -> approximately 100 samples/sec ASSUMING there is no blocking code
+  delay(10);
 }
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
-  Serial.println("setup");
+  //Serial.println("setup");
   initAll();
 }
 
