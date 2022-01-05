@@ -11,7 +11,7 @@
  * Set Up Instructions: 
  * 1. LED input pin order is BLUE, GREEN, CATHODE, RED with CATHODE having a longer wire
  * 2. Connect BLUE to 220 ohm resistor, GREEM to a 220 ohm resistor, and RED to a 220 ohm resistor
- * 3. Connect BLUE to pin 3, GREEN to pin 5, RED to pin 6, and CATHODE to GND
+ * 3. Connect BLUE to pin 3 (PIN 13 ON TEENSY), GREEN to pin 5 (PIN 14 ON TEENSY), RED to pin 6 (PIN 15 ON TEENSY), and CATHODE to GND
  * 
  * Functions:
  * ledON(color): changes color to "BLUE", "GREEN",OR "RED" based on color parameter
@@ -19,9 +19,9 @@
  */
 
 // Define Pins
-  #define BLUE 3
-  #define GREEN 5
-  #define RED 6
+  #define BLUE 13
+  #define GREEN 14
+  #define RED 15
 
 /*void setup() {
   
