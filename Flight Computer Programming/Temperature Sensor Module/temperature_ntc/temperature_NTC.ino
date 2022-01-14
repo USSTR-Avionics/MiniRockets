@@ -12,7 +12,7 @@
  *   c1,c2,c3: Constants used in the steinhart hart equation to calculate temperature
  *  
  *  Steps:
- *  1. Connect 5V pin on microcontroller to the NTC thermistor
+ *  1. Connect 5V pin on microcontroller to the NTC thermistor (or 3.3 V works fine)
  *  2. Connect the NTC thermistor to a 10 kohm resistor
  *  3. Connect the resistor to ground
  *  4. Connect an analog pin (here we use A0) to measure the voltage between the thermistor and resistor
@@ -42,17 +42,17 @@
  */
 
 
-int tempPin = 0;
+int tempPin = A12;
 
-void setup()
+/*void setup()
 {
   Serial.begin(9600);
-  Serial.println("TEST");
+  //Serial.println("TEST");
 
-}
-void loop()
-{
-  int tempReading = analogRead(tempPin);
+}*/
+
+void temperatureNTC(int pin) {
+  int tempReading = analogRead(pin);
   // Find ln of R2 by ln of voltage divider equation R2 = R1* (Vin/Vout-1)
   double lnR2 = log(10000.0 * ((1024.0 / tempReading - 1)));
   // Convert resistance to temperature using steinhart-hart equation
@@ -61,5 +61,11 @@ void loop()
   float tempC = tempK - 273.15;            
   // Display Temperature in C
   Serial.println(tempC);
-  delay(500);
+  //delay(500);
 }
+
+/*void loop()
+{
+  temperatureNTC(26);
+  temperatureNTC(27);
+}*/

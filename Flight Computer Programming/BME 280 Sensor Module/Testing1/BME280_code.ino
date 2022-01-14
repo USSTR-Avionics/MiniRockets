@@ -22,7 +22,7 @@
 */
 // Date - November 9, 2021
 // Authors - Atharva, Colton
-s
+
 #include <Wire.h>
 
 #include "SparkFunBME280.h"

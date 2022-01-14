@@ -27,11 +27,12 @@ int decentCheck;
 float pressure = 0.0;
 float ax, ay, az;
 float timer = 0.0;
-int sensor1 = 0;
+float sensor1 = 0;
 float altitude = 0.0;
 int value = 0;
 unsigned long startingTime = 0;
-
+float temp_int = 0;
+float temp_ext = 0;
 
 
 
@@ -125,7 +126,9 @@ void groundIdleMode(bool state)
 
     ledON("GREEN");
     buzzerOn();
-    sensor1 = analogRead(A0);
+    sensor1 = 20;
+    temp_int = temperatureNTCSend(26);
+    temp_ext = temperatureNTCSend(27);
     
     // GET ACCELERATION FROM IMU
     if (abs(az) > LIFTOFF_THRESHOLD)
@@ -270,7 +273,7 @@ void landSafeMode(bool state)
 void dataReadout() {
   // Sensor Interface Display Code
   char text[40];
-  sprintf(text,"%d,%d,%d",sensor1,pressure,altitude);
+  sprintf(text,"%f,%f,%f",sensor1,temp_int,temp_ext);
   Serial.println(text);
   // Delay 10 ms -> approximately 100 samples/sec ASSUMING there is no blocking code
   delay(10);
