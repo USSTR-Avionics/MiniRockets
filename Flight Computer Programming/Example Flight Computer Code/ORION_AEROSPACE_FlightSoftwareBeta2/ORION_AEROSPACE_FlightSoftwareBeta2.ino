@@ -6,7 +6,7 @@
 #include <SparkFunBME280.h> //library from https://github.com/sparkfun/SparkFun_BME280_Arduino_Library
 //Note this is a port of the original PID LIB and still needs testing 
 #include "OA_PID.h"
-#include <Servo.h>
+
 //----------------------------------------------
 //--------------PRE-PROCESSOR VARIABLES---------
 //this is where you will want to define your own pin numbers

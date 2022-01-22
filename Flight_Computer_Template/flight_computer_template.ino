@@ -8,7 +8,7 @@
 
 //-------------PRE-PROCESSOR VARIABLES-----------
 //* NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
-#define LIFTOFF_THRESHOLD 1.15f
+#define LIFTOFF_THRESHOLD 15//1.15f
 
 
 //-------------LIBRARIES AND MODULES-------------
@@ -25,7 +25,7 @@ int decentCheck;
 
 // For Testing, Remove later
 float pressure = 0.0;
-float ax, ay, az;
+//float ax, ay, az;
 float timer = 0.0;
 float sensor1 = 0;
 float altitude = 0.0;
@@ -33,6 +33,7 @@ int value = 0;
 unsigned long startingTime = 0;
 float temp_int = 0;
 float temp_ext = 0;
+
 
 
 
@@ -72,7 +73,7 @@ void initAll() {
   
   //----IMU----
   //Initialize
-
+  initMPU();
   //Check Value
 
   //----BME280----
@@ -131,21 +132,28 @@ void groundIdleMode(bool state)
     temp_ext = temperatureNTCSend(27);
     
     // GET ACCELERATION FROM IMU
+    getAccel();
+    getGyro();
+    //Serial.print(startingTime);
+   
     if (abs(az) > LIFTOFF_THRESHOLD)
     {
+      
       // START TIMER: starting time is always 0 when running the code for the first time
-      if (startingTime = 0UL)
+      if (startingTime == 0UL)
       {
+        //Serial.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         startingTime = millis();
       }
       // new time - starting time > 0.1 sec and accelation > threshold
-      if ( (millis() - startingTime > 100) && (abs(az) > LIFTOFF_THRESHOLD))
+      if ( (millis() - startingTime > 2000) && (abs(az) > LIFTOFF_THRESHOLD))
       {
         // reset the timer and go to next state
         startingTime = 0;
         rocket.poweredFlight = true;
         rocket.groundIdle = false;
       } 
+     
     }
   }
 
@@ -153,9 +161,12 @@ void groundIdleMode(bool state)
 
 void poweredFlightMode(bool state)
 {
-
+  
   if (state)
   {
+    ledON("BLUE");
+    getAccel();
+    getGyro();
     if (abs(az) < LIFTOFF_THRESHOLD)
     {
       // START TIMER: starting time is always 0 when running the code for the first time
@@ -164,7 +175,7 @@ void poweredFlightMode(bool state)
         startingTime = millis();
       }
       // new time - starting time > 0.1 sec and accelation > threshold
-      if ( (millis() - startingTime > 100) && (abs(az) < LIFTOFF_THRESHOLD))
+      if ( (millis() - startingTime > 5000) && (abs(az) < LIFTOFF_THRESHOLD))
       {
         // reset the timer and go to next state
         startingTime = 0;
@@ -196,6 +207,9 @@ void unpoweredFlightMode(bool state)
 {
   if (state)
   {
+    ledON("RED");
+    getAccel();
+    getGyro();
     apogeeCheck();
   }
 }
@@ -273,8 +287,32 @@ void landSafeMode(bool state)
 void dataReadout() {
   // Sensor Interface Display Code
   char text[40];
-  sprintf(text,"%f,%f,%f",sensor1,temp_int,temp_ext);
-  Serial.println(text);
+  //sprintf(text,"%f,%f,%f",sensor1,temp_int,temp_ext);
+  /*Serial.print(temp_int);
+  Serial.print(",");
+  Serial.print(temp_ext);
+  Serial.print(",");
+  Serial.print(ax);
+  Serial.print(",");
+  Serial.print(ay);
+  Serial.print(",");*/
+  Serial.print(axglob);
+  Serial.print(",");
+  Serial.print(ayglob);
+  Serial.print(",");
+  Serial.print(azglob);
+  Serial.print(",");
+  Serial.print(millis());
+  Serial.print(",");
+  Serial.print(temp);
+  Serial.print(",");
+  Serial.print(gxglob);
+  Serial.print(",");
+  Serial.print(gyglob);
+  Serial.print(",");
+  Serial.print(gzglob);
+  Serial.println();
+  //Serial.println(text);
   // Delay 10 ms -> approximately 100 samples/sec ASSUMING there is no blocking code
   delay(10);
 }
@@ -282,7 +320,7 @@ void dataReadout() {
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
-  //Serial.println("setup");
+  Serial.println("setup");
   initAll();
 }
 
