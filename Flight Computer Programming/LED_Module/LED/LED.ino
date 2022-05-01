@@ -10,8 +10,8 @@
  * 
  * Set Up Instructions: 
  * 1. LED input pin order is BLUE, GREEN, CATHODE, RED with CATHODE having a longer wire
- * 2. Connect BLUE to 220 ohm resistor, GREEM to a 220 ohm resistor, and RED to a 220 ohm resistor
- * 3. Connect BLUE to pin 3, GREEN to pin 5, RED to pin 6, and CATHODE to GND
+ * 2. Connect BLUE to 10 ohm resistor, GREEM to a 10 ohm resistor, and RED to a 100 ohm resistor
+ * 3. Connect BLUE to pin 38, GREEN to pin 39, RED to pin 40, and CATHODE to GND
  * 
  * Functions:
  * ledON(color): changes color to "BLUE", "GREEN",OR "RED" based on color parameter
@@ -19,17 +19,16 @@
  */
 
 // Define Pins
-  #define BLUE 3
-  #define GREEN 5
-  #define RED 6
+  #define BLUE 38
+  #define GREEN 39
+  #define RED 40
 
-/*void setup() {
-  
-  initSensor();
+void setup() {
+  LED_initSensor();
 }
-*/
 
-/*
+
+
 void loop() {
   delay(1000);
   ledON("RED");
@@ -43,8 +42,7 @@ void loop() {
   ledON("BLUE");
   delay(1000);
   ledOFF();
-  delay(1000);
-}*/
+}
 
 void LED_initSensor() {
   pinMode(RED, OUTPUT);
@@ -54,25 +52,25 @@ void LED_initSensor() {
 
 void ledON(String color) {
   if (color == "RED") {
-    analogWrite(RED,255);
-    analogWrite(GREEN,0);
-    analogWrite(BLUE,0);
+    digitalWrite(RED,HIGH);
+    digitalWrite(GREEN,LOW);
+    digitalWrite(BLUE,LOW);
   }
   if (color == "GREEN") {
-    analogWrite(RED,0);
-    analogWrite(GREEN,255);
-    analogWrite(BLUE,0);
+    digitalWrite(RED,LOW);
+    digitalWrite(GREEN,HIGH);
+    digitalWrite(BLUE,LOW);
   }
   if (color == "BLUE") {
-    analogWrite(RED,0);
-    analogWrite(GREEN,0);
-    analogWrite(BLUE,255);
+    digitalWrite(RED,0);
+    digitalWrite(BLUE,HIGH);
+    digitalWrite(GREEN,LOW);
   }
   
 }
 
 void ledOFF() {
-  analogWrite(RED,0);
-  analogWrite(GREEN,0);
-  analogWrite(BLUE,0);
+  digitalWrite(RED,LOW);
+  digitalWrite(GREEN,LOW);
+  digitalWrite(BLUE,LOW);
 }
