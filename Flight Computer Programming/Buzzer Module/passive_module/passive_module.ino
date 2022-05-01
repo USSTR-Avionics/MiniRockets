@@ -21,9 +21,9 @@
  
 #include "pitches.h"
 
-/*void setup() {
+void setup() {
  
-}*/
+}
 
 void buzzerOn() {
   // notes in the melody:
@@ -32,10 +32,10 @@ void buzzerOn() {
   int duration = 500;
   // We only use melody[1] here to not have too long of a delay
   // pin8 output the voice, every scale is 0.5 sencond
-  tone(8, melody[1], duration);
+  tone(34, melody[1], duration);
   delay(500);
 }
  
-/*void loop() {
+void loop() {
   buzzerOn();
-}*/
+}
