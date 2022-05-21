@@ -1,4 +1,4 @@
-#include <MPU6050.h> //library
+//#include <MPU6050.h> //library
 
 #define MPU_ADDRESS 0x68
 #include "globalvars.h"
@@ -14,13 +14,13 @@ float temp = 0.0;
 uint32_t current_update = 0;
 uint32_t last_update = 0;
 
-MPU6050 mpu;
+//MPU6050 mpu;
 
 
 
 //initialize the mpu
 bool initMPU() {
-  if (mpu.begin(MPU6050_SCALE_250DPS, MPU6050_RANGE_4G)) {
+//  if (mpu.begin(MPU6050_SCALE_250DPS, MPU6050_RANGE_4G)) {
     //Serial.println("MPU has been initialized...");
     mpu.calibrateGyro();
     mpu.setAccelOffsetX(-2375);
@@ -54,7 +54,7 @@ void getGyro() {
 }
 
 void getTemp() {
-  temp = mpu.readTemperature();
+//  temp = mpu.readTemperature();
 }
 
 //this simply integrates our gyro values into usable roll yaw and pitch
