@@ -8,12 +8,13 @@
 
 //-------------PRE-PROCESSOR VARIABLES-----------
 //* NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
-#define LIFTOFF_THRESHOLD 15//1.15f
+#define LIFTOFF_THRESHOLD 9.66//1.15f (had 15)
 
 
 //-------------LIBRARIES AND MODULES-------------
 //#include "Tester.h"
-
+#include <Wire.h>
+#include "SparkFun_Qwiic_KX13X.h"
 
 //-------------OBJECT DECLARATION----------------
 //Tester Test1(5);
@@ -36,6 +37,14 @@ unsigned long startingTime = 0;
 float temp_int = 0;
 float temp_ext = 0;
 
+
+//QwiicKX132 kxAccel;
+QwiicKX134 kxAccel; // Uncomment this if using the KX134 - check your board
+                      //if unsure.  
+outputData kx134_accel; // This will hold the accelerometer's output. 
+float kx134_accel_x;
+float kx134_accel_y;
+float kx134_accel_z;
 
 
 
@@ -67,6 +76,9 @@ void initAll() {
   bool allValid = false;
   while (allValid == false)
   {
+
+  //----KX134_ACCEL----
+  initKX134();
   
   //----GPS_NEO6M----
   //Initialize
@@ -136,27 +148,39 @@ void groundIdleMode(bool state)
     sensor1 = 20;
     
     // GET ACCELERATION FROM IMU
+    getKX134_Accel();
+    Serial.print(kx134_accel_x);
+    Serial.print(",");
+    Serial.print(kx134_accel_y);
+    Serial.print(",");
+    Serial.println(kx134_accel_z);
     //getAccel();
     //getGyro();
     //Serial.print(startingTime);
-   
-    if (abs(az) > LIFTOFF_THRESHOLD)
+   Serial.print(millis());
+    if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
     {
-      
+      Serial.println("IT IS GREATER");
       // START TIMER: starting time is always 0 when running the code for the first time
       if (startingTime == 0UL)
       {
-        //Serial.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        Serial.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         startingTime = millis();
       }
+      // Changed from 2000 to 500
       // new time - starting time > 0.1 sec and accelation > threshold
-      if ( (millis() - startingTime > 2000) && (abs(az) > LIFTOFF_THRESHOLD))
+      if ( (millis() - startingTime > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
       {
         // reset the timer and go to next state
-        startingTime = 0;
+        startingTime = 0UL;
         rocket.poweredFlight = true;
         rocket.groundIdle = false;
       } 
+      else
+      {
+        startingTime == 0UL;
+      }
+      
      
     }
   }
@@ -172,19 +196,25 @@ void poweredFlightMode(bool state)
     // Debug Start
     Serial.println("POWERED FLIGHT");
     // Debug End
-    
     ledON("BLUE");
-    //getAccel();
+    getKX134_Accel();
+    Serial.print(kx134_accel_x);
+    Serial.print(",");
+    Serial.print(kx134_accel_y);
+    Serial.print(",");
+    Serial.println(kx134_accel_z);
     //getGyro();
-    if (abs(az) < LIFTOFF_THRESHOLD)
+    if (abs(kx134_accel_z) < LIFTOFF_THRESHOLD)
     {
+      Serial.print("LESS THAN");
       // START TIMER: starting time is always 0 when running the code for the first time
       if (startingTime = 0UL)
       {
         startingTime = millis();
       }
       // new time - starting time > 0.1 sec and accelation > threshold
-      if ( (millis() - startingTime > 5000) && (abs(az) < LIFTOFF_THRESHOLD))
+      // Changed from 5000 to 100
+      if ( (millis() - startingTime > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
       {
         // reset the timer and go to next state
         startingTime = 0;
@@ -218,7 +248,13 @@ void unpoweredFlightMode(bool state)
   {
     Serial.println("UNPOWERED FLIGHT");
     ledON("RED");
-    //getAccel();
+    // GET ACCELERATION FROM IMU
+    getKX134_Accel();
+    Serial.print(kx134_accel_x);
+    Serial.print(",");
+    Serial.print(kx134_accel_y);
+    Serial.print(",");
+    Serial.println(kx134_accel_z);
     //getGyro();
     apogeeCheck();
   }
@@ -330,6 +366,7 @@ void dataReadout() {
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
+  Wire.begin();
   Serial.println("setup");
   initAll();
 }
