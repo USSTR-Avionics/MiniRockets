@@ -1,4 +1,26 @@
-
+/*
+ * KX134 Module
+ * 
+ * Product Link: https://www.sparkfun.com/products/17589
+ * 
+ * Inputs: GND, 3V3, SDA, SCL, ADR, CS
+ * 
+ * Outputs:
+ * - rawTemp
+ * - rawPressure 
+ * - realTemperature
+ * - realPressure
+ * - absoluteAltitude
+ * - realAltitude
+ * 
+ * Set Up Instructions: 
+ * 1. Connect 3V3 to 3V3 pin and GND to GND
+ * 2. Connect SCL to SCL (PIN 19 ON TEENSY) and SDA to SDA (PIN 18 ON TEENSY)
+ *
+ * Functions:
+ * bool initKX134(): initializes the sensor (0=error, 1=success)
+ * getKX134_Accel(): updates kx134_accel, kx134_accel_x, kx134_accel_y, kx134_accel_z global variables
+ */
 
 
 bool initKX134() {

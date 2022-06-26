@@ -1,5 +1,5 @@
 /*************************************************
- * Public Constants
+ * Public Constants For Buzzer Module
  *************************************************/
  
 #define NOTE_B0  31

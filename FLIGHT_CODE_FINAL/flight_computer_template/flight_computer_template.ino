@@ -3,10 +3,15 @@
    Iteration 2
 
    Modules Included:
+   - LED
+   - BUZZER
+   - KX134 ACCELEROMETER
+   - BNO055 IMU
+   - MS5611 PRESSURE SENSOR
+   - MICROSD
+   - LoRa TX
 
 */
-
-
 
 //-------------PRE-PROCESSOR VARIABLES-----------
 //* NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
@@ -14,10 +19,11 @@
 
 
 //-------------LIBRARIES AND MODULES-------------
-//#include "Tester.h"
 #include <Wire.h>
-//#include <SD.h>
+#include <SD.h>
 //#include <SPI.h>
+#include <SPI.h>
+#include <RH_RF95.h>
 #include "SparkFun_Qwiic_KX13X.h"
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
@@ -25,24 +31,21 @@
 #include <MS5611.h>
 
 //-------------OBJECT DECLARATION----------------
-//Tester Test1(5);
+MS5611 ms5611;
+//QwiicKX132 kxAccel;
+QwiicKX134 kxAccel; // Uncomment this if using the KX134 - check your board
+//if unsure.
 
 //-------------VARIABLES-------------------------
 
 float initial_altitude = 0.0;
 int decentCheck;
-
 float timer = 0.0;
+float transmit_timer = 0.0;
 float sensor1 = 0;
 float altitude = 0.0;
-
 unsigned long startingTime = 0;
 float x =1;
-
-
-//QwiicKX132 kxAccel;
-QwiicKX134 kxAccel; // Uncomment this if using the KX134 - check your board
-//if unsure.
 outputData kx134_accel; // This will hold the accelerometer's output.
 float kx134_accel_x;
 float kx134_accel_y;
@@ -70,18 +73,14 @@ float bno055_calib_sys;
 float bno055_calib_gyro;
 float bno055_calib_accel;
 float bno055_calib_mag;
-
-
-MS5611 ms5611;
 uint32_t rawTemp;
 uint32_t rawPressure;
 double realTemperature;
 long realPressure;
 float absoluteAltitude;
 float relativeAltitude;
-
-
 double referencePressure;
+bool debug = true;
 
 /*
    STATE MACHINE:
@@ -114,15 +113,10 @@ void initAll() {
     //----KX134_ACCEL----
     initKX134();
 
-    //----GPS_NEO6M----
-    //Initialize
-
-    //Check Value
-    bool gps_valid = true;
-
     //----IMU----
     //Initialize
     initBNO055();
+    
     //Check Value
 
     //----BME280----
@@ -138,7 +132,7 @@ void initAll() {
 
     //----MicroSD----
     //Initialize
-    //initMicroSD();
+    initMicroSD();
 
     //Check Value
 
@@ -155,14 +149,15 @@ void initAll() {
 
     //----LoRa Module Placeholder----
     //Initialize
-
+    init_RFM95_TX();
+    
     //Check Value
 
     //----Parachute Deployment Placeholder----
     //Initialize
 
     //Check Value
-    allValid = gps_valid;
+    allValid = true;
     if (allValid == true) {
       rocket.groundIdle = true;
     }
@@ -175,32 +170,28 @@ void groundIdleMode(bool state)
 
   if (state)
   {
-    // Debug Start
 
+
+    if (debug == true) 
+    {
     Serial.println("GROUND IDLE");
-    // Debug End
+    }
+    
 
     ledON("GREEN");
     //buzzerOn();
-    sensor1 = 20;
-
-    // GET ACCELERATION FROM IMU
     getKX134_Accel();
     get_bno055_data();
-    //getAccel();
-    //getGyro();
-    //Serial.print(startingTime);
-    //Serial.print(millis());
+
+    
     if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
     {
-      //Serial.println("IT IS GREATER");
-      // START TIMER: starting time is always 0 when running the code for the first time
+      // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
       if (startingTime == 0UL)
       {
-        //Serial.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         startingTime = millis();
       }
-      // Changed from 2000 to 500
+      // DEBUG: Change from 2000 to 100
       // new time - starting time > 0.1 sec and accelation > threshold
       if ( (millis() - startingTime > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
       {
@@ -209,6 +200,7 @@ void groundIdleMode(bool state)
         rocket.poweredFlight = true;
         rocket.groundIdle = false;
       }
+      // Otherwise restart the starting time since there was an issue
       else
       {
         startingTime == 0UL;
@@ -225,23 +217,28 @@ void poweredFlightMode(bool state)
 
   if (state)
   {
+
+
+    if (debug == true) 
+    {
+      Serial.println("POWERED FLIGHT");
+    }
+
     dataReadout();
-    // Debug Start
-    //Serial.println("POWERED FLIGHT");
-    // Debug End
     ledON("BLUE");
-    getKX134_Accel();
-    //getGyro();
+
+    
     if (abs(kx134_accel_z) < LIFTOFF_THRESHOLD)
     {
-      //Serial.print("LESS THAN");
-      // START TIMER: starting time is always 0 when running the code for the first time
+
+
+      // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
       if (startingTime = 0UL)
       {
         startingTime = millis();
       }
       // new time - starting time > 0.1 sec and accelation > threshold
-      // Changed from 5000 to 100
+      //  DEBUG: Change from 5000 to 100
       if ( (millis() - startingTime > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
       {
         // reset the timer and go to next state
@@ -259,14 +256,13 @@ void poweredFlightMode(bool state)
 // can also compare using timer
 // example: current_alt < (alt-1sec) -> Descending
 void apogeeCheck() {
-  getMS5611_Values();
-  float last_alt = altitude;
+  float last_alt = absoluteAltitude;
   if (decentCheck > 10) {
     rocket.ballisticDescent = true;
     rocket.unpoweredFlight = false;
   }
   // GET BMP data on this line
-  if (last_alt - altitude > 2) {
+  if (last_alt - absoluteAltitude > 2) {
     decentCheck++;
   }
 }
@@ -275,15 +271,16 @@ void unpoweredFlightMode(bool state)
 {
   if (state)
   {
+
+    if (debug == true) 
+    {
+          Serial.println("UNPOWERED FLIGHT");
+    }
     
     dataReadout();
-    Serial.println("UNPOWERED FLIGHT");
     ledON("RED");
-    // GET ACCELERATION FROM IMU
-    //getKX134_Accel();
-
-    //getGyro();
-    //apogeeCheck();
+    apogeeCheck();
+    
   }
 }
 
@@ -291,6 +288,11 @@ void ballisticDescentMode(bool state)
 {
   if (state)
   {
+
+        if (debug == true) 
+        {
+          Serial.println("BALLISTIC DESCENT");
+        }
 
     // 1000 ft = 304.8 m
     // Add a backup deployment height
@@ -429,7 +431,25 @@ void dataReadout() {
   Serial.print(",");
   Serial.println(relativeAltitude);
   delay(1);
-  //writeToMicroSD();
+
+      // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
+      if (transmit_timer == 0UL)
+      {
+        transmit_timer = millis();
+      }
+      
+      // new time - starting time > 5 sec and accelation > threshold
+      if ( millis() - transmit_timer > 5000 )
+      {
+        // reset the timer and go to next state
+        transmit_timer = 0UL;
+        writeToMicroSD();
+        sendPacket();
+        
+      }
+
+
+  
   x=x+1;
 }
 
@@ -442,7 +462,7 @@ void setup() {
 }
 
 void loop() {
-      //dataReadout();
+  //dataReadout();
   groundIdleMode(rocket.groundIdle);
   poweredFlightMode(rocket.poweredFlight);
   unpoweredFlightMode(rocket.unpoweredFlight);
