@@ -20,6 +20,10 @@
 #include <SD.h>
 #include <SPI.h>
 
+float x =1;
+float y = 76.22;
+float z = 1.23456;
+
 const int chipSelect = BUILTIN_SDCARD;
 
 
@@ -62,7 +66,12 @@ void writeToMicroSD() {
       dataString += ",";
     }
   }*/
-  dataString = String(analogRead(A9));
+  
+  dataString = "";
+  dataString.concat(x);
+  dataString.concat(y);
+  dataString.concat(z);
+  x=x+1;
 
   // open the file.
   File dataFile = SD.open("datalog.txt", FILE_WRITE);

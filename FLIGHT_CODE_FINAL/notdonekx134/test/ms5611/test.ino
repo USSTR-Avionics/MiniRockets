@@ -20,7 +20,7 @@ void loop() {
   Serial.print(",");
   Serial.print(absoluteAltitude);
   Serial.print(",");
-  Serial.print(relativeAltitude);
+  Serial.println(relativeAltitude);
 
 
   

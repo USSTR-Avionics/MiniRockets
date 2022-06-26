@@ -53,7 +53,7 @@ void LED_initSensor() {
 }
 
 void ledON(String color) {
-  Serial.println(color);
+  //Serial.println(color);
   if (color == "RED") {
     digitalWrite(RED,1);
     digitalWrite(GREEN,0);

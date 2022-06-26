@@ -1,20 +1,28 @@
 /*
- * USST Avionics Flight Computer
- * Iteration 2
- * 
- * Modules Included:
- * 
- */
+   USST Avionics Flight Computer
+   Iteration 2
+
+   Modules Included:
+
+*/
+
+
 
 //-------------PRE-PROCESSOR VARIABLES-----------
 //* NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
-#define LIFTOFF_THRESHOLD 9.66//1.15f (had 15)
+#define LIFTOFF_THRESHOLD 9.9//1.15f (had 15)
 
 
 //-------------LIBRARIES AND MODULES-------------
 //#include "Tester.h"
 #include <Wire.h>
+//#include <SD.h>
+//#include <SPI.h>
 #include "SparkFun_Qwiic_KX13X.h"
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include <utility/imumaths.h>
+#include <MS5611.h>
 
 //-------------OBJECT DECLARATION----------------
 //Tester Test1(5);
@@ -24,43 +32,69 @@
 float initial_altitude = 0.0;
 int decentCheck;
 
-// For Testing, Remove later
-float pressure = 0.0;
-float ax = 0;
-float ay = 0;
-float az = 0;
 float timer = 0.0;
 float sensor1 = 0;
 float altitude = 0.0;
-int value = 0;
+
 unsigned long startingTime = 0;
-float temp_int = 0;
-float temp_ext = 0;
+float x =1;
 
 
 //QwiicKX132 kxAccel;
 QwiicKX134 kxAccel; // Uncomment this if using the KX134 - check your board
-                      //if unsure.  
-outputData kx134_accel; // This will hold the accelerometer's output. 
+//if unsure.
+outputData kx134_accel; // This will hold the accelerometer's output.
 float kx134_accel_x;
 float kx134_accel_y;
 float kx134_accel_z;
+float bno055_accel_x;
+float bno055_accel_y;
+float bno055_accel_z;
+float bno055_orient_x;
+float bno055_orient_y;
+float bno055_orient_z;
+float bno055_gyro_x;
+float bno055_gyro_y;
+float bno055_gyro_z;
+float bno055_linear_x;
+float bno055_linear_y;
+float bno055_linear_z;
+float bno055_mag_x;
+float bno055_mag_y;
+float bno055_mag_z;
+float bno055_gravity_x;
+float bno055_gravity_y;
+float bno055_gravity_z;
+float bno055_temp;
+float bno055_calib_sys;
+float bno055_calib_gyro;
+float bno055_calib_accel;
+float bno055_calib_mag;
 
 
+MS5611 ms5611;
+uint32_t rawTemp;
+uint32_t rawPressure;
+double realTemperature;
+long realPressure;
+float absoluteAltitude;
+float relativeAltitude;
 
+
+double referencePressure;
 
 /*
- * STATE MACHINE:
- * 1. Ground Idle: Rocket has not launched
- * 2. Powered Flight: Rocket has launched
- * 3. Unpowered Flight: Burnout has occured (engines are no longer powering rocket)
- * 4. Ballistic Descent: Apogee has been reached
- * 5. Chute Descent: Pyros have fired and parachute is deployed
- * 6. Land Safe: Rocket is back on the ground
- * 
- * For all our functions to access
- * Access states by typing rocket.yourStateHere
- */
+   STATE MACHINE:
+   1. Ground Idle: Rocket has not launched
+   2. Powered Flight: Rocket has launched
+   3. Unpowered Flight: Burnout has occured (engines are no longer powering rocket)
+   4. Ballistic Descent: Apogee has been reached
+   5. Chute Descent: Pyros have fired and parachute is deployed
+   6. Land Safe: Rocket is back on the ground
+
+   For all our functions to access
+   Access states by typing rocket.yourStateHere
+*/
 struct rocketState {
   bool groundIdle = false;
   bool poweredFlight = false;
@@ -77,59 +111,61 @@ void initAll() {
   while (allValid == false)
   {
 
-  //----KX134_ACCEL----
-  initKX134();
-  
-  //----GPS_NEO6M----
-  //Initialize
+    //----KX134_ACCEL----
+    initKX134();
 
-  //Check Value
-  bool gps_valid = true;
-  
-  //----IMU----
-  //Initialize
+    //----GPS_NEO6M----
+    //Initialize
 
-  //Check Value
+    //Check Value
+    bool gps_valid = true;
 
-  //----BME280----
-  //Initialize
+    //----IMU----
+    //Initialize
+    initBNO055();
+    //Check Value
 
-  //Check Value
+    //----BME280----
+    //Initialize
+    initMS5611();
 
-  //----Temperature----
-  //Initialize
+    //Check Value
 
-  //Check Value
+    //----Temperature----
+    //Initialize
 
-  //----MicroSD----
-  //Initialize
+    //Check Value
 
-  //Check Value
+    //----MicroSD----
+    //Initialize
+    //initMicroSD();
 
-  //----FlashChip----
-  //Initialize
+    //Check Value
 
-  //Check Value
+    //----FlashChip----
+    //Initialize
 
-  //----LED----
-  //Initialize
-  LED_initSensor();
-  
-  //----Buzzer----
+    //Check Value
 
-  //----LoRa Module Placeholder----
-  //Initialize
+    //----LED----
+    //Initialize
+    LED_initSensor();
 
-  //Check Value
+    //----Buzzer----
 
-  //----Parachute Deployment Placeholder----
-  //Initialize
+    //----LoRa Module Placeholder----
+    //Initialize
 
-  //Check Value
-  allValid = gps_valid;
-  if (allValid == true) {
-    rocket.groundIdle = true;
-  }
+    //Check Value
+
+    //----Parachute Deployment Placeholder----
+    //Initialize
+
+    //Check Value
+    allValid = gps_valid;
+    if (allValid == true) {
+      rocket.groundIdle = true;
+    }
   }
 }
 
@@ -140,31 +176,28 @@ void groundIdleMode(bool state)
   if (state)
   {
     // Debug Start
+
     Serial.println("GROUND IDLE");
     // Debug End
-    
+
     ledON("GREEN");
-    buzzerOn();
+    //buzzerOn();
     sensor1 = 20;
-    
+
     // GET ACCELERATION FROM IMU
     getKX134_Accel();
-    Serial.print(kx134_accel_x);
-    Serial.print(",");
-    Serial.print(kx134_accel_y);
-    Serial.print(",");
-    Serial.println(kx134_accel_z);
+    get_bno055_data();
     //getAccel();
     //getGyro();
     //Serial.print(startingTime);
-   Serial.print(millis());
+    //Serial.print(millis());
     if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
     {
-      Serial.println("IT IS GREATER");
+      //Serial.println("IT IS GREATER");
       // START TIMER: starting time is always 0 when running the code for the first time
       if (startingTime == 0UL)
       {
-        Serial.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        //Serial.print("YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         startingTime = millis();
       }
       // Changed from 2000 to 500
@@ -175,13 +208,13 @@ void groundIdleMode(bool state)
         startingTime = 0UL;
         rocket.poweredFlight = true;
         rocket.groundIdle = false;
-      } 
+      }
       else
       {
         startingTime == 0UL;
       }
-      
-     
+
+
     }
   }
 
@@ -189,24 +222,19 @@ void groundIdleMode(bool state)
 
 void poweredFlightMode(bool state)
 {
-  
+
   if (state)
   {
-
+    dataReadout();
     // Debug Start
-    Serial.println("POWERED FLIGHT");
+    //Serial.println("POWERED FLIGHT");
     // Debug End
     ledON("BLUE");
     getKX134_Accel();
-    Serial.print(kx134_accel_x);
-    Serial.print(",");
-    Serial.print(kx134_accel_y);
-    Serial.print(",");
-    Serial.println(kx134_accel_z);
     //getGyro();
     if (abs(kx134_accel_z) < LIFTOFF_THRESHOLD)
     {
-      Serial.print("LESS THAN");
+      //Serial.print("LESS THAN");
       // START TIMER: starting time is always 0 when running the code for the first time
       if (startingTime = 0UL)
       {
@@ -220,17 +248,18 @@ void poweredFlightMode(bool state)
         startingTime = 0;
         rocket.unpoweredFlight = true;
         rocket.poweredFlight = false;
-      } 
+      }
 
     }
   }
-  
+
 }
 
 //use pressure sensor to check for apogee
 // can also compare using timer
 // example: current_alt < (alt-1sec) -> Descending
 void apogeeCheck() {
+  getMS5611_Values();
   float last_alt = altitude;
   if (decentCheck > 10) {
     rocket.ballisticDescent = true;
@@ -246,17 +275,15 @@ void unpoweredFlightMode(bool state)
 {
   if (state)
   {
+    
+    dataReadout();
     Serial.println("UNPOWERED FLIGHT");
     ledON("RED");
     // GET ACCELERATION FROM IMU
-    getKX134_Accel();
-    Serial.print(kx134_accel_x);
-    Serial.print(",");
-    Serial.print(kx134_accel_y);
-    Serial.print(",");
-    Serial.println(kx134_accel_z);
+    //getKX134_Accel();
+
     //getGyro();
-    apogeeCheck();
+    //apogeeCheck();
   }
 }
 
@@ -265,11 +292,11 @@ void ballisticDescentMode(bool state)
   if (state)
   {
 
-      // 1000 ft = 304.8 m
-      // Add a backup deployment height
-      if (altitude < 304.8)
-      {
-        // START TIMER: starting time is always 0 when running the code for the first time
+    // 1000 ft = 304.8 m
+    // Add a backup deployment height
+    if (altitude < 304.8)
+    {
+      // START TIMER: starting time is always 0 when running the code for the first time
       if (startingTime = 0UL)
       {
         startingTime = millis();
@@ -278,14 +305,14 @@ void ballisticDescentMode(bool state)
       if ( (millis() - startingTime > 100) && (altitude < 304.8))
       {
         // reset the timer and go to next state
-          startingTime = 0;
-          rocket.chuteDescent = true;
-          rocket.ballisticDescent = false;
+        startingTime = 0;
+        rocket.chuteDescent = true;
+        rocket.ballisticDescent = false;
       }
-        
-      }
+
     }
-  
+  }
+
 }
 
 void chuteDescentMode(bool state)
@@ -293,12 +320,14 @@ void chuteDescentMode(bool state)
 
   if (state)
   {
+
+    dataReadout();
     // DEPLOY PARACHUTE
     if (altitude < 5)
-      {
-        
-        // START TIMER
-        // START TIMER: starting time is always 0 when running the code for the first time
+    {
+
+      // START TIMER
+      // START TIMER: starting time is always 0 when running the code for the first time
       if (startingTime = 0UL)
       {
         startingTime = millis();
@@ -307,77 +336,118 @@ void chuteDescentMode(bool state)
       if ( (millis() - startingTime > 100) && (altitude < 5))
       {
         // reset the timer and go to next state
-          startingTime = 0;
-          rocket.landSafe = true;
-          rocket.chuteDescent = false;
+        startingTime = 0;
+        rocket.landSafe = true;
+        rocket.chuteDescent = false;
       }
-      }
-  
+    }
+
   }
 }
 
 void landSafeMode(bool state)
 {
-    if (state)
-    {
-      // STOP DATA COLLECTION
-      // CHECK IF SD CARD CAN STILL BE WRITTEN TO
-      // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
-      // WRITE TO SD CARD
-      buzzerOn();
-      ledON("GREEN");
-      
-    }
+  if (state)
+  {
+    // STOP DATA COLLECTION
+    // CHECK IF SD CARD CAN STILL BE WRITTEN TO
+    // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
+    // WRITE TO SD CARD
+    buzzerOn();
+    ledON("GREEN");
+
+  }
 }
 
 void dataReadout() {
-  // Sensor Interface Display Code
-  char text[40];
-  //sprintf(text,"%f,%f,%f",sensor1,temp_int,temp_ext);
-  /*Serial.print(temp_int);
+  getKX134_Accel();
+  get_bno055_data();
+  getMS5611_Values();
+  Serial.print(x);
   Serial.print(",");
-  Serial.print(temp_ext);
+  Serial.print(kx134_accel_x);
   Serial.print(",");
-  Serial.print(ax);
+  Serial.print(kx134_accel_y);
   Serial.print(",");
-  Serial.print(ay);
-  Serial.print(",");*/
-//  Serial.print(axglob);
-//  Serial.print(",");
-//  Serial.print(ayglob);
-//  Serial.print(",");
-//  Serial.print(azglob);
-//  Serial.print(",");
-//  Serial.print(millis());
-//  Serial.print(",");
-//  Serial.print(temp);
-//  Serial.print(",");
-//  Serial.print(gxglob);
-//  Serial.print(",");
-//  Serial.print(gyglob);
-//  Serial.print(",");
-//  Serial.print(gzglob);
-//  Serial.println();
-  //Serial.println(text);
-  // Delay 10 ms -> approximately 100 samples/sec ASSUMING there is no blocking code
-  delay(10);
+  Serial.print(kx134_accel_z);
+  Serial.print(",");
+  Serial.print(bno055_accel_x);
+  Serial.print(",");
+  Serial.print(bno055_accel_y);
+  Serial.print(",");
+  Serial.print(bno055_accel_z);
+  Serial.print(",");
+  Serial.print(bno055_orient_x);
+  Serial.print(",");
+  Serial.print(bno055_orient_y);
+  Serial.print(",");
+  Serial.print(bno055_orient_z);
+  Serial.print(",");
+  Serial.print(bno055_gyro_x);
+  Serial.print(",");
+  Serial.print(bno055_gyro_y);
+  Serial.print(",");
+  Serial.print(bno055_gyro_z);
+  Serial.print(",");
+  Serial.print(bno055_linear_x);
+  Serial.print(",");
+  Serial.print(bno055_linear_y);
+  Serial.print(",");
+  Serial.print(bno055_linear_z);
+  Serial.print(",");
+  Serial.print(bno055_mag_x);
+  Serial.print(",");
+  Serial.print(bno055_mag_y);
+  Serial.print(",");
+  Serial.print(bno055_mag_z);
+  Serial.print(",");
+  Serial.print(bno055_gravity_x);
+  Serial.print(",");
+  Serial.print(bno055_gravity_y);
+  Serial.print(",");
+  Serial.print(bno055_gravity_z);
+  Serial.print(",");
+  Serial.print(bno055_temp);
+  Serial.print(",");
+  Serial.print(bno055_calib_sys);
+  Serial.print(",");
+  Serial.print(bno055_calib_gyro);
+  Serial.print(",");
+  Serial.print(bno055_calib_accel);
+  Serial.print(",");
+  Serial.print(bno055_calib_mag);
+  Serial.print(",");
+  Serial.print(rawTemp);
+  Serial.print(",");
+  Serial.print(rawPressure);
+  Serial.print(",");
+  Serial.print(realTemperature);
+  Serial.print(",");
+  Serial.print(realPressure);
+  Serial.print(",");
+  Serial.print(absoluteAltitude);
+  Serial.print(",");
+  Serial.println(relativeAltitude);
+  delay(1);
+  //writeToMicroSD();
+  x=x+1;
 }
 
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
   Wire.begin();
-  Serial.println("setup");
+  //Serial.println("setup");
   initAll();
 }
 
 void loop() {
+      //dataReadout();
   groundIdleMode(rocket.groundIdle);
   poweredFlightMode(rocket.poweredFlight);
   unpoweredFlightMode(rocket.unpoweredFlight);
   ballisticDescentMode(rocket.ballisticDescent);
   chuteDescentMode(rocket.chuteDescent);
   landSafeMode(rocket.landSafe);
-  dataReadout();
-  
+
 }
