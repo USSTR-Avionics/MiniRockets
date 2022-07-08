@@ -1,4 +1,4 @@
-#include "Adafruit_FRAM_I2C.h"
+
 
 /* Example code for the Adafruit I2C FRAM breakout */
 
@@ -8,6 +8,18 @@
    Connect GROUND to common ground */
    
 Adafruit_FRAM_I2C fram     = Adafruit_FRAM_I2C();
+
+bool init_FRAM(){
+    // 1. Verify the chip has been found
+  if (fram.begin()) {  // you can stick the new i2c addr in here, e.g. begin(0x51);
+    Serial.println("Found I2C FRAM");
+    return true;
+  } else {
+    Serial.println("I2C FRAM not identified ... check your connections?\r\n");
+    Serial.println("Will continue in case this processor doesn't support repeated start\r\n");
+    return false;
+  }
+}
 
 void clearMem(){
     // dump the entire 32K of memory!
@@ -23,6 +35,7 @@ void clearMem(){
 void read_frame(){
     // dump the entire 32K of memory!
   uint8_t value;
+  // 32768
   for (uint16_t a = 0; a < 32768; a++) {
     value = fram.read(a);
     if ((a % 32) == 0) {
@@ -36,39 +49,35 @@ void read_frame(){
   
 }
 
-
-
-
-void setup(void) {
-  Serial.begin(9600);
-
-
-  // 1. Verify the chip has been found
-  
-  if (fram.begin()) {  // you can stick the new i2c addr in here, e.g. begin(0x51);
-    Serial.println("Found I2C FRAM");
-  } else {
-    Serial.println("I2C FRAM not identified ... check your connections?\r\n");
-    Serial.println("Will continue in case this processor doesn't support repeated start\r\n");
-    while (1);
+void write_fram()
+{
+  for (int i = 0; i < myIntsSize; i++) {
+  //Serial.println(i);
+  if ( (i+offsetfram)<32767)
+  {
+    fram.write(i+offsetfram, myInts[i]);
   }
-
-  clearMem();
-  // 2. Read the value wrtten to location #0, Print it out, Write the value +1 to location #0
-  
-  // Read the first byte
-  uint8_t test = fram.read(0x0);
-  Serial.print("Restarted "); Serial.print(test); Serial.println(" times");
-  // Test write ++
-  fram.write(0x7FE0, 299);
-
-
-  // 3. Print out the value in every location
-  
-  read_frame();
+  else
+  {
+    fram.write(i+offsetfram, 9);
+    fullBit = 1;
+    Serial.println("FRAM FULL");
+    return;
+  }
+  }
+  offsetfram=offsetfram+myIntsSize;
   
 }
 
-void loop(void) {
 
-}
+
+
+//void setup(void) {
+//  
+//  
+//  
+//}
+//
+//void loop(void) {
+//
+//}

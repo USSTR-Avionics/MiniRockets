@@ -29,6 +29,7 @@
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <MS5611.h>
+#include "Adafruit_FRAM_I2C.h"
 
 //-------------OBJECT DECLARATION----------------
 MS5611 ms5611;
@@ -80,7 +81,13 @@ long realPressure;
 float absoluteAltitude;
 float relativeAltitude;
 double referencePressure;
-bool debug = true;
+bool debug = false;
+
+int myInts[5];
+int myIntsSize = 5;
+int offsetfram = 0;
+int fullBit = 0;
+int yyes = 0;
 
 /*
    STATE MACHINE:
@@ -138,7 +145,7 @@ void initAll() {
 
     //----FlashChip----
     //Initialize
-
+    init_FRAM();
     //Check Value
 
     //----LED----
@@ -445,7 +452,14 @@ void dataReadout() {
         transmit_timer = 0UL;
         writeToMicroSD();
         sendPacket();
-        
+        myInts[0] = yyes;
+        myInts[1] = 1;
+        myInts[2] = 2;
+        myInts[3] = 3;
+        myInts[4] = 4;
+        write_fram();
+        //read_frame();
+        yyes=yyes+1;
       }
 
 

@@ -140,8 +140,8 @@ void writeToMicroSD() {
     dataFile.println(dataString);
     dataFile.close();
     // print to the serial port too:
-    Serial.print("WROTE TO SD:");
-    Serial.println(dataString);
+    //Serial.print("WROTE TO SD:");
+    //Serial.println(dataString);
   } else {
     // if the file isn't open, pop up an error:
     Serial.println("error opening datalog.txt");

@@ -95,7 +95,7 @@ void sendPacket()
   char radiopacket[20];
   myPacket.toCharArray(radiopacket,20);
   itoa(packetnum++, radiopacket+13, 10);
-  Serial.print("Sending "); Serial.println(radiopacket);
+  //Serial.print("Sending "); Serial.println(radiopacket);
   radiopacket[19] = 0;
   rf95.send((uint8_t *)radiopacket, 20);
 
