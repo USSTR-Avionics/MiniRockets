@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Constant_Kalman_Module",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Constant_Kalman_Module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Constant_Kalman_Module-Debug-68f0101f446210d7424b.json",
+					"name" : "Constant_Kalman_Module",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/dhaus/Desktop/Avionics-code/Flight Computer Programming/Kalman Filter/Constant_Kalman_Module/cmake-build-debug",
+		"source" : "C:/Users/dhaus/Desktop/Avionics-code/Flight Computer Programming/Kalman Filter/Constant_Kalman_Module"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

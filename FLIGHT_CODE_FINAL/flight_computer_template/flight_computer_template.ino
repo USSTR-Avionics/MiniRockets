@@ -30,6 +30,8 @@
 #include <utility/imumaths.h>
 #include <MS5611.h>
 #include "Adafruit_FRAM_I2C.h"
+#include "movingAverage.h"
+#include "kalmanFilter1dconst.h"
 
 //-------------OBJECT DECLARATION----------------
 MS5611 ms5611;
@@ -88,6 +90,18 @@ int myIntsSize = 5;
 int offsetfram = 0;
 int fullBit = 0;
 int yyes = 0;
+
+int iterationCount;
+float val0;
+float val1;
+float val2;
+float val3;
+int numCounter = 0 ;
+float currentVal = 0;
+float movingAverageVal=0;
+
+float kalmanAverage = 0;
+float kalmanGain;
 
 /*
    STATE MACHINE:
@@ -372,71 +386,77 @@ void dataReadout() {
   getKX134_Accel();
   get_bno055_data();
   getMS5611_Values();
-  Serial.print(x);
-  Serial.print(",");
-  Serial.print(kx134_accel_x);
-  Serial.print(",");
-  Serial.print(kx134_accel_y);
-  Serial.print(",");
-  Serial.print(kx134_accel_z);
-  Serial.print(",");
-  Serial.print(bno055_accel_x);
-  Serial.print(",");
-  Serial.print(bno055_accel_y);
-  Serial.print(",");
-  Serial.print(bno055_accel_z);
-  Serial.print(",");
-  Serial.print(bno055_orient_x);
-  Serial.print(",");
-  Serial.print(bno055_orient_y);
-  Serial.print(",");
-  Serial.print(bno055_orient_z);
-  Serial.print(",");
-  Serial.print(bno055_gyro_x);
-  Serial.print(",");
-  Serial.print(bno055_gyro_y);
-  Serial.print(",");
-  Serial.print(bno055_gyro_z);
-  Serial.print(",");
-  Serial.print(bno055_linear_x);
-  Serial.print(",");
-  Serial.print(bno055_linear_y);
-  Serial.print(",");
-  Serial.print(bno055_linear_z);
-  Serial.print(",");
-  Serial.print(bno055_mag_x);
-  Serial.print(",");
-  Serial.print(bno055_mag_y);
-  Serial.print(",");
-  Serial.print(bno055_mag_z);
-  Serial.print(",");
-  Serial.print(bno055_gravity_x);
-  Serial.print(",");
-  Serial.print(bno055_gravity_y);
-  Serial.print(",");
-  Serial.print(bno055_gravity_z);
-  Serial.print(",");
-  Serial.print(bno055_temp);
-  Serial.print(",");
-  Serial.print(bno055_calib_sys);
-  Serial.print(",");
-  Serial.print(bno055_calib_gyro);
-  Serial.print(",");
-  Serial.print(bno055_calib_accel);
-  Serial.print(",");
-  Serial.print(bno055_calib_mag);
-  Serial.print(",");
-  Serial.print(rawTemp);
-  Serial.print(",");
-  Serial.print(rawPressure);
-  Serial.print(",");
-  Serial.print(realTemperature);
-  Serial.print(",");
-  Serial.print(realPressure);
-  Serial.print(",");
+//  Serial.print(x);
+//  Serial.print(",");
+//  Serial.print(kx134_accel_x);
+//  Serial.print(",");
+//  Serial.print(kx134_accel_y);
+//  Serial.print(",");
+//  Serial.print(kx134_accel_z);
+//  Serial.print(",");
+//  Serial.print(bno055_accel_x);
+//  Serial.print(",");
+//  Serial.print(bno055_accel_y);
+//  Serial.print(",");
+//  Serial.print(bno055_accel_z);
+//  Serial.print(",");
+//  Serial.print(bno055_orient_x);
+//  Serial.print(",");
+//  Serial.print(bno055_orient_y);
+//  Serial.print(",");
+//  Serial.print(bno055_orient_z);
+//  Serial.print(",");
+//  Serial.print(bno055_gyro_x);
+//  Serial.print(",");
+//  Serial.print(bno055_gyro_y);
+//  Serial.print(",");
+//  Serial.print(bno055_gyro_z);
+//  Serial.print(",");
+//  Serial.print(bno055_linear_x);
+//  Serial.print(",");
+//  Serial.print(bno055_linear_y);
+//  Serial.print(",");
+//  Serial.print(bno055_linear_z);
+//  Serial.print(",");
+//  Serial.print(bno055_mag_x);
+//  Serial.print(",");
+//  Serial.print(bno055_mag_y);
+//  Serial.print(",");
+//  Serial.print(bno055_mag_z);
+//  Serial.print(",");
+//  Serial.print(bno055_gravity_x);
+//  Serial.print(",");
+//  Serial.print(bno055_gravity_y);
+//  Serial.print(",");
+//  Serial.print(bno055_gravity_z);
+//  Serial.print(",");
+//  Serial.print(bno055_temp);
+//  Serial.print(",");
+//  Serial.print(bno055_calib_sys);
+//  Serial.print(",");
+//  Serial.print(bno055_calib_gyro);
+//  Serial.print(",");
+//  Serial.print(bno055_calib_accel);
+//  Serial.print(",");
+//  Serial.print(bno055_calib_mag);
+//  Serial.print(",");
+//  Serial.print(rawTemp);
+//  Serial.print(",");
+//  Serial.print(rawPressure);
+//  Serial.print(",");
+//  Serial.print(realTemperature);
+//  Serial.print(",");
+  //Serial.print(realPressure);
+  //Serial.print(",");
   Serial.print(absoluteAltitude);
+  //Serial.print(relativeAltitude);
   Serial.print(",");
-  Serial.println(relativeAltitude);
+  Serial.print(kalmanAverage);
+  Serial.print(",");
+  Serial.print(movingAverageVal);
+  Serial.print(",");
+  Serial.println(kalmanGain);
+//  Serial.print(y);
   delay(1);
 
       // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
@@ -450,7 +470,7 @@ void dataReadout() {
       {
         // reset the timer and go to next state
         transmit_timer = 0UL;
-        writeToMicroSD();
+        //writeToMicroSD();
         sendPacket();
         myInts[0] = yyes;
         myInts[1] = 1;
@@ -462,9 +482,42 @@ void dataReadout() {
         yyes=yyes+1;
       }
 
-
-  
+  kalmanAverage = kalmanFilter(absoluteAltitude);
+  kalmanGain = get_k();
+  updateNumCount();
   x=x+1;
+}
+
+void updateNumCount()
+{
+  
+    if (numCounter==0)
+    {
+        val0 = absoluteAltitude;
+    }
+    else if (numCounter==1)
+    {
+        val1 = absoluteAltitude;
+    }
+    else if (numCounter==2)
+    {
+        val2 = absoluteAltitude;
+    }
+    else
+    {
+        val3 = absoluteAltitude;
+    }
+
+    if (numCounter<3)
+    {
+        numCounter+=1;
+    }
+    else
+    {
+        numCounter=0;
+    }
+    movingAverageVal = movingAverage(absoluteAltitude,x,val0,val1,val2,val3);
+    
 }
 
 void setup() {
