@@ -200,6 +200,7 @@ void groundIdleMode(bool state)
     
 
     ledON("GREEN");
+        dataReadout();
     //buzzerOn();
     getKX134_Accel();
     get_bno055_data();
@@ -386,14 +387,14 @@ void dataReadout() {
   getKX134_Accel();
   get_bno055_data();
   getMS5611_Values();
-//  Serial.print(x);
-//  Serial.print(",");
-//  Serial.print(kx134_accel_x);
-//  Serial.print(",");
-//  Serial.print(kx134_accel_y);
-//  Serial.print(",");
-//  Serial.print(kx134_accel_z);
-//  Serial.print(",");
+  Serial.print(x);
+  Serial.print(",");
+  Serial.print(kx134_accel_x);
+  Serial.print(",");
+  Serial.print(kx134_accel_y);
+  Serial.print(",");
+  Serial.print(kx134_accel_z);
+  Serial.print(",");
 //  Serial.print(bno055_accel_x);
 //  Serial.print(",");
 //  Serial.print(bno055_accel_y);

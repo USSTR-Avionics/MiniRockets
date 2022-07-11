@@ -111,27 +111,6 @@ struct Kalman{
 };
 int main() {
     //Matrix<2, 2> B{0.0, 45.34, 32.98, 1456.1222};
-    std::cout << q<< std::endl;
-    std::cout << p_hat << std::endl;
-    for (int i = 0; i< 10; i++) {
-        std::cout << "ITERATION " << i+1 << std::endl;
-        // Current State Estimates
-        k = kalman_gain(p_hat,0.01);
-        std::cout << "K IS: " << k << std::endl;
-        x = state_update(k,x,z[i]);
-        std::cout << "x (current state estimate) IS: " << x << std::endl;
-        p = (1-k)*p_hat;
-        std::cout << "p (current state estimate uncertainty is): " << p << std::endl;
-        BLA::Matrix<2,2> A;
-
-        std::cout << k << std::endl;
-        // Prediction
-        x_hat = x;
-        p_hat=p+q;
-        std::cout << "x_hat "<< x_hat << std::endl;
-        std::cout << "p_hat "<< p_hat << std::endl;
-        //std::cout << p_hat << std::endl;
-    }
 
     return 0;
 }

@@ -38,7 +38,7 @@ float q= 1;//0.15
 float k;
 // p = estimate uncertainty
 double p = 10000;//10000
-float r = 5; // 0.01
+float r = 10; // 0.01
 // x_ = initial guess
 float x_ = 518.5;
 // z = measurement
@@ -60,7 +60,7 @@ float kalmanFilter(float measurementValue)
     // Prediction
     x_hat=x_;
     p_hat=p+q;
-    return x_;
+    return x_hat;
 }
 
 //int main() {
