@@ -19,7 +19,7 @@
     // For this example: t = 0.25 s
     float delta_t = 0.25;
 
-    
+    float old_point=0;
     // F = state transition matrix
     BLA::Matrix<2,2> F = {1,delta_t,0,1};
     
@@ -27,7 +27,7 @@
     BLA::Matrix<2,1> G = {0.5*(pow(delta_t,2)),delta_t};
     
     // assume rocket acceleration is 9,8 for first
-    float un= 9.8;
+    float un= -9.8;
     
     //x_n_MAT= {x_n, x_n_dot};
 
@@ -51,24 +51,44 @@
     //BLA::Matrix<2,2> test = Invert(P_n_plus1);
 
 
+    // OLD VALUES
+    BLA::Matrix<2,1> old_x;
+    BLA::Matrix<2,2> old_P;
+    BLA::Matrix<2,2> old_p_hat;
     // State Update Equation
     
     // Filter
-    void iterate(float z, float u) {
+    void iterate(float z, float u, int i) {
+      old_x = x;
+      old_P = P;
+      // MEASUREMENT = ZZ
+      printf("TEST");
         BLA::Matrix<1,1> zz = {z};
+      // ACCELERATION
         BLA::Matrix<1,1> uu = {u-9.8};
-        x_hat = F*x + G*un;
+      // PREDICTIONS
+      if (i == 0) {
+        x_hat = F*x + G*(9.8);
         p_hat = F*P*(~F)+Q;
-        // Update the Kalman filter
+      }
+      else 
+      {
+        x_hat = F*x + G*(old_point+un);
+        p_hat = F*P*(~F)+Q;
+      }
+
+        old_point=u;
+      old_p_hat = p_hat;
+        // Update the Kalman filter based on the PREDICTION and MEASURMENT
         midstep = (H*p_hat*(~H)+R_n);
         midstep_invert_val=1/midstep(0,0);
         midstep_invert = {midstep_invert_val};
+        // KALMAN GAIN
         k = p_hat*(~H)*midstep_invert;
+        // NEW STATE
         x = x_hat + k*(zz-(H*x_hat));
+        // NEW COVARIANCE
         P = (identity-k*H)*p_hat*(~(identity-k*H))+ k*R_n*(~k);
-        // Predict
-        x_hat = F*x+G*uu;
-        p_hat = F*P*(~F)+Q;
         
     }
 //};

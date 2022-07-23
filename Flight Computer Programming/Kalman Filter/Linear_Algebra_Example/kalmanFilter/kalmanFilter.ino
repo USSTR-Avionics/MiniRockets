@@ -24,21 +24,27 @@ void setup()
     BLA::Matrix<1,1> sss = 1;
     BLA::Matrix<1,1> ddd = 2;
     bool is_nonsingular = Invert(J_inv);
-    for (int i = 0; i<2; i++)
+    for (int i = 0; i<30; i++)
     {
-      iterate(altitude[i],acceleration[i]);
-    Serial << "x " << x << '\n';
-    Serial << "F " << F << '\n';
-    Serial << "G " << G << '\n';
-    Serial << "Q " << Q << '\n';
-    Serial << "R " << R_n << '\n';
-    Serial << "P " << P << '\n';
-    Serial << "H " << H << '\n';
-    Serial << "x_hat " << x_hat << '\n';
-    Serial << "midstep " << midstep << '\n';
-    Serial << "midstep_invert " << midstep_invert_val << '\n';
-    Serial << "k " << k << '\n';
-    Serial << "p_hat " << p_hat << '\n';
+      iterate(altitude[i],acceleration[i], i);
+    //Serial << "Predicted x =" << F << " * " << old_x << " + " << G << " * " << un << " = " << x_hat << '\n';
+    //Serial << "Predicted P =" << F << " * " << old_P << " * " << ~F << " + " << Q << " = " << p_hat << '\n'; 
+    //Serial << "Kalman Gain Equation = " << old_p_hat << "*" << ~H << "/" << H << old_p_hat << ~H << R_n << '\n';
+    //Serial << "old_x " << old_x << '\n';
+    //Serial << "old_P " << old_P << '\n';
+    //Serial << "x " << x << '\n';
+    //Serial << "F " << F << '\n';
+    //Serial << "G " << G << '\n';
+    //Serial << "Q " << Q << '\n';
+    //Serial << "R " << R_n << '\n';
+    //Serial << "P " << P << '\n';
+    //Serial << "H " << H << '\n';
+    //Serial << "x_hat " << x_hat << '\n';
+    //Serial << "midstep " << midstep << '\n';
+    //Serial << "midstep_invert " << midstep_invert_val << '\n';
+    //Serial << "k " << k << '\n';
+    //Serial << "p_hat " << p_hat << '\n';
+    Serial << x(0,0)<< '\n';
     }
     
 }
