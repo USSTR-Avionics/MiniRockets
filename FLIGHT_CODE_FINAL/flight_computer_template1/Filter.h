@@ -2,7 +2,7 @@
 #include <cmath>
     BLA::Matrix<2,1> x_hat;
     // Set a very high estimate uncertainty for intial guess 
-    BLA::Matrix<2,2> P = {500,0,0,500};
+    BLA::Matrix<2,2> P = {0,0,0,0};// 500 0 0 500
     BLA::Matrix<2,2> p_hat;
     BLA::Matrix<1,1> midstep;
     BLA::Matrix<1,1> midstep_invert;
@@ -44,7 +44,7 @@
     
     // For simplicity, assuming costant measurement uncertainty for measurement covariance matrix R
     // Altimeter measurement error standard deiation = 20m
-    BLA::Matrix<1,1> R_n=20*20;
+    BLA::Matrix<1,1> R_n=2*2;//0.03154598471*0.03154598471;
 
     // Kalman Gain
     //BLA::Matrix<2,1> k = P_n_minus1*(~H)*Invert(H*P_n_minus1*(~H)+R_n);

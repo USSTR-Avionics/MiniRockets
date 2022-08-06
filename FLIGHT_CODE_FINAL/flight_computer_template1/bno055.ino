@@ -1,17 +1,13 @@
 /*
  * BNO055 Module
  * 
- * Product Link: https://www.smart-prototyping.com/image/cache/data/2020/10/102074%20MS5611/3-750x750.JPG
+ * Product Link: https://cdn-learn.adafruit.com/downloads/pdf/adafruit-bno055-absolute-orientation-sensor.pdf
+ * 
  * 
  * Inputs: VCC, GND, SCL, SDA, CSB, SDO, PS
  * 
  * Outputs:
  * - Acceleration (x,y,z) bno055_accel_x, bno055_accel_y, bno055_accel_z
- * - rawPressure 
- * - realTemperature
- * - realPressure
- * - absoluteAltitude
- * - realAltitude
  * 
  * Set Up Instructions: 
  * 1. Connect VCC to 5V (accepts 3-5 V) and GND to GND
@@ -81,41 +77,47 @@ void get_bno055_data() {
   bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
   bno.getEvent(&gravityData, Adafruit_BNO055::VECTOR_GRAVITY);
 
-  printEvent(&orientationData);
-  printEvent(&angVelocityData);
-  printEvent(&linearAccelData);
-  printEvent(&magnetometerData);
-  printEvent(&accelerometerData);
-  printEvent(&gravityData);
 
-  imu::Quaternion quat = bno.getQuat();
-  //Serial.print(quat.w(), 4);
-  //Serial.print(",");
-  //Serial.print(quat.y(), 4);
-  //Serial.print(",");
-  //Serial.print(quat.x(), 4);
-  //Serial.print(",");
-  //Serial.println(quat.z(), 4);
 
-  int8_t boardTemp = bno.getTemp();
-  //kSerial.println();
-  //kSerial.print(F("temperature: "));
-  //kSerial.println(boardTemp);
 
-  uint8_t system, gyro, accel, mag = 0;
-  bno.getCalibration(&system, &gyro, &accel, &mag);
-  //kSerial.println();
-  ///kSerial.print("Calibration: Sys=");
-  //kSerial.print(system);
-  //kSerial.print(" Gyro=");
-  //kSerial.print(gyro);
-  //kSerial.print(" Accel=");
-  //kSerial.print(accel);
-  //kSerial.print(" Mag=");
-  //kSerial.println(mag);
+  // VECTOR_EULER 1
+  bno055_euler_x = bno.getVector(Adafruit_BNO055::VECTOR_EULER).x();
+  bno055_euler_y = bno.getVector(Adafruit_BNO055::VECTOR_EULER).y();
+  bno055_euler_z = bno.getVector(Adafruit_BNO055::VECTOR_EULER).z();
 
-  //kSerial.println("--");
-  delay(BNO055_SAMPLERATE_DELAY_MS);
+  //2
+  bno055_quat_w = bno.getQuat().w();
+  bno055_quat_y = bno.getQuat().y();
+  bno055_quat_x = bno.getQuat().x();
+  bno055_quat_z = bno.getQuat().z();
+
+  // VECTOR_GYROSCOPE 3
+  bno055_ang_vel_x = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE).x();
+  bno055_ang_vel_y = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE).y();
+  bno055_ang_vel_z = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE).z();
+
+  // VECTOR_ACCELEROMETER 4
+  bno055_accel_x = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER).x();
+  bno055_accel_y = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER).y();
+  bno055_accel_z = bno.getVector(Adafruit_BNO055::VECTOR_ACCELEROMETER).z();
+
+  // VECTOR_MAGNETOMETER 5
+  bno055_mag_x = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER).x();
+  bno055_mag_y = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER).y();
+  bno055_mag_z = bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER).z();
+  
+  // VECTOR_LINEARACCEL 6
+  bno055_linear_x = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL).x();
+  bno055_linear_y = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL).y();
+  bno055_linear_z = bno.getVector(Adafruit_BNO055::VECTOR_LINEARACCEL).z();
+
+  // VECTOR_GRAVITY 7
+  bno055_gravity_x = bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY).x();
+  bno055_gravity_y = bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY).y();
+  bno055_gravity_z = bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY).z();
+
+  // 8
+  bno055_temp = bno.getTemp();
 }
 
 //void setup(void)
@@ -138,79 +140,3 @@ void get_bno055_data() {
 //{
 //
 //}
-
-
-
-void printEvent(sensors_event_t* event) {
-  double x = -1000000, y = -1000000 , z = -1000000; //dumb values, easy to spot problem
-  if (event->type == SENSOR_TYPE_ACCELEROMETER) {
-    //kSerial.print("Accl:");
-    x = event->acceleration.x;
-    y = event->acceleration.y;
-    z = event->acceleration.z;
-    bno055_accel_x = event->acceleration.x;
-    bno055_accel_y = event->acceleration.y;
-    bno055_accel_z = event->acceleration.z;
-  }
-  else if (event->type == SENSOR_TYPE_ORIENTATION) {
-    //kSerial.print("Orient:");
-    x = event->orientation.x;
-    y = event->orientation.y;
-    z = event->orientation.z;
-    bno055_orient_x = event->orientation.x;
-    bno055_orient_y = event->orientation.y;
-    bno055_orient_z = event->orientation.z;
-  }
-  else if (event->type == SENSOR_TYPE_MAGNETIC_FIELD) {
-    //kSerial.print("Mag:");
-    x = event->magnetic.x;
-    y = event->magnetic.y;
-    z = event->magnetic.z;
-    bno055_mag_x = event->magnetic.x;
-    bno055_mag_y = event->magnetic.y;
-    bno055_mag_z = event->magnetic.z;
-  }
-  else if (event->type == SENSOR_TYPE_GYROSCOPE) {
-    //kSerial.print("Gyro:");
-    x = event->gyro.x;
-    y = event->gyro.y;
-    z = event->gyro.z;
-    bno055_gyro_x = event->gyro.x;
-    bno055_gyro_y = event->gyro.y;
-    bno055_gyro_z = event->gyro.z;
-  }
-  else if (event->type == SENSOR_TYPE_ROTATION_VECTOR) {
-    //kSerial.print("Rot:");
-    x = event->gyro.x;
-    y = event->gyro.y;
-    z = event->gyro.z;
-    bno055_gyro_x = event->gyro.x;
-    bno055_gyro_y = event->gyro.y;
-    bno055_gyro_z = event->gyro.z;
-  }
-  else if (event->type == SENSOR_TYPE_LINEAR_ACCELERATION) {
-    //kSerial.print("Linear:");
-    x = event->acceleration.x;
-    y = event->acceleration.y;
-    z = event->acceleration.z;
-    bno055_linear_x = event->acceleration.x;
-    bno055_linear_y = event->acceleration.y;
-    bno055_linear_z = event->acceleration.z;
-  }
-  else if (event->type == SENSOR_TYPE_GRAVITY) {
-    //kSerial.print("Gravity:");
-    x = event->acceleration.x;
-    y = event->acceleration.y;
-    z = event->acceleration.z;
-  }
-  else {
-  // k Serial.print("Unk:");
-  }
-
-  //kSerial.print("\tx= ");
-  //kSerial.print(x);
-  //kSerial.print(" |\ty= ");
-  //kSerial.print(y);
-  //kSerial.print(" |\tz= ");
-  //kSerial.println(z);
-}

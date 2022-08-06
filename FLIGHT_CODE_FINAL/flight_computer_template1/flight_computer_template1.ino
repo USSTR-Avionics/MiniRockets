@@ -57,29 +57,50 @@ outputData kx134_accel; // This will hold the accelerometer's output.
 float kx134_accel_x;
 float kx134_accel_y;
 float kx134_accel_z;
+
 float bno055_accel_x;
 float bno055_accel_y;
 float bno055_accel_z;
+
 float bno055_orient_x;
 float bno055_orient_y;
 float bno055_orient_z;
+
 float bno055_gyro_x;
 float bno055_gyro_y;
 float bno055_gyro_z;
+
 float bno055_linear_x;
 float bno055_linear_y;
 float bno055_linear_z;
+
 float bno055_mag_x;
 float bno055_mag_y;
 float bno055_mag_z;
+
 float bno055_gravity_x;
 float bno055_gravity_y;
 float bno055_gravity_z;
+
+float bno055_euler_x;
+float bno055_euler_y;
+float bno055_euler_z;
+
+float bno055_quat_w;
+float bno055_quat_y;
+float bno055_quat_x;
+float bno055_quat_z;
+
+float bno055_ang_vel_x;
+float bno055_ang_vel_y;
+float bno055_ang_vel_z;
+
 float bno055_temp;
 float bno055_calib_sys;
 float bno055_calib_gyro;
 float bno055_calib_accel;
 float bno055_calib_mag;
+
 uint32_t rawTemp;
 uint32_t rawPressure;
 double realTemperature;
@@ -391,37 +412,28 @@ void dataReadout() {
   getKX134_Accel();
   get_bno055_data();
   getMS5611_Values();
-  Serial.print(x);
-  Serial.print(",");
-  Serial.print(kx134_accel_x);
-  Serial.print(",");
-  Serial.print(kx134_accel_y);
-  Serial.print(",");
-  Serial.print(kx134_accel_z);
-  Serial.print(",");
+
+
+////  Serial.print(",");
+////  Serial.print(bno055_ang_vel_x);
+////  Serial.print(",");
+////  Serial.print(bno055_ang_vel_y);
+////  Serial.print(",");
+////  Serial.print(bno055_ang_vel_z);
+////  Serial.print(",");
+////  Serial.print(x);
+//////  Serial.print(",");
+//////  Serial.print(kx134_accel_x);
+//////  Serial.print(",");
+//////  Serial.print(kx134_accel_y);
+//////  Serial.print(",");
+//////  Serial.print(kx134_accel_z);
+////  Serial.print(",");
 //  Serial.print(bno055_accel_x);
 //  Serial.print(",");
 //  Serial.print(bno055_accel_y);
 //  Serial.print(",");
 //  Serial.print(bno055_accel_z);
-//  Serial.print(",");
-//  Serial.print(bno055_orient_x);
-//  Serial.print(",");
-//  Serial.print(bno055_orient_y);
-//  Serial.print(",");
-//  Serial.print(bno055_orient_z);
-//  Serial.print(",");
-//  Serial.print(bno055_gyro_x);
-//  Serial.print(",");
-//  Serial.print(bno055_gyro_y);
-//  Serial.print(",");
-//  Serial.print(bno055_gyro_z);
-//  Serial.print(",");
-//  Serial.print(bno055_linear_x);
-//  Serial.print(",");
-//  Serial.print(bno055_linear_y);
-//  Serial.print(",");
-//  Serial.print(bno055_linear_z);
 //  Serial.print(",");
 //  Serial.print(bno055_mag_x);
 //  Serial.print(",");
@@ -429,40 +441,64 @@ void dataReadout() {
 //  Serial.print(",");
 //  Serial.print(bno055_mag_z);
 //  Serial.print(",");
-//  Serial.print(bno055_gravity_x);
+//  Serial.print(bno055_linear_x);
 //  Serial.print(",");
-//  Serial.print(bno055_gravity_y);
+//  Serial.print(bno055_linear_y);
+//  Serial.print(",");
+//  Serial.print(bno055_linear_z);
+//  Serial.print(",");
+//  Serial.print(bno055_gravity_x);
+//
 //  Serial.print(",");
 //  Serial.print(bno055_gravity_z);
 //  Serial.print(",");
 //  Serial.print(bno055_temp);
 //  Serial.print(",");
-//  Serial.print(bno055_calib_sys);
+////  Serial.print(bno055_calib_sys);
+////  Serial.print(",");
+////  Serial.print(bno055_calib_gyro);
+////  Serial.print(",");
+////  Serial.print(bno055_calib_accel);
+////  Serial.print(",");
+////  Serial.print(bno055_calib_mag);
+////  Serial.print(",");
+////  Serial.print(rawTemp);
+////  Serial.print(",");
+//Serial.print(rawPressure);
+//Serial.print(",");
+//Serial.print(realTemperature);
+//Serial.print(",");
+//Serial.print(realPressure);
+//Serial.print(",");
+Serial.print(absoluteAltitude);
+Serial.print(",");
+//  Serial.print(bno055_euler_x);
+//Serial.print(",");
+//Serial.print(bno055_euler_y);
+//Serial.print(",");
+//Serial.print(bno055_euler_z);
+//Serial.print(",");
+//Serial.print(",");
+//Serial.print(bno055_quat_w);
+//Serial.print(",");
+//Serial.print(bno055_quat_y);
+//Serial.print(",");
+//Serial.print(bno055_quat_x);
+//Serial.print(",");
+//Serial.println(bno055_quat_z);
 //  Serial.print(",");
-//  Serial.print(bno055_calib_gyro);
-//  Serial.print(",");
-//  Serial.print(bno055_calib_accel);
-//  Serial.print(",");
-//  Serial.print(bno055_calib_mag);
-//  Serial.print(",");
-//  Serial.print(rawTemp);
-//  Serial.print(",");
-//  Serial.print(rawPressure);
-//  Serial.print(",");
-//  Serial.print(realTemperature);
-//  Serial.print(",");
-  //Serial.print(realPressure);
-  //Serial.print(",");
-  Serial.print(absoluteAltitude);
+//  Serial.println(bno055_gravity_y);
+
   //Serial.print(relativeAltitude);
-  Serial.print(",");
+  //Serial.print(",");
   Serial.print(x_matrix(0,0));
   Serial.print(",");
   Serial.print(movingAverageVal);
-  Serial.print(",");
-  Serial.print(2);
+  //Serial.print(",");
+  //Serial.print(2);
   Serial.print(",");
   Serial.println(float(k(0,0)));
+  
 
 //  Serial.print(y);
   delay(1);
