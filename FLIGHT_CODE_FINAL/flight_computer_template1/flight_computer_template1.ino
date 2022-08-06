@@ -32,7 +32,7 @@
 #include "Adafruit_FRAM_I2C.h"
 #include "movingAverage.h"
 //#include "kalmanFilter1dconst.h"
-#include <BasicLinearAlgebra.h>
+#include "BasicLinearAlgebra.h"
 #include "Filter.h"
 using namespace BLA;
 
