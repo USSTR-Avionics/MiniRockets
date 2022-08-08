@@ -32,9 +32,10 @@
 #include "Adafruit_FRAM_I2C.h"
 #include "movingAverage.h"
 //#include "kalmanFilter1dconst.h"
-#include "BasicLinearAlgebra.h"
-#include "Filter.h"
+#include <BasicLinearAlgebra.h>
 using namespace BLA;
+//#include "Filter.h"
+
 
 //-------------OBJECT DECLARATION----------------
 MS5611 ms5611;
@@ -491,13 +492,13 @@ Serial.print(",");
 
   //Serial.print(relativeAltitude);
   //Serial.print(",");
-  Serial.print(x_matrix(0,0));
+//  Serial.print(x_matrix(0,0));
   Serial.print(",");
   Serial.print(movingAverageVal);
   //Serial.print(",");
   //Serial.print(2);
   Serial.print(",");
-  Serial.println(float(k(0,0)));
+//  Serial.println(float(k(0,0)));
   
 
 //  Serial.print(y);
@@ -526,7 +527,7 @@ Serial.print(",");
         yyes=yyes+1;
       }
 
-    iterate(absoluteAltitude,kx134_accel_z,startkalman);
+//    iterate(absoluteAltitude,kx134_accel_z,startkalman);
     startkalman = startkalman+1;
 //  kalmanAverage = kalmanFilter(absoluteAltitude);
 //  kalmanGain = get_k();
