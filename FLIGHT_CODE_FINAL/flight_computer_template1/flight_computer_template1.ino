@@ -34,7 +34,7 @@
 //#include "kalmanFilter1dconst.h"
 #include <BasicLinearAlgebra.h>
 using namespace BLA;
-//#include "Filter.h"
+#include "Filter.h"
 
 
 //-------------OBJECT DECLARATION----------------
