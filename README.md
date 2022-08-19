@@ -1,4 +1,8 @@
-Steps:
+# USST Avionics Board
+
+<img src = https://imgur.com/a/dLvvcr2 </img>
+
+# Steps:
 
 Download and install Arduino IDE 1.8.19 from
 https://www.arduino.cc/en/software Download and install Teensyduino from
