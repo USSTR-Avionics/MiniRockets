@@ -1,6 +1,6 @@
 # USST Avionics Board
 
-<img src = https://www.google.com/search?q=usst&sxsrf=ALiCzsZMxrmL-zWBKVn4MmeJPgUfOSjC6A:1660883535946&source=lnms&tbm=isch&sa=X&ved=2ahUKEwj5krGpidL5AhUwjIkEHeVjBJ4Q_AUoAXoECAEQAw&biw=755&bih=765&dpr=1.2#imgrc=iFQLigFJ7VluzM> </img>
+<img src = https://i.imgur.com/jnRxNR3.png> </img>
 
 # Steps:
 
