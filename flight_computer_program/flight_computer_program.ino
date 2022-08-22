@@ -156,7 +156,7 @@ void initAll() {
   bool allValid = false;
   while (allValid == false)
   {
-
+    
     //----KX134_ACCEL----
     initKX134();
 
@@ -197,7 +197,7 @@ if (CrashReport) Serial.print(CrashReport);
     //----LoRa Module Placeholder----
     //Initialize
     init_RFM95_TX();
-    
+    read_frame();
     //Check Value
 
     //----Parachute Deployment Placeholder----
@@ -413,7 +413,7 @@ void dataReadout() {
   getKX134_Accel();
   get_bno055_data();
   getMS5611_Values();
-
+  
 
 ////  Serial.print(",");
 ////  Serial.print(bno055_ang_vel_x);
