@@ -24,6 +24,7 @@
  */
 
 bool initMS5611() {
+  if (MS5611Activate == 1) {
   // Initialize MS5611 sensor
   Serial.println("Initialize MS5611 Sensor");
 
@@ -39,6 +40,7 @@ bool initMS5611() {
   // Check settings
   checkSettings();
   return 1;
+  }
 }
 
 void checkSettings()
@@ -48,6 +50,7 @@ void checkSettings()
 }
 
 void getMS5611_Values() {
+  if (MS5611Activate == 1) {
   // Read raw values
   rawTemp = ms5611.readRawTemperature();
   rawPressure = ms5611.readRawPressure();
@@ -59,4 +62,5 @@ void getMS5611_Values() {
   // Calculate altitude
   absoluteAltitude = ms5611.getAltitude(realPressure);
   relativeAltitude = ms5611.getAltitude(realPressure, referencePressure);
+  }
 }

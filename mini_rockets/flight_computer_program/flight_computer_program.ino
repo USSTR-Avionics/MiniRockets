@@ -7,29 +7,46 @@
    - BUZZER
    - BNO055 IMU
    - MS5611 PRESSURE SENSOR
-   - MICROSD
+   - MICROSD 
+   - TX RFM95
+   - Kalman Filter
+   - 
 
 */
 
+
+
 //-------------PRE-PROCESSOR VARIABLES-----------
 //* NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
-#define LIFTOFF_THRESHOLD 9.9//1.15f (had 15)
+
 
 
 //-------------LIBRARIES AND MODULES-------------
 #include <Wire.h>
 #include <SD.h>
 #include <SPI.h>
+#include <RH_RF95.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
 #include <MS5611.h>
+#include "externs.h"
+#include "SparkFun_Qwiic_KX13X.h"
+#include "Adafruit_FRAM_I2C.h"
+#include "movingAverage.h"
+//#include "kalmanFilter1dconst.h"
+#include <BasicLinearAlgebra.h>
+using namespace BLA;
+#include "Filter.h"
 
 //-------------OBJECT DECLARATION----------------
 MS5611 ms5611;
-
+QwiicKX134 kxAccel;
 
 //-------------VARIABLES-------------------------
+// KX134
+outputData kx134_accel; // This will hold the accelerometer's output.
+
 float initial_altitude = 0.0;
 int decentCheck;
 float timer = 0.0;
@@ -37,54 +54,6 @@ float transmit_timer = 0.0;
 float altitude = 0.0;
 unsigned long startingTime = 0;
 float x =1;
-
-// BNO-055
-float bno055_accel_x;
-float bno055_accel_y;
-float bno055_accel_z;
-float bno055_orient_x;
-float bno055_orient_y;
-float bno055_orient_z;
-float bno055_gyro_x;
-float bno055_gyro_y;
-float bno055_gyro_z;
-float bno055_linear_x;
-float bno055_linear_y;
-float bno055_linear_z;
-float bno055_mag_x;
-float bno055_mag_y;
-float bno055_mag_z;
-float bno055_gravity_x;
-float bno055_gravity_y;
-float bno055_gravity_z;
-float bno055_ang_vel_x;
-float bno055_ang_vel_y;
-float bno055_ang_vel_z;
-float bno055_euler_x;
-float bno055_euler_y;
-float bno055_euler_z;
-float bno055_quat_w;
-float bno055_quat_y;
-float bno055_quat_x;
-float bno055_quat_z;
-float bno055_temp;
-float bno055_calib_sys;
-float bno055_calib_gyro;
-float bno055_calib_accel;
-float bno055_calib_mag;
-
-
-// MS5611
-uint32_t rawTemp;
-uint32_t rawPressure;
-double realTemperature;
-long realPressure;
-float absoluteAltitude;
-float relativeAltitude;
-double referencePressure;
-
-bool debug = false;
-
 
 /*
    STATE MACHINE:
@@ -110,60 +79,59 @@ struct rocketState {
 
 // All the sensors are initialized and checked for proper functionality
 void initAll() {
-  bool allValid = false;
-  while (allValid == false)
-  {
-  
-    //----IMU----
-    //Initialize
+  if (mode == 0)
+{
+  ledActivate = 1;
+  buzzerActivate = 1;
+  MS5611Activate = 1;
+  microSdActivate = 0;
+  KX134Activate = 0;
+  FRAMActivate = 0;
+  TXActivate = 0;
+  kalmanFilterActivate = 0;
+  movingAverageFilterActivate = 0;
+  #define LIFTOFF_THRESHOLD 5.0//1.15f (had 15)
+  #define APOGEE_THRESHOLD 0.1
+  #define PARACHUTE_DEPLOYMENT_HEIGHT 0.1
+  #define LAND_SAFE_HEIGHT 0.0
+  #define TIMER_COUNT_THRESHOLD 50.0
+}
+if (mode == 1)
+{
+  #define LIFTOFF_THRESHOLD 8.0//1.15f (had 15)
+  #define APOGEE_THRESHOLD 0.5
+  #define PARACHUTE_DEPLOYMENT_HEIGHT 800
+  #define LAND_SAFE_HEIGHT 700.0
+  #define TIMER_COUNT_THRESHOLD 100.0
+}
+if (mode == 2)
+{
+  #define LIFTOFF_THRESHOLD 8.0//1.15f (had 15)
+  #define APOGEE_THRESHOLD 0.5
+  #define PARACHUTE_DEPLOYMENT_HEIGHT 800
+  #define LAND_SAFE_HEIGHT 700.0
+  #define TIMER_COUNT_THRESHOLD 10.0
+}
+    initKX134();
+    init_FRAM();
     initBNO055();
-
-    //----BME280----
-    //Initialize
     initMS5611();
-
-    //----MicroSD----
-    //Initialize
     initMicroSD();
-
-    //Check Value
-if (CrashReport) Serial.print(CrashReport);
-
-    //----LED----
-    //Initialize
     LED_initSensor();
-
-    //----Buzzer----
-
-
-    //----Parachute Deployment Placeholder----
-    //Initialize
-
-    //Check Value
-    allValid = true;
-    if (allValid == true) {
-      rocket.groundIdle = true;
-    }
-  }
+    init_RFM95_TX();
+    rocket.groundIdle = true;
+    
 }
 
 
 void groundIdleMode(bool state)
 {
-
   if (state)
   {
-    if (debug == true) 
-    {
-    Serial.println("GROUND IDLE");
-    }
-    
-
+    currentState = 1;
     ledON("GREEN");
-        dataReadout();
     //buzzerOn();
     get_bno055_data();
-
     
     if (abs(bno055_linear_z) > LIFTOFF_THRESHOLD)
     {
@@ -174,7 +142,7 @@ void groundIdleMode(bool state)
       }
       // DEBUG: Change from 2000 to 100
       // new time - starting time > 0.1 sec and accelation > threshold
-      if ( (millis() - startingTime > 100) && (abs(bno055_linear_z) > LIFTOFF_THRESHOLD))
+      if ( (millis() - startingTime > TIMER_COUNT_THRESHOLD) && (abs(bno055_linear_z) > LIFTOFF_THRESHOLD))
       {
         // reset the timer and go to next state
         startingTime = 0UL;
@@ -198,21 +166,12 @@ void poweredFlightMode(bool state)
 
   if (state)
   {
-
-
-    if (debug == true) 
-    {
-      Serial.println("POWERED FLIGHT");
-    }
-
-    dataReadout();
+    currentState = 2;
     ledON("BLUE");
 
     
     if (abs(bno055_linear_z) < LIFTOFF_THRESHOLD)
     {
-
-
       // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
       if (startingTime = 0UL)
       {
@@ -220,7 +179,7 @@ void poweredFlightMode(bool state)
       }
       // new time - starting time > 0.1 sec and accelation > threshold
       //  DEBUG: Change from 5000 to 100
-      if ( (millis() - startingTime > 100) && (abs(bno055_linear_z) < LIFTOFF_THRESHOLD))
+      if ( (millis() - startingTime > TIMER_COUNT_THRESHOLD) && (abs(bno055_linear_z) < LIFTOFF_THRESHOLD))
       {
         // reset the timer and go to next state
         startingTime = 0;
@@ -237,13 +196,27 @@ void poweredFlightMode(bool state)
 // can also compare using timer
 // example: current_alt < (alt-1sec) -> Descending
 void apogeeCheck() {
-  float last_alt = absoluteAltitude;
-  if (decentCheck > 10) {
+   // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
+      if (startingTime == 0UL)
+      {
+        startingTime = millis();
+        last_alt = relativeAltitude;
+      }
+      // new time - starting time > 0.1 sec and accelation > threshold
+      //  DEBUG: Change from 5000 to 100
+      if ( (millis() - startingTime > TIMER_COUNT_THRESHOLD) && (last_alt - relativeAltitude > APOGEE_THRESHOLD))
+      {
+        // reset the timer and increase decentCheck;
+        startingTime = 0;
+        decentCheck++;
+      }
+  if (decentCheck > 7) {
     rocket.ballisticDescent = true;
     rocket.unpoweredFlight = false;
   }
-  // GET BMP data on this line
-  if (last_alt - absoluteAltitude > 2) {
+  getMS5611_Values();
+  // was 2 m
+  if (last_alt - relativeAltitude > APOGEE_THRESHOLD) {
     decentCheck++;
   }
 }
@@ -252,13 +225,8 @@ void unpoweredFlightMode(bool state)
 {
   if (state)
   {
-
-    if (debug == true) 
-    {
-          Serial.println("UNPOWERED FLIGHT");
-    }
-    
-    dataReadout();
+    currentState = 3;
+ 
     ledON("RED");
     apogeeCheck();
     
@@ -270,14 +238,11 @@ void ballisticDescentMode(bool state)
   if (state)
   {
 
-        if (debug == true) 
-        {
-          Serial.println("BALLISTIC DESCENT");
-        }
+      currentState = 4;
 
     // 1000 ft = 304.8 m
     // Add a backup deployment height
-    if (altitude < 304.8)
+    if (relativeAltitude < PARACHUTE_DEPLOYMENT_HEIGHT)
     {
       // START TIMER: starting time is always 0 when running the code for the first time
       if (startingTime = 0UL)
@@ -285,7 +250,7 @@ void ballisticDescentMode(bool state)
         startingTime = millis();
       }
       // new time - starting time > 0.1 sec and accelation > threshold
-      if ( (millis() - startingTime > 100) && (altitude < 304.8))
+      if ( (millis() - startingTime > TIMER_COUNT_THRESHOLD) && (relativeAltitude < PARACHUTE_DEPLOYMENT_HEIGHT))
       {
         // reset the timer and go to next state
         startingTime = 0;
@@ -301,12 +266,12 @@ void ballisticDescentMode(bool state)
 void chuteDescentMode(bool state)
 {
 
+
   if (state)
   {
-
-    dataReadout();
+    currentState = 5;
     // DEPLOY PARACHUTE
-    if (altitude < 5)
+    if (relativeAltitude < LAND_SAFE_HEIGHT)
     {
 
       // START TIMER
@@ -316,7 +281,7 @@ void chuteDescentMode(bool state)
         startingTime = millis();
       }
       // new time - starting time > 0.1 sec and accelation > threshold
-      if ( (millis() - startingTime > 100) && (altitude < 5))
+      if ( (millis() - startingTime > TIMER_COUNT_THRESHOLD) && (relativeAltitude < LAND_SAFE_HEIGHT))
       {
         // reset the timer and go to next state
         startingTime = 0;
@@ -332,6 +297,7 @@ void landSafeMode(bool state)
 {
   if (state)
   {
+    currentState = 5;
     // STOP DATA COLLECTION
     // CHECK IF SD CARD CAN STILL BE WRITTEN TO
     // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
@@ -343,89 +309,13 @@ void landSafeMode(bool state)
 }
 
 void dataReadout() {
+  getKX134_Accel();
   get_bno055_data();
   getMS5611_Values();
-  Serial.print(x);
-  Serial.print(",");
-  Serial.print(bno055_accel_x);
-  Serial.print(",");
-  Serial.print(bno055_accel_y);
-  Serial.print(",");
-  Serial.print(bno055_accel_z);
-  Serial.print(",");
-  Serial.print(bno055_orient_x);
-  Serial.print(",");
-  Serial.print(bno055_orient_y);
-  Serial.print(",");
-  Serial.print(bno055_orient_z);
-  Serial.print(",");
-  Serial.print(bno055_gyro_x);
-  Serial.print(",");
-  Serial.print(bno055_gyro_y);
-  Serial.print(",");
-  Serial.print(bno055_gyro_z);
-  Serial.print(",");
-  Serial.print(bno055_linear_x);
-  Serial.print(",");
-  Serial.print(bno055_linear_y);
-  Serial.print(",");
-  Serial.print(bno055_linear_z);
-  Serial.print(",");
-  Serial.print(bno055_mag_x);
-  Serial.print(",");
-  Serial.print(bno055_mag_y);
-  Serial.print(",");
-  Serial.print(bno055_mag_z);
-  Serial.print(",");
-  Serial.print(bno055_gravity_x);
-  Serial.print(",");
-  Serial.print(bno055_gravity_y);
-  Serial.print(",");
-  Serial.print(bno055_gravity_z);
-  Serial.print(",");
-  Serial.print(bno055_ang_vel_x);
-  Serial.print(",");
-  Serial.print(bno055_ang_vel_y);
-  Serial.print(",");
-  Serial.print(bno055_ang_vel_z);
-  Serial.print(",");
-  Serial.print(bno055_euler_x);
-  Serial.print(",");
-  Serial.print(bno055_euler_y);
-  Serial.print(",");
-  Serial.print(bno055_euler_z);
-  Serial.print(",");
-  Serial.print(bno055_quat_w);
-  Serial.print(",");
-  Serial.print(bno055_quat_y);
-  Serial.print(",");
-  Serial.print(bno055_quat_x);
-  Serial.print(",");
-  Serial.println(bno055_quat_z);
-  Serial.print(",");
-  Serial.print(bno055_temp);
-  Serial.print(",");
-  Serial.print(bno055_calib_sys);
-  Serial.print(",");
-  Serial.print(bno055_calib_gyro);
-  Serial.print(",");
-  Serial.print(bno055_calib_accel);
-  Serial.print(",");
-  Serial.print(bno055_calib_mag);
-  Serial.print(",");
-  Serial.print(rawTemp);
-  Serial.print(",");
-  Serial.print(rawPressure);
-  Serial.print(",");
-  Serial.print(realTemperature);
-  Serial.print(",");
-  Serial.print(realPressure);
-  Serial.print(",");
-  Serial.print(absoluteAltitude);
-  Serial.print(",");
-  Serial.print(relativeAltitude);
-
-
+  
+  serialPrint();
+      write_fram();
+      writeToMicroSD();
 
       // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
       if (transmit_timer == 0UL)
@@ -438,9 +328,53 @@ void dataReadout() {
       {
         // reset the timer and go to next state
         transmit_timer = 0UL;
-        writeToMicroSD();
+        sendPacket();
       }
+      
+  if (kalmanFilterActivate == 1)
+  {
+      iterate(absoluteAltitude,kx134_accel_z,startkalman);
+      startkalman = startkalman+1;
+      //kalmanAverage = kalmanFilter(absoluteAltitude);
+      //kalmanGain = get_k();
+  }
+  if (movingAverageFilterActivate == 1)
+  {
+      updateNumCount();
+  }
   x=x+1;
+}
+
+void updateNumCount()
+{
+  
+    if (numCounter==0)
+    {
+        val0 = absoluteAltitude;
+    }
+    else if (numCounter==1)
+    {
+        val1 = absoluteAltitude;
+    }
+    else if (numCounter==2)
+    {
+        val2 = absoluteAltitude;
+    }
+    else
+    {
+        val3 = absoluteAltitude;
+    }
+
+    if (numCounter<3)
+    {
+        numCounter+=1;
+    }
+    else
+    {
+        numCounter=0;
+    }
+    movingAverageVal = movingAverage(absoluteAltitude,x,val0,val1,val2,val3);
+    
 }
 
 void setup() {

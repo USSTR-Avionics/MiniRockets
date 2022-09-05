@@ -24,12 +24,18 @@
   #define RED 40
 
 void LED_initSensor() {
+  if (ledActivate == 1)
+  {
   pinMode(RED, OUTPUT);
   pinMode(GREEN, OUTPUT);
   pinMode(BLUE, OUTPUT);
+  }
+
 }
 
 void ledON(String color) {
+  if (ledActivate == 1)
+  {
   //Serial.println(color);
   if (color == "RED") {
     digitalWrite(RED,1);
@@ -46,11 +52,14 @@ void ledON(String color) {
     digitalWrite(GREEN,0);
     digitalWrite(BLUE,1);
   }
-  
+  }
 }
 
 void ledOFF() {
-  analogWrite(RED,0);
-  analogWrite(GREEN,0);
-  analogWrite(BLUE,0);
+  if (ledActivate == 1) {
+    analogWrite(RED,0);
+    analogWrite(GREEN,0);
+    analogWrite(BLUE,0);
+  }
+
 }
