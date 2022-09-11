@@ -226,7 +226,7 @@ void groundIdleMode(bool state)
     
 
     ledON("GREEN");
-        dataReadout();
+    dataReadout();
     //buzzerOn();
     getKX134_Accel();
     get_bno055_data();
