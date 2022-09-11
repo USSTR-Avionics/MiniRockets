@@ -6,19 +6,17 @@
 #include "movingAverage.h"
 
 /* NOT USING THESE RIGHT NOW; JUST TESTING OUT A MVP*/
-
 //#include "kalmanFilter1dconst.h"
 //#include "BasicLinearAlgebra.h"
 //using namespace BLA;
 //#include "Filter.h"
 
 #include "MS5611.h"
-#include "SparkFun_Qwiic_KX13X.h"
 #include "sensor_kx134.h"
 
 // OBJECT DECLARATION
-MS5611 ms5611;
-QwiicKX134 kxAccel; 
+//MS5611 ms5611;
+//QwiicKX134 kxAccel; 
 
 // PROGRAMMER VARS | vars for the programmer
 bool debug = false;
@@ -44,7 +42,7 @@ float altitude = 0.0;
 
 
 
-
+// STATE MACHINE
 struct rocketState 
     {
     bool groundIdle = false;
@@ -61,6 +59,8 @@ void initAll()
 
     while (allValid == false)
         {
+        init_kx134();
+
         if (CrashReport) Serial.print(CrashReport);
             allValid = true;
             if (allValid == true) 
@@ -80,7 +80,9 @@ void groundIdleMode(bool state)
             Serial.println("GROUND IDLE");
             }
 
-        get_kx134_accel();
+        kx134_accel_x = get_kx134_accel_x();
+        kx134_accel_y = get_kx134_accel_y();
+        kx134_accel_z = get_kx134_accel_z();
     
         if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
             {
@@ -121,7 +123,7 @@ void poweredFlightMode(bool state)
         if (abs(kx134_accel_z) < LIFTOFF_THRESHOLD)
             {
             // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
-            if (startingTime = 0UL)
+            if (startingTime == 0UL)
                 {
                 startingTime = millis();
                 }
@@ -185,7 +187,7 @@ void ballisticDescentMode(bool state)
         if (altitude < 304.8)
             {
             // START TIMER: starting time is always 0 when running the code for the first time
-            if (startingTime = 0UL)
+            if (startingTime == 0UL)
                 {
                   startingTime = millis();
                 }
@@ -211,7 +213,7 @@ void chuteDescentMode(bool state)
             {
             // START TIMER
             // START TIMER: starting time is always 0 when running the code for the first time
-            if (startingTime = 0UL)
+            if (startingTime == 0UL)
                 {
                 startingTime = millis();
                 }
@@ -238,7 +240,7 @@ void landSafeMode(bool state)
         }
     }
 
-
+// STANDARD ENTRY POINTS
 void setup() 
     {
     Serial.begin(9600);
