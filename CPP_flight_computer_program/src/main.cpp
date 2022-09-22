@@ -14,15 +14,12 @@
 #include "MS5611.h"
 #include "sensor_kx134.h"
 
-// OBJECT DECLARATION
-//MS5611 ms5611;
-//QwiicKX134 kxAccel; 
-
 // PROGRAMMER VARS | vars for the programmer
 bool debug = false;
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long startingTime = 0;
+#define MEM_ERR    0
 
 // SENSOR VARS | vars handling sensor data
 float kx134_accel_x;
