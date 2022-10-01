@@ -11,8 +11,8 @@
 //using namespace BLA;
 //#include "Filter.h"
 
-#include "MS5611.h"
 #include "sensor_kx134.h"
+#include "sensor_ms5611.h"
 
 // PROGRAMMER VARS | vars for the programmer
 bool debug = false;
@@ -25,6 +25,8 @@ unsigned long startingTime = 0;
 float kx134_accel_x;
 float kx134_accel_y;
 float kx134_accel_z;
+double ms5611_temp;
+double ms5611_press;
 
 
 // STATE VARS | vars that are important for the state machine
@@ -57,6 +59,7 @@ void initAll()
     while (allValid == false)
         {
         init_kx134();
+        init_MS5611();
 
         if (CrashReport) Serial.print(CrashReport);
             allValid = true;
@@ -186,7 +189,7 @@ void ballisticDescentMode(bool state)
             // START TIMER: starting time is always 0 when running the code for the first time
             if (startingTime == 0UL)
                 {
-                  startingTime = millis();
+                startingTime = millis();
                 }
             // new time - starting time > 0.1 sec and accelation > threshold
             if ( (millis() - startingTime > 100) && (altitude < 304.8))
@@ -237,6 +240,30 @@ void landSafeMode(bool state)
         }
     }
 
+void debug_data()
+    {
+    delay(500);
+
+    kx134_accel_x = get_kx134_accel_x();
+    kx134_accel_y = get_kx134_accel_y();
+    kx134_accel_z = get_kx134_accel_z();
+    Serial.println("--- KX134 ---");
+    Serial.print("x: ");
+    Serial.println(kx134_accel_x);
+    Serial.print("y: ");
+    Serial.println(kx134_accel_y);
+    Serial.print("z: ");
+    Serial.println(kx134_accel_z);
+
+    ms5611_temp = get_ms5611_temp();
+    ms5611_press = get_ms5611_press();
+    Serial.println("--- MS5611 ---");
+    Serial.print("temperature: ");
+    Serial.println(ms5611_temp);
+    Serial.print("pressure: ");
+    Serial.println(ms5611_press);
+    }
+
 // STANDARD ENTRY POINTS
 void setup() 
     {
@@ -247,6 +274,7 @@ void setup()
 
 void loop() 
     {
+    debug_data();
     // put your main code here, to run repeatedly:
     groundIdleMode(rocket.groundIdle);
     poweredFlightMode(rocket.poweredFlight);
