@@ -15,26 +15,39 @@ bool init_MS5611()
 
     while(!ms5611.begin())
     {
-      Serial.println("Could not find a valid MS5611 sensor, check wiring!");
-      return 0;
+        Serial.println("Could not find a valid MS5611 sensor, check wiring!");
+        return 0;
     }
 
+
+    ms5611.setOversampling(OSR_ULTRA_HIGH);
+
     // Check settings
-    checkSettings();
+    // checkSettings();
 
     return 1;
     }
 
-double get_ms5611_temp()
+float get_ms5611_temp()
     {
-    double temp_data = ms5611.getTemperature();
+    int result = ms5611.read();
+    if (result != MS5611_READ_OK)
+        {
+        Serial.println("[MS5611] Error in read");
+        Serial.println(result);
+        }
+    float temp_data = ms5611.getTemperature();
     return temp_data;
     }
 
-double get_ms5611_press()
+float get_ms5611_press()
     {
-    double press_data = ms5611.getPressure();
-    Serial.println("before");
-    Serial.println(press_data);
+    int result = ms5611.read();
+    if (result != MS5611_READ_OK)
+        {
+        Serial.println("[MS5611] Error in read");
+        Serial.println(result);
+        }
+    float press_data = ms5611.getPressure();
     return press_data;
     }

@@ -25,8 +25,8 @@ unsigned long startingTime = 0;
 float kx134_accel_x;
 float kx134_accel_y;
 float kx134_accel_z;
-double ms5611_temp;
-double ms5611_press;
+float ms5611_temp;
+float ms5611_press;
 
 
 // STATE VARS | vars that are important for the state machine
