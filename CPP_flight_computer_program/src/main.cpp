@@ -1,39 +1,37 @@
-#include <Arduino.h>
-#include <Wire.h>
-#include <SD.h>
-#include <SPI.h>
-#include <RH_RF95.h>
 #include "movingAverage.h"
-
 /* NOT USING THESE RIGHT NOW; JUST TESTING OUT A MVP*/
 //#include "kalmanFilter1dconst.h"
 //#include "BasicLinearAlgebra.h"
 //using namespace BLA;
 //#include "Filter.h"
-
-#include "sensor_kx134.h"
 #include "sensor_ms5611.h"
+#include "sensor_kx134.h"
+#include <Arduino.h>
+#include <RH_RF95.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
 
 // PROGRAMMER VARS | vars for the programmer
-bool debug = false;
+bool debug = false; // remove these comparisons for production
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long startingTime = 0;
-#define MEM_ERR    0
+#define MEM_ERR     0
+#define INT_DEF    -1
+#define FLO_DEF    -6.9
 
 // SENSOR VARS | vars handling sensor data
-float kx134_accel_x;
-float kx134_accel_y;
-float kx134_accel_z;
-float ms5611_temp;
-float ms5611_press;
-
+float kx134_accel_x = FLO_DEF;
+float kx134_accel_y = FLO_DEF;
+float kx134_accel_z = FLO_DEF;
+float ms5611_temp   = FLO_DEF;
+float ms5611_press  = FLO_DEF;
 
 // STATE VARS | vars that are important for the state machine
-float absoluteAltitude;
-int decentCheck;
-float altitude = 0.0;
-
+float absoluteAltitude = FLO_DEF;
+int decentCheck        = INT_DEF;
+float altitude         = 0.0;
 
 // LIMIT VARS | vars defining important limits and thresholds
 // NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
@@ -52,6 +50,8 @@ struct rocketState
     bool landSafe = false;
     } rocket;
 
+
+
 void initAll() 
     {
     bool allValid = false;
@@ -61,6 +61,7 @@ void initAll()
         init_kx134();
         init_MS5611();
 
+        // !TODO clarify and condense the following block
         if (CrashReport) Serial.print(CrashReport);
             allValid = true;
             if (allValid == true) 
@@ -72,12 +73,11 @@ void initAll()
 
 void groundIdleMode(bool state)
     {
-
     if (state)
         {
         if (debug == true) 
             {
-            Serial.println("GROUND IDLE");
+            Serial.println("[ROCKET STATE] GROUND IDLE");
             }
 
         kx134_accel_x = get_kx134_accel_x();
@@ -86,21 +86,22 @@ void groundIdleMode(bool state)
     
         if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
             {
-          // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
+            // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
             if (startingTime == 0UL)
                 {
                 startingTime = millis();
                 }
-          // DEBUG: Change from 2000 to 100
-          // new time - starting time > 0.1 sec and accelation > threshold
+
+            // DEBUG: Change from 2000 to 100
+            // new time - starting time > 0.1 sec and accelation > threshold
             if ( (millis() - startingTime > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
                 {
-            // reset the timer and go to next state
+                // reset the timer and go to next state
                 startingTime = 0UL;
                 rocket.poweredFlight = true;
                 rocket.groundIdle = false;
                 }
-          // Otherwise restart the starting time since there was an issue
+            // Otherwise restart the starting time since there was an issue
             else
                 {
                 startingTime = 0UL;
@@ -112,12 +113,11 @@ void groundIdleMode(bool state)
 
 void poweredFlightMode(bool state)
     {
-
     if (state)
         {
         if (debug == true) 
             {
-            Serial.println("POWERED FLIGHT");
+            Serial.println("[ROCKET STATE] POWERED FLIGHT");
             }
 
         if (abs(kx134_accel_z) < LIFTOFF_THRESHOLD)
@@ -127,6 +127,7 @@ void poweredFlightMode(bool state)
                 {
                 startingTime = millis();
                 }
+
             // new time - starting time > 0.1 sec and accelation > threshold
             //  DEBUG: Change from 5000 to 100
             if ( (millis() - startingTime > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
@@ -136,17 +137,15 @@ void poweredFlightMode(bool state)
                 rocket.unpoweredFlight = true;
                 rocket.poweredFlight = false;
                 }
-
             }
           }
-
     }
 
-//use pressure sensor to check for apogee
-// can also compare using timer
-// example: current_alt < (alt-1sec) -> Descending
 void apogeeCheck() 
     {
+    //use pressure sensor to check for apogee
+    // can also compare using timer
+    // example: current_alt < (alt-1sec) -> Descending
     float last_alt = absoluteAltitude;
 
     if (decentCheck > 10) 
@@ -154,6 +153,7 @@ void apogeeCheck()
         rocket.ballisticDescent = true;
         rocket.unpoweredFlight = false;
         }
+
     // GET BMP data on this line
     if (last_alt - absoluteAltitude > 2) 
         {
@@ -167,7 +167,7 @@ void unpoweredFlightMode(bool state)
         {
         if (debug == true) 
             {
-            Serial.println("UNPOWERED FLIGHT");
+            Serial.println("[ROCKET STATE] UNPOWERED FLIGHT");
             }
         apogeeCheck();
         }
@@ -179,7 +179,7 @@ void ballisticDescentMode(bool state)
         {
         if (debug == true) 
             {
-            Serial.println("BALLISTIC DESCENT");
+            Serial.println("[ROCKET STATE] BALLISTIC DESCENT");
             }
 
         // 1000 ft = 304.8 m
@@ -217,6 +217,7 @@ void chuteDescentMode(bool state)
                 {
                 startingTime = millis();
                 }
+
             // new time - starting time > 0.1 sec and accelation > threshold
             if ( (millis() - startingTime > 100) && (altitude < 5))
                 {
@@ -267,7 +268,7 @@ void debug_data()
 // STANDARD ENTRY POINTS
 void setup() 
     {
-    Serial.begin(9600);
+    Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
     initAll();
     }
@@ -275,7 +276,7 @@ void setup()
 void loop() 
     {
     debug_data();
-    // put your main code here, to run repeatedly:
+
     groundIdleMode(rocket.groundIdle);
     poweredFlightMode(rocket.poweredFlight);
     unpoweredFlightMode(rocket.unpoweredFlight);
