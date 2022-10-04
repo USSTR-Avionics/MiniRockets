@@ -1,7 +1,7 @@
-#include "movingAverage.h"
 /* NOT USING THESE RIGHT NOW; JUST TESTING OUT A MVP*/
 //#include "kalmanFilter1dconst.h"
 //#include "BasicLinearAlgebra.h"
+//#include "movingAverage.h"
 //using namespace BLA;
 //#include "Filter.h"
 #include "sensor_ms5611.h"
