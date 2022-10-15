@@ -5,6 +5,8 @@
 
 ## indents
 
+- we will use the Whitesmiths style of indents, [reasoning](http://www.activeclickweb.com/whitesmiths/index.html)  
+
 - in line tab indents, that means you indent after a command block like in Python and then continue in line  
 
 ```

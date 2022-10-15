@@ -4,10 +4,13 @@
 //#include "movingAverage.h"
 //using namespace BLA;
 //#include "Filter.h"
+#include "default_variables.h"
 #include "sensor_ms5611.h"
 #include "sensor_kx134.h"
+#include "errorcodes.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
+#include <stdint.h> // switch to machine independent types
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
@@ -18,10 +21,7 @@
 bool debug_mode = false; // remove these comparisons for production
 
 // PROGRAM VARS | vars generally required for the program
-unsigned long starting_time = 0;
-#define MEM_ERR     0
-#define INT_DEF    -1
-#define FLO_DEF    -6.9
+uint64_t starting_time = 0;
 
 // SENSOR VARS | vars handling sensor data
 float kx134_accel_x = FLO_DEF;
@@ -42,7 +42,7 @@ float rocket_altitude   = 0.0;
 
 
 // STATE MACHINE
-struct rocketState
+struct rocket_state
     {
     bool ground_idle = false;
     bool powered_flight = false;
@@ -54,7 +54,7 @@ struct rocketState
 
 
 
-void init_all() 
+int init_all() 
     {
     bool all_valid = false;
 
@@ -64,13 +64,14 @@ void init_all()
         init_MS5611();
 
         // !TODO clarify and condense the following block
-        if (CrashReport) Serial.print(CrashReport);
-            all_valid = true;
-            if (all_valid == true) 
-                {   
-                rocket.ground_idle = true;
-                }
+        // if (CrashReport) Serial.print(CrashReport);
+        all_valid = true;
+        if (all_valid == true) 
+            {   
+            rocket.ground_idle = true;
+            }
         }
+    return EXIT_SUCCESS;
     }
 
 void ground_idle_mode(bool state)
@@ -86,7 +87,7 @@ void ground_idle_mode(bool state)
         kx134_accel_y = get_kx134_accel_y();
         kx134_accel_z = get_kx134_accel_z();
     
-        if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
+        if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD) // ? why take abs()
             {
             // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
             if (starting_time == 0UL)
@@ -131,7 +132,7 @@ void powered_flight_mode(bool state)
                 }
 
             // new time - starting time > 0.1 sec and accelation > threshold
-            //  DEBUG: Change from 5000 to 100
+            // DEBUG: Change from 5000 to 100
             if ( (millis() - starting_time > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
                 {
                   // reset the timer and go to next state
@@ -157,7 +158,7 @@ void apogee_check()
         }
 
     // GET BMP data on this line
-    if (last_alt - absolute_altitude > 2) 
+    if (last_alt - absolute_altitude > 2) // ? this doesnt make sense, wouldnt it always be 0
         {
         decent_check += decent_check;
         }
@@ -201,7 +202,6 @@ void ballistic_descent_mode(bool state)
                 rocket.chute_descent = true;
                 rocket.ballistic_descent = false;
                 }
-
             }
         }
     }
@@ -221,7 +221,7 @@ void chute_descent_mode(bool state)
                 }
 
             // new time - starting time > 0.1 sec and accelation > threshold
-            if ( (millis() - starting_time > 100) && (rocket_altitude < 5))
+            if ((millis() - starting_time > 100) && (rocket_altitude < 5))
                 {
                 // reset the timer and go to next state
                 starting_time = 0;
