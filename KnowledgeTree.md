@@ -1,5 +1,7 @@
 [ARM Assembly](https://www.youtube.com/watch?v=FV6P5eRmMh8)  
 
+[Calling Rust functions from C](https://github.com/frroossst/callingRustFunctionsFromC)
+
 [Crash Course Computer Science](https://www.youtube.com/watch?v=tpIctyqH29Q&list=PLH2l6uzC4UEW0s7-KewFLBC1D0l6XRfye)  
 
 [C isn't a programming language](https://faultlore.com/blah/c-isnt-a-language/)

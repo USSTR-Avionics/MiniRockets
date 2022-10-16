@@ -253,8 +253,10 @@ void debug_data(bool time_delay)
         delay(500);
         }
 
+    Serial.println("--- Rust lib ---");
     uint8_t x = get_u8_from_rust();
     Serial.println(x);
+    // get pointer and array checks
 
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
