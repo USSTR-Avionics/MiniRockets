@@ -1,0 +1,1 @@
+/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/rusty_fram_wrapper/target/thumbv7em-none-eabihf/release/librusty_fram_wrapper.a: /home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/rusty_fram_wrapper/src/lib.rs

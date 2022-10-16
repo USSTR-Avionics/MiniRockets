@@ -2,6 +2,8 @@
 
 [Crash Course Computer Science](https://www.youtube.com/watch?v=tpIctyqH29Q&list=PLH2l6uzC4UEW0s7-KewFLBC1D0l6XRfye)  
 
+[C isn't a programming language](https://faultlore.com/blah/c-isnt-a-language/)
+
 [C programming tutorial](https://www.youtube.com/watch?v=Bz4MxDeEM6k)  
 
 [CPU Scheduling](https://www.youtube.com/watch?v=Jkmy2YLUbUY)

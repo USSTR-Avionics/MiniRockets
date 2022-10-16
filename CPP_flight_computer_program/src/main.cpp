@@ -16,6 +16,8 @@
 #include <SD.h>
 
 
+extern "C" uint8_t get_u8_from_rust();
+
 
 // PROGRAMMER VARS | vars for the programmer
 bool debug_mode = false; // remove these comparisons for production
@@ -243,9 +245,16 @@ void land_safe_mode(bool state)
         }
     }
 
-void debug_data()
+void debug_data(bool time_delay)
     {
     // debug true then add delay
+    if (time_delay == true)
+        {
+        delay(500);
+        }
+
+    uint8_t x = get_u8_from_rust();
+    Serial.println(x);
 
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
@@ -277,7 +286,7 @@ void setup()
 
 void loop() 
     {
-    debug_data();
+    debug_data(true);
 
     ground_idle_mode(rocket.ground_idle);
     powered_flight_mode(rocket.powered_flight);
