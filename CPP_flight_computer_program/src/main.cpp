@@ -8,6 +8,7 @@
 #include "sensor_ms5611.h"
 #include "sensor_kx134.h"
 #include "errorcodes.h"
+#include "rusty_fram.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
@@ -16,7 +17,6 @@
 #include <SD.h>
 
 
-extern "C" uint8_t get_u8_from_rust();
 
 
 // PROGRAMMER VARS | vars for the programmer

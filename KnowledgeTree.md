@@ -22,6 +22,8 @@
 
 [Kalman Filers](https://www.youtube.com/watch?v=CaCcOwJPytQ&list=PLX2gX-ftPVXU3oUFNATxGXY90AULiqnWT)  
 
+[Making Rust and C++ talk](https://www.youtube.com/watch?v=x9acx2zgx4Q)
+
 [PID Controllers](https://www.youtube.com/watch?v=wkfEZmsQqiA&list=PLn8PRpmsu08pQBgjxYFXSsODEF3Jqmm-y)  
 
 [Pointers in C/C++](https://www.youtube.com/watch?v=2ybLD6_2gKM)  
@@ -47,6 +49,8 @@
 [UART, I2C, SPI communication](https://www.youtube.com/watch?v=IyGwvGzrqp8)  
 
 [Why we don't use classes or Object Oriented Programming](https://www.youtube.com/watch?v=QM1iUe6IofM)
+
+[Why we don't use classes or Object Oriented Programming quotes edition](https://www.yegor256.com/2016/08/15/what-is-wrong-object-oriented-programming.html)
 
 
 

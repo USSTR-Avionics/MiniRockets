@@ -1,6 +1,7 @@
-complete all sensor codes  
-    - bmp280 code seems to not exist
+complete all sensor code
 
-impl fram wrapper  
+impl fram wrapper (maybe in Rust)
 
-bmi 088 repalces bno055
+bmi088 repalces bno055
+
+impl startup health checkups
