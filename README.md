@@ -12,6 +12,15 @@
 
 # Using VSCode and PlatformIO (recommended)
 
+## Things you need to get started
+[ ] VSCode
+[ ] platformIO extension
+[ ] install git bash for your platform
+[ ] install rustc and cargo for your platform
+
+
+## Next Steps
+
 1. Clone the codebase  
     `git clone https://github.com/USSTR-Avionics/Avionics-code.git`  
 
@@ -24,4 +33,9 @@
 3. Select the "PIO Home" tab in VSCode > "Import Existing Project" > Navigate to the directory where the codebase was cloned >   
     open "CPP_flight_computer_code" > Scroll down to reveal the "Import Project" > Select board as "Teensy 4.1"  
 
-4. At the bottom click on the checkbox to build the codebase  
+4. Navigate to the root of rusty_fram_wrapper and run the terminal command  
+    `make`  
+
+4. At the bottom click on the checkbox to build the codebase (this also links the rust lib)
+
+
