@@ -2,7 +2,7 @@
 
 <center> <img src = https://i.imgur.com/jnRxNR3.png> </img> </center>
 
-# Getting Started
+# Getting Started (:warning: deprecated)
 
 1) Download and install <a href="https://www.arduino.cc/en/software">Arduino IDE 1.8.19</a>  
 2) Download and install <a href="https://www.pjrc.com/teensy/td\_download.html">Teensyduino</a> 
@@ -13,10 +13,10 @@
 # Using VSCode and PlatformIO (recommended)
 
 ## Things you need to get started
-[ ] VSCode
-[ ] platformIO extension
-[ ] install git bash for your platform
-[ ] install rustc and cargo for your platform
+- [ ] VSCode  
+- [ ] platformIO extension  
+- [ ] install git bash for your platform  
+- [ ] install rustc and cargo for your platform  
 
 
 ## Next Steps
@@ -39,3 +39,4 @@
 4. At the bottom click on the checkbox to build the codebase (this also links the rust lib)
 
 
+**NOTE : You may use any toolchain you like as long as it maintains compatibility and interoperability with "master", using different tools from the team also means that the team can't help you debug or troubleshoot as quickly**
