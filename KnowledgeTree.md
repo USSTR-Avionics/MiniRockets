@@ -44,6 +44,8 @@
 
 [Software vs Hardware Threads](https://stackoverflow.com/questions/5593328/software-threads-vs-hardware-threads)  
 
+[Teensy 4.1 Datasheet](https://www.pjrc.com/store/teensy41.html)
+
 [Timeouts in an event loop](https://www.youtube.com/watch?v=cCOL7MC4Pl0)  
 
 [UART, I2C, SPI communication](https://www.youtube.com/watch?v=IyGwvGzrqp8)  
