@@ -76,6 +76,12 @@ int init_all()
     return EXIT_SUCCESS;
     }
 
+int health_check()
+    {
+    // ! TODO perform sensor checks
+    return EXIT_SUCCESS;
+    }
+
 void ground_idle_mode(bool state)
     {
     if (state == true)
@@ -284,11 +290,15 @@ void setup()
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
     init_all();
+    if (health_check() == EXIT_FAILURE)
+        {
+        exit(1); // this should also fail if init_all() fails;
+        }
     }
 
 void loop() 
     {
-    debug_data(true);
+    debug_data(true); // remove on prod;
 
     ground_idle_mode(rocket.ground_idle);
     powered_flight_mode(rocket.powered_flight);

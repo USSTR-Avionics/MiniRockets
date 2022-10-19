@@ -50,6 +50,8 @@
 
 [UART, I2C, SPI communication](https://www.youtube.com/watch?v=IyGwvGzrqp8)  
 
+[Why you should not be creating branches on git](https://www.youtube.com/watch?v=aNgWjSAjjtg)
+
 [Why we don't use classes or Object Oriented Programming](https://www.youtube.com/watch?v=QM1iUe6IofM)
 
 [Why we don't use classes or Object Oriented Programming quotes edition](https://www.yegor256.com/2016/08/15/what-is-wrong-object-oriented-programming.html)
