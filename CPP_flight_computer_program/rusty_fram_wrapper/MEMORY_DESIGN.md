@@ -11,13 +11,24 @@
 | | | | 2 | |  |
 
 
+## Napking Math
+On if this optimisation is even necessary, I2C FRAM has a capacity of 32,000 bytes, 
+each sensor stores a 32 bit float (or 4 bytes) at least, we have 5 sensors, coming out to, 20 bytes per chunk.  
+
+Worst case savings = 15 bytes
+Best case saving = 10 bytes 
+
+For an FRAM with 32,000 bytes (neglecting reserved space), 1600 sesnor chunks can be stores,
+with worst case optimisation, 2133 sensor chunks can be stored,
+with best case optimisation, 3200 sensory chunks can be stored
+
+Worst case improvements = 33.3125 %  
+Best case improvements = 50%
 
 
-# Temperature layout
+## Temperature layouy
 
-- Take up two bytes on the fram
-
-| byte 1     | byte 2       |  
+| byte 1 |  byte 2 |  
 | whole part | decimal part |
 
 - accepted precision from -100 to 100, and

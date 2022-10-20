@@ -10,7 +10,7 @@ pub extern "C" fn get_u8_from_rust()  -> u8
     }
 
 #[no_mangle]
-pub extern "C" fn wrap_temperature_for_writing(temp: i32) -> u8
+pub extern "C" fn wrap_temperature_for_writing(temp: i32) -> u8 // take in a f32
     {
     let mut wrapped_temp: u8 = 0;
 
