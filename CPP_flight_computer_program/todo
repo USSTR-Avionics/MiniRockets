@@ -5,3 +5,7 @@ impl fram wrapper (maybe in Rust)
 bmi088 repalces bno055
 
 impl startup health checkups
+
+figure out platformIO tests, run tests before startup on debug
+
+what happens to assert fail on runtime

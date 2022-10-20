@@ -7,6 +7,7 @@
 #include "default_variables.h"
 #include "sensor_ms5611.h"
 #include "sensor_kx134.h"
+#include "memory_fram.h"
 #include "errorcodes.h"
 #include "rusty_fram.h"
 #include <Arduino.h>
@@ -64,6 +65,7 @@ int init_all()
         {
         init_kx134();
         init_MS5611();
+        init_fram();
 
         // !TODO clarify and condense the following block
         // if (CrashReport) Serial.print(CrashReport);
