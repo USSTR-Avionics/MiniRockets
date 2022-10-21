@@ -1,6 +1,7 @@
 #include "Adafruit_EEPROM_I2C.h"
 #include "Adafruit_FRAM_I2C.h"
-
+/*
+void init_fram();
 
   if (i2ceeprom.begin(0x50)) {  // you can stick the new i2c addr in here, e.g. begin(0x51);
     Serial.println("Found I2C EEPROM");
@@ -10,3 +11,5 @@
   }
 
 
+
+*/

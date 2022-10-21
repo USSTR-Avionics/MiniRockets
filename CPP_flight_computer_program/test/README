@@ -9,3 +9,6 @@ in the development cycle.
 
 More information about PlatformIO Unit Testing:
 - https://docs.platformio.org/en/latest/advanced/unit-testing/index.html
+
+Ref for unity.h unit tester for C
+- https://github.com/ThrowTheSwitch/Unity

@@ -1,7 +1,7 @@
 #include "Adafruit_BMP280.h"
 
-bool init_bmp280()
+int init_bmp280()
     {
 
-    return true;
+    return EXIT_SUCCESS;
     }

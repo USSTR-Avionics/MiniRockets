@@ -65,7 +65,7 @@ int init_all()
         {
         init_kx134();
         init_MS5611();
-        init_fram();
+        //init_fram();
 
         // !TODO clarify and condense the following block
         // if (CrashReport) Serial.print(CrashReport);
@@ -262,9 +262,14 @@ void debug_data(bool time_delay)
         }
 
     Serial.println("--- Rust lib ---");
-    uint8_t x = get_u8_from_rust();
-    Serial.println(x);
     // get pointer and array checks
+    Serial.println(wrap_temperature_for_writing(0));
+    Serial.println(wrap_temperature_for_writing(100));
+    int32_t x = -10;
+    // Serial.print("pass and return ");
+    // Serial.println(pass_and_return_through_ffi(x));
+    Serial.println(wrap_temperature_for_writing(x));
+    Serial.println(wrap_temperature_for_writing(500));
 
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
