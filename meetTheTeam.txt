@@ -12,3 +12,7 @@ Rust
 Jane Doe
 Machine Code
 Building robots
+
+Tianze Kuang <- David
+C++
+Raytracer
