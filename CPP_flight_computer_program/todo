@@ -1,15 +1,15 @@
-complete all sensor code
+[HALTED] complete all sensor code
+    - BMI088 (don't have the sensor yet)
+    - RadioHead (too lazy to do it now)
 
-impl fram wrapper (maybe in Rust)
+[IN PROGRESS @frroossst] impl fram wrapper (maybe in Rust)
 
-bmi088 repalces bno055
+[TODO] impl startup health checkups
 
-impl startup health checkups
+[IN PROGRESS @snowy-shadow]figure out platformIO tests, run tests before startup on debug
 
-figure out platformIO tests, run tests before startup on debug
+[TODO] change return to EXIT codes rather than bool
 
-what happens to assert fail on runtime
-
-change return to EXIT codes rather than bool
-
-add a wiring diagram for the microcontroller
+[IN PROGRESS @djh293] add a wiring diagram for the microcontroller
+ 
+[TODO] ifndef
