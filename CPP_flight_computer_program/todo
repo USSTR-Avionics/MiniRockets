@@ -11,3 +11,5 @@ figure out platformIO tests, run tests before startup on debug
 what happens to assert fail on runtime
 
 change return to EXIT codes rather than bool
+
+add a wiring diagram for the microcontroller

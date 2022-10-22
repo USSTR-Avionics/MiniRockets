@@ -65,7 +65,7 @@ int init_all()
         {
         init_kx134();
         init_MS5611();
-        //init_fram();
+        init_fram();
 
         // !TODO clarify and condense the following block
         // if (CrashReport) Serial.print(CrashReport);
@@ -271,6 +271,10 @@ void debug_data(bool time_delay)
     Serial.println(wrap_temperature_for_writing(x));
     Serial.println(wrap_temperature_for_writing(500));
 
+    while(true)
+        {
+        }
+
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
     kx134_accel_z = get_kx134_accel_z();
@@ -299,6 +303,7 @@ void setup()
     init_all();
     if (health_check() == EXIT_FAILURE)
         {
+        Serial.println("[FAILED] Health Check"); // also write to reserved fram space
         exit(1); // this should also fail if init_all() fails;
         }
     }
