@@ -1,4 +1,5 @@
 #include "Adafruit_FRAM_I2C.h"
+#include <Arduino.h>
 
 Adafruit_FRAM_I2C fram = Adafruit_FRAM_I2C();
 
@@ -16,4 +17,11 @@ int init_fram()
 int write_to_fram(int what, int where)
     {
 
+    }
+
+int c_return_delay_test()
+    {
+    delay(500);
+    delay(500);
+    return 0;
     }

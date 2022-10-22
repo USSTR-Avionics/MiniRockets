@@ -22,7 +22,7 @@ pub extern "C" fn pass_and_return_through_ffi(x: i32)  -> i32
 #[no_mangle]
 pub extern "C" fn return_delay_test()  -> u8
     {
-    Duration::from_millis(500);
+    let ten_millis = Duration::from_millis(500);
 
     return 0;
     }
