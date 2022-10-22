@@ -18,8 +18,6 @@
 #include <SD.h>
 
 
-
-
 // PROGRAMMER VARS | vars for the programmer
 bool debug_mode = false; // remove these comparisons for production
 

@@ -11,7 +11,6 @@ pub extern "C" fn get_u8_from_rust()  -> u8
     1
     }
 
-
 #[no_mangle]
 pub extern "C" fn pass_and_return_through_ffi(x: i32)  -> i32
     {
