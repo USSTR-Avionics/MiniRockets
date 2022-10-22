@@ -83,13 +83,13 @@ void serialPrint()
 //  dataString.concat(",");
 //  dataString.concat(bno055_euler_z);
 //  dataString.concat(",");
-dataString.concat(bno055_quat_w);
-dataString.concat(",");
-dataString.concat(bno055_quat_y);
-dataString.concat(",");
-dataString.concat(bno055_quat_x);
-dataString.concat(",");
-dataString.concat(bno055_quat_z);
+//dataString.concat(bno055_quat_w);
+//dataString.concat(",");
+//dataString.concat(bno055_quat_y);
+//dataString.concat(",");
+//dataString.concat(bno055_quat_x);
+//dataString.concat(",");
+//dataString.concat(bno055_quat_z);
 //  dataString.concat(",");
 //  dataString.concat(bno055_temp);
 //  dataString.concat(",");
@@ -105,12 +105,12 @@ dataString.concat(absoluteAltitude);
 //  dataString.concat(",");
 //  if (KX134Activate == 1)
 //  {
-//    dataString.concat(kx134_accel_x);
-//    dataString.concat(",");
-//    dataString.concat(kx134_accel_y);
-//    dataString.concat(",");
-//    dataString.concat(kx134_accel_z);
-//    dataString.concat(",");
+    dataString.concat(kx134_accel_x);
+    dataString.concat(",");
+    dataString.concat(kx134_accel_y);
+    dataString.concat(",");
+    dataString.concat(kx134_accel_z);
+    dataString.concat(",");
 //  }
 //
 //  dataString.concat(decentCheck);
