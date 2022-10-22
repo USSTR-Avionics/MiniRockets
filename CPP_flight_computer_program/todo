@@ -13,3 +13,5 @@
 [IN PROGRESS @djh293] add a wiring diagram for the microcontroller
  
 [TODO] ifndef
+
+[IN PROGRESS @frroossst @snowy-shadow] write a custom panic handler in rust
