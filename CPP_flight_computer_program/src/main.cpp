@@ -297,7 +297,6 @@ void setup()
     {
     Serial.begin(9600); // arg doesn't need to be 9600 just true
     Wire.begin();
-    Serial.println(__cplusplus);
     init_all();
     if (health_check() == EXIT_FAILURE)
         {
