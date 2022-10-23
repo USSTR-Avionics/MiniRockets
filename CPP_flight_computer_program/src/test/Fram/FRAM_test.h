@@ -1,6 +1,9 @@
 #ifndef CPP_FLIGHT_COMPUTER_PROGRAM_FRAM_TEST_H
 #define CPP_FLIGHT_COMPUTER_PROGRAM_FRAM_TEST_H
 
+#include <tuple>
+#include <string>
+
 #include "Adafruit_EEPROM_I2C.h"
 #include "Adafruit_FRAM_I2C.h"
 
@@ -9,7 +12,7 @@
 class Floating_point
 {
 public:
-    Floating_point(const float& Input, const uint8_t Size);
+    Floating_point(const float& Input, const uint8_t& Size, std::string  Name);
 
     bool operator == (const Floating_point& Other) const;
 
@@ -17,16 +20,24 @@ public:
 
     uint16_t Find_Addr(const uint8_t& Size);
 
+    // save data address in FRAM to container
+    std::tuple<std::string, uint16_t, uint8_t> Store();
+
     virtual void Write(const float& Value) = 0;
 
     virtual float Read() = 0;
 
+protected:
+    // what for
+    std::string m_Name = "Variable";
     // where
-    uint16_t Addr = 0x60;
+    uint16_t m_Addr = 0x60;
     // how big
-    float Value;
+    uint8_t m_Size = 8;
+    // value stored in decimal
+    float m_Value = 0;
 
-    Adafruit_FRAM_I2C FRAM = Adafruit_FRAM_I2C();
+    Adafruit_FRAM_I2C m_FRAM = Adafruit_FRAM_I2C();
 
 private:
     virtual void Clear() = 0;
@@ -34,8 +45,8 @@ private:
 };
 class f16_FRAM : protected Floating_point
 {
-    f16_FRAM(const float& Input, const uint8_t& Size)
-    : Floating_point(Input, Size){};
+    f16_FRAM(const float& Input, const uint8_t& Size = 16, const std::string Name)
+    : Floating_point(Input, Size, Name){};
 
     void operator = (const float& Value);
 

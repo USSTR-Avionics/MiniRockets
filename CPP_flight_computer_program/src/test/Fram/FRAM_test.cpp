@@ -1,15 +1,21 @@
 #include "FRAM_test.h"
+
+#include <utility>
 /* =========================================================================
  *                          Floating_point
  * =========================================================================
  */
+// Constructor
+Floating_point::Floating_point(const float &Input, const uint8_t& Size, std::string  Name)
+        : m_Name(std::move(Name)), m_Addr(Find_Addr(Size)), m_Size(Size), m_Value(Input) {}
+
+// Member functions
 uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 {
     uint16_t Counter = 0, Required = 0, Tracker = 0;
 
     const uint8_t Zero = 0x00;
 
-    bool Flag = false;
 
     // Amount required
     switch(Size)
@@ -37,9 +43,12 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 
     while (true)
     {
+        bool Flag = false;
+
         for (; Counter < Required; Counter++)
         {
-            const uint8_t Temp = FRAM.read(Addr);
+            // we might need to implement an addres limiter, but 256kb is a lot of address to use
+            const uint8_t Temp = m_FRAM.read(m_Addr);
 
             if(Temp != Zero)
             {
@@ -50,7 +59,7 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 
         if(Flag == true)
         {
-            Addr += Tracker;
+            m_Addr += Tracker;
             Tracker = 0;
         }
         else
@@ -59,16 +68,21 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
         }
     }
 
-    return Addr;
+    return m_Addr;
 }
 
+std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store()
+{
+    std::tuple<std::string, uint16_t, uint8_t> Temp = std::make_tuple(m_Name, m_Addr, m_Size);
+    return Temp;
+};
+
+// Operators
 bool Floating_point::operator == (const Floating_point& Other) const
 {
-    return Other.Value == this->Value;
+    return this->m_Value == Other.m_Value;
 }
 
-Floating_point::Floating_point(const float &Input, const uint8_t Size)
-    : Value(Input), Addr(Find_Addr(Size)) {}
 
 /* =========================================================================
  *                          f16_FRAM
@@ -84,8 +98,8 @@ void f16_FRAM::Clear()
 
     for(uint8_t i = 0; i < 2; i++)
     {
-        FRAM.write(Addr, Zero);
-        Addr++;
+        m_FRAM.write(m_Addr, Zero);
+        m_Addr++;
     }
 }
 
@@ -109,8 +123,8 @@ void f32_FRAM::Clear()
 
     for(uint8_t i = 0; i < 4; i++)
     {
-        FRAM.write(Addr, Zero);
-        Addr++;
+        m_FRAM.write(m_Addr, Zero);
+        m_Addr++;
     }
 }
 
