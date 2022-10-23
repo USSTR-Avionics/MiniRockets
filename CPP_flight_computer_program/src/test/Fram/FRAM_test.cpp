@@ -79,7 +79,7 @@ std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Nam
 // Operators
 bool Floating_point::operator == (const Floating_point& Other) const
 {
-    return this->m_Value == Other.m_Value;
+    return m_Value == Other.m_Value;
 }
 
 
