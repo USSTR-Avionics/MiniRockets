@@ -8,7 +8,6 @@ enum AVR
 {
     AVR_FAILED,
     AVR_SUCCESS,
-    AVR_TIME_OUT,
 };
 
 template<typename T>
