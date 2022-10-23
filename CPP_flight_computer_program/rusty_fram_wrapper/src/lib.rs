@@ -1,9 +1,9 @@
 #![no_main]
 #![no_std]
 
-use core::{convert::TryInto, ffi::c_int};
-// use core::time::Duration;
+use core::{convert::TryInto, ffi::{c_int, c_float}};
 // use core::panic::PanicInfo;
+// use core::time::Duration;
 use panic_halt as _;
 
 /*
@@ -28,8 +28,12 @@ pub extern "C" fn return_delay_test()  -> u8
     }
 
 #[no_mangle]
-pub extern "C" fn wrap_temperature_for_writing(temp: c_int) -> u8 // take in a f32
+pub extern "C" fn int_wrap_temperature_for_writing(temp_reading: c_float) -> u8 // take in a f32
     {
+    let temp_whole: i32 = temp_reading as i32;
+    
+
+    /* 
     if (temp <= 100) && (temp >= 0)
         {
         let unwrp_result: Result<u8, core::num::TryFromIntError> = temp.try_into(); 
@@ -53,22 +57,7 @@ pub extern "C" fn wrap_temperature_for_writing(temp: c_int) -> u8 // take in a f
         // wrapped_temp = wrapped_temp + 101;
         return wrapped_temp;
         }
+    */
 
     return 0;
     }
-
-/* 
-// Sam's take on this fn
-#[no_mangle]
-pub extern "C" fn Sam_wrap_temperature_for_writing(temp: c_int) -> u8
-{
-    if (temp > 100) || (temp < -100)
-    {
-        0
-    }
-    else
-    {
-        (temp + 101) as u8
-    }
-    }
-*/

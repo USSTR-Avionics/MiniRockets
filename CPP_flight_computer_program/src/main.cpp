@@ -7,6 +7,7 @@
 #include "default_variables.h"
 #include "sensor_ms5611.h"
 #include "sensor_kx134.h"
+#include "Watchdog_t4.h"
 #include "memory_fram.h"
 #include "errorcodes.h"
 #include "rusty_fram.h"
@@ -297,6 +298,9 @@ void setup()
     {
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
+
+    // TODO: configure watchdog for error handling
+
     init_all();
     if (health_check() == EXIT_FAILURE)
         {
