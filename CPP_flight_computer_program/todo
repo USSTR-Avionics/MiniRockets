@@ -15,3 +15,6 @@
 [TODO] ifndef
 
 [IN PROGRESS @frroossst @snowy-shadow] write a custom panic handler in rust
+    - test panic abort in Carog.toml
+    - test panic halt in lib.rs
+    - ^^^ test both sequentially    

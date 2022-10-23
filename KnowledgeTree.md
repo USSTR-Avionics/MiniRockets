@@ -44,6 +44,8 @@
 
 [Software vs Hardware Threads](https://stackoverflow.com/questions/5593328/software-threads-vs-hardware-threads)  
 
+[Synching your git fork with remote](https://www.freecodecamp.org/news/how-to-sync-your-fork-with-the-original-git-repository/)
+
 [Teensy 4.1 Datasheet](https://www.pjrc.com/store/teensy41.html)
 
 [Timeouts in an event loop](https://www.youtube.com/watch?v=cCOL7MC4Pl0)  

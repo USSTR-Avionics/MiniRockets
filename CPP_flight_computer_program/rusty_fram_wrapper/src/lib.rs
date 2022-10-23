@@ -2,8 +2,16 @@
 #![no_std]
 
 use core::{convert::TryInto, ffi::c_int};
-use core::time::Duration;
+// use core::time::Duration;
+// use core::panic::PanicInfo;
 use panic_halt as _;
+
+/*
+#[panic_handler]
+fn panic(_info: &PanicInfo) -> ! {
+    loop {}
+}
+*/
 
 #[no_mangle]
 pub extern "C" fn get_u8_from_rust()  -> u8
@@ -12,16 +20,9 @@ pub extern "C" fn get_u8_from_rust()  -> u8
     }
 
 #[no_mangle]
-pub extern "C" fn pass_and_return_through_ffi(x: i32)  -> i32
-    {
-    x
-    }
-
-
-#[no_mangle]
 pub extern "C" fn return_delay_test()  -> u8
     {
-    let ten_millis = Duration::from_millis(500);
+    // let ten_millis = Duration::from_millis(500);
 
     return 0;
     }
@@ -56,6 +57,7 @@ pub extern "C" fn wrap_temperature_for_writing(temp: c_int) -> u8 // take in a f
     return 0;
     }
 
+/* 
 // Sam's take on this fn
 #[no_mangle]
 pub extern "C" fn Sam_wrap_temperature_for_writing(temp: c_int) -> u8
@@ -69,3 +71,4 @@ pub extern "C" fn Sam_wrap_temperature_for_writing(temp: c_int) -> u8
         (temp + 101) as u8
     }
     }
+*/
