@@ -6,8 +6,8 @@
  * =========================================================================
  */
 // Constructor
-Floating_point::Floating_point(const float &Input, const uint8_t& Size, std::string  Name)
-        : m_Name(std::move(Name)), m_Addr(Find_Addr(Size)), m_Size(Size), m_Value(Input) {}
+Floating_point::Floating_point(const float &Input, const uint8_t& Size)
+        : m_Addr(Find_Addr(Size)), m_Size(Size), m_Value(Input) {}
 
 // Member functions
 uint16_t Floating_point::Find_Addr(const uint8_t& Size)
@@ -71,11 +71,10 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
     return m_Addr;
 }
 
-std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store()
+std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Name)
 {
-    std::tuple<std::string, uint16_t, uint8_t> Temp = std::make_tuple(m_Name, m_Addr, m_Size);
-    return Temp;
-};
+    return std::tuple<std::string, uint16_t, uint8_t>(std::move(Name), m_Addr, m_Size);
+}
 
 // Operators
 bool Floating_point::operator == (const Floating_point& Other) const
