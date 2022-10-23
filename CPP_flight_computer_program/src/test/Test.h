@@ -1,6 +1,7 @@
 #ifndef CPP_FLIGHT_COMPUTER_PROGRAM_TEST_H
 #define CPP_FLIGHT_COMPUTER_PROGRAM_TEST_H
 
+#include <functional>
 #include "rusty_fram.h"
 
 enum AVR
@@ -35,7 +36,7 @@ public:
     
     enum AVR Test_Value(const std::function<T(T, T)>& Function, const T& Value, const T& Expect) const
     {
-        Function(Value, Expect) ? return AVR_SUCCESS : AVR_FAILED;
+        return (Expect == Function(Value, Expect)) ?  AVR_SUCCESS :  AVR_FAILED;
     }
     
 };
