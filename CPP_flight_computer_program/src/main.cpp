@@ -16,6 +16,7 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
+// #include "MYTest.h"
 
 
 // PROGRAMMER VARS | vars for the programmer
@@ -268,6 +269,8 @@ void debug_data(bool time_delay)
     // Serial.println(pass_and_return_through_ffi(x));
     Serial.println(wrap_temperature_for_writing(x));
     Serial.println(wrap_temperature_for_writing(5.9));
+    Serial.println("called delay func");
+    Serial.println(c_return_delay_test());
 
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();

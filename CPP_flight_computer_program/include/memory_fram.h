@@ -3,3 +3,4 @@
 
 
 int init_fram();
+int c_return_delay_test();
