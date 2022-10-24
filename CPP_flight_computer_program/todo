@@ -15,3 +15,5 @@
 [TODO] ifndef
 
 [IN PROGRESS @frroossst @snowy-shadow] write a custom panic handler in rust
+
+[TODO] If there is time, redo the state machine. Two states can exist at the same time
