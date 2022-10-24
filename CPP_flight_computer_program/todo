@@ -15,5 +15,13 @@
 [TODO] ifndef
 
 [IN PROGRESS @frroossst @snowy-shadow] write a custom panic handler in rust
+    - test panic abort in Carog.toml
+    - test panic halt in lib.rs
+    - ^^^ test both sequentially
+    - https://doc.rust-lang.org/nomicon/ffi.html
+
+[TODO] configure the watchdog timer on the Teensy 4.1
+    - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
+    -
 
 [TODO] If there is time, rewrite the state machine. Two states can exist at the same time
