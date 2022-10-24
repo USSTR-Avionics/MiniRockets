@@ -3,6 +3,7 @@
 
 #include <tuple>
 #include <string>
+#include <bitset>
 
 #include "Adafruit_EEPROM_I2C.h"
 #include "Adafruit_FRAM_I2C.h"
@@ -12,14 +13,21 @@
 class Floating_point
 {
 public:
+    // constructor
     Floating_point(const float& Input, const uint8_t& Size);
 
-    bool operator == (const Floating_point& Other) const;
+    // IO
+    virtual float Read() = 0;
 
-    uint16_t Find_Addr(const uint8_t& Size);
+    virtual void Write(const float& Value) = 0;
 
     // save data address in FRAM to container <"Name", Addr, Size(bits)>
     std::tuple<std::string, uint16_t, uint8_t> Store(std::string Name);
+
+    // operators
+    bool operator == (const Floating_point& Other) const;
+
+    uint16_t Find_Addr(const uint8_t& Size);
 
 protected:
     // where
@@ -38,8 +46,15 @@ private:
 };
 class f16_FRAM : protected Floating_point
 {
+public:
+    // Constructor
     f16_FRAM(const float& Input)
     : Floating_point(Input, 16){};
+
+    // IO
+    void Write(const float& Value) override;
+
+    float Read() override;
 
     void operator = (const float& Value);
 
@@ -47,13 +62,9 @@ class f16_FRAM : protected Floating_point
 
     f16_FRAM& operator + (const f16_FRAM& Other);
 
-    void Write(const float& Value);
-
-    float Read();
-
-private:
     // call write at destruction
     ~f16_FRAM();
+
 private:
     void Clear() override;
 

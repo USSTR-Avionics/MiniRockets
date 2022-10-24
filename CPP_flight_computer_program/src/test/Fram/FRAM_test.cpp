@@ -16,7 +16,6 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 
     const uint8_t Zero = 0x00;
 
-
     // Amount required
     switch(Size)
     {
@@ -48,6 +47,7 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
         for (; Counter < Required; Counter++)
         {
             // we might need to implement an addres limiter, but 256kb is a lot of address to use
+            // will crash the program tho
             const uint8_t Temp = m_FRAM.read(m_Addr);
 
             if(Temp != Zero)
@@ -87,8 +87,38 @@ bool Floating_point::operator == (const Floating_point& Other) const
  *                          f16_FRAM
  * =========================================================================
  */
-f16_FRAM& f16_FRAM::operator = (const f16_FRAM& Other)
+void Write(const float& Value)
 {
+
+}
+
+float f16_FRAM::Read()
+{
+    std::bitset<8> Register1, Register2;
+    bool Negative = false;
+
+    // Assuming this works, pretty sure doesn't
+    Register1 = m_FRAM.read(m_Addr);
+    Register2 = m_FRAM.read(m_Addr++);
+
+    if(Register1[0] == 1)
+    {
+        Negative = true;
+        // shift left to remove flag
+        Register1 << 1;
+    }
+    else
+    {
+        // shift left to remove flag
+        Register1 << 1;
+    }
+
+}
+
+// Destructor
+f16_FRAM::~f16_FRAM()
+{
+    void Clear();
 }
 
 void f16_FRAM::Clear()
@@ -102,10 +132,11 @@ void f16_FRAM::Clear()
     }
 }
 
-f16_FRAM::~f16_FRAM()
+// Operator
+f16_FRAM& f16_FRAM::operator = (const f16_FRAM& Other)
 {
-    void Clear();
 }
+
 
 /* =========================================================================
  *                          f32_FRAM
