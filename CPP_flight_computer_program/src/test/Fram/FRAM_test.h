@@ -4,6 +4,7 @@
 #include <tuple>
 #include <string>
 #include <bitset>
+#include <utility>
 
 #include "Adafruit_EEPROM_I2C.h"
 #include "Adafruit_FRAM_I2C.h"
