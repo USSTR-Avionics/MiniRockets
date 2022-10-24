@@ -21,13 +21,14 @@ public:
 
     virtual void Write(const float& Value) = 0;
 
+    // util
+    uint16_t Find_Addr(const uint8_t& Size);
     // save data address in FRAM to container <"Name", Addr, Size(bits)>
     std::tuple<std::string, uint16_t, uint8_t> Store(std::string Name);
 
     // operators
+    // equal
     bool operator == (const Floating_point& Other) const;
-
-    uint16_t Find_Addr(const uint8_t& Size);
 
 protected:
     // where
@@ -40,6 +41,8 @@ protected:
     // FRAM API
     Adafruit_FRAM_I2C m_FRAM = Adafruit_FRAM_I2C();
 
+
+
 private:
     virtual void Clear() = 0;
 
@@ -48,6 +51,8 @@ class f16_FRAM : protected Floating_point
 {
 public:
     // Constructor
+    f16_FRAM();
+
     f16_FRAM(const float& Input)
     : Floating_point(Input, 16){};
 
@@ -56,11 +61,15 @@ public:
 
     float Read() override;
 
-    void operator = (const float& Value);
-
-    f16_FRAM& operator = (const f16_FRAM& Other);
-
-    f16_FRAM& operator + (const f16_FRAM& Other);
+    // operators
+    // addition
+    Floating_point& operator + (const float& Value) const;
+    Floating_point& operator + (const Floating_point& Other) const;
+    // subtraction
+    Floating_point& operator - (const float& Value) const;
+    Floating_point& operator - (const Floating_point& Other) const;
+    // assignment
+    Floating_point& operator = (const Floating_point& Value);
 
     // call write at destruction
     ~f16_FRAM();

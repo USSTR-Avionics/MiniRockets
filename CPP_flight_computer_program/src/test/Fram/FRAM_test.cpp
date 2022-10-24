@@ -12,7 +12,7 @@ Floating_point::Floating_point(const float &Input, const uint8_t& Size)
 // Member functions
 uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 {
-    uint16_t Counter = 0, Required = 0, Tracker = 0;
+    uint16_t Counter = 0, Required = 0, Tracker = 0, Addr = 0x60;
 
     const uint8_t Zero = 0x00;
 
@@ -42,24 +42,27 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 
     while (true)
     {
+        uint16_t Temp_Addr = Addr;
+
         bool Flag = false;
 
         for (; Counter < Required; Counter++)
         {
             // we might need to implement an addres limiter, but 256kb is a lot of address to use
             // will crash the program tho
-            const uint8_t Temp = m_FRAM.read(m_Addr);
+            const uint8_t Temp_Value = m_FRAM.read(Temp_Addr);
 
-            if(Temp != Zero)
+            if(Temp_Value != Zero)
             {
                 Flag = true;
-                Tracker++;
+                Tracker += ++Counter;
             }
+            Temp_Addr++;
         }
 
         if(Flag == true)
         {
-            m_Addr += Tracker;
+            Addr += Tracker;
             Tracker = 0;
         }
         else
@@ -68,7 +71,7 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
         }
     }
 
-    return m_Addr;
+    return Addr;
 }
 
 std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Name)
@@ -131,12 +134,6 @@ void f16_FRAM::Clear()
         m_Addr++;
     }
 }
-
-// Operator
-f16_FRAM& f16_FRAM::operator = (const f16_FRAM& Other)
-{
-}
-
 
 /* =========================================================================
  *                          f32_FRAM
