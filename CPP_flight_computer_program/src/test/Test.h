@@ -4,12 +4,14 @@
 #include <functional>
 #include "rusty_fram.h"
 
-enum AVR
+namespace AVR
 {
-    AVR_FAILED,
-    AVR_SUCCESS,
-};
-
+    enum Result
+    {
+        AVR_FAILED,
+        AVR_SUCCESS,
+    };
+}
 template<typename T>
 class Test
 {
@@ -33,9 +35,9 @@ public:
     };
     */
     
-    enum AVR Test_Value(const std::function<T(T, T)>& Function, const T& Value, const T& Expect) const
+    enum AVR::Result Test_Value(const std::function<T(T, T)>& Function, const T& Value, const T& Expect) const
     {
-        return (Expect == Function(Value, Expect)) ?  AVR_SUCCESS :  AVR_FAILED;
+        return (Expect == Function(Value, Expect)) ?  AVR::Result::AVR_SUCCESS :  AVR::Result::AVR_FAILED;
     }
     
 };

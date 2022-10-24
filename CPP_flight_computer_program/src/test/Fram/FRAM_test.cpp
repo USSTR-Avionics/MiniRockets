@@ -36,7 +36,8 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
             break;
 
         default:
-            // throw an error
+            // this should be an error, but exceptions are disabled cannot throw
+            Required = 2;
             break;
     }
 
@@ -79,13 +80,6 @@ std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Nam
     return std::tuple<std::string, uint16_t, uint8_t>(std::move(Name), m_Addr, m_Size);
 }
 
-// Operators
-bool Floating_point::operator == (const Floating_point& Other) const
-{
-    return m_Value == Other.m_Value;
-}
-
-
 /* =========================================================================
  *                          f16_FRAM
  * =========================================================================
@@ -118,12 +112,19 @@ float f16_FRAM::Read()
 
 }
 
+// Operators
+bool f16_FRAM::operator == (const f16_FRAM& Other) const
+{
+    return m_Value == Other.m_Value;
+}
+
 // Destructor
 f16_FRAM::~f16_FRAM()
 {
     void Clear();
 }
 
+//clear storage
 void f16_FRAM::Clear()
 {
     const uint8_t Zero = 0x00;
@@ -139,6 +140,17 @@ void f16_FRAM::Clear()
  *                          f32_FRAM
  * =========================================================================
  */
+
+// Operators
+f32_FRAM& f32_FRAM::operator = (const float& Value) const
+{
+    f32_FRAM Temp = Value;
+};
+
+bool f32_FRAM::operator == (const f32_FRAM& Other) const
+{
+    return m_Value == Other.m_Value;
+}
 
 f32_FRAM::~f32_FRAM()
 {

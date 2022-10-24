@@ -40,17 +40,11 @@ protected:
 
     // FRAM API
     Adafruit_FRAM_I2C m_FRAM = Adafruit_FRAM_I2C();
-
-
-
-private:
-    virtual void Clear() = 0;
-
 };
 class f16_FRAM : protected Floating_point
 {
 public:
-    // Constructor
+    // Constructors
     f16_FRAM();
 
     f16_FRAM(const float& Input)
@@ -63,28 +57,55 @@ public:
 
     // operators
     // addition
-    Floating_point& operator + (const float& Value) const;
-    Floating_point& operator + (const Floating_point& Other) const;
+    f16_FRAM& operator + (const float& Value) const;
+    f16_FRAM& operator + (const f16_FRAM& Other) const;
     // subtraction
-    Floating_point& operator - (const float& Value) const;
-    Floating_point& operator - (const Floating_point& Other) const;
+    f16_FRAM& operator - (const float& Value) const;
+    f16_FRAM& operator - (const f16_FRAM& Other) const;
     // assignment
-    Floating_point& operator = (const Floating_point& Value);
+    f16_FRAM& operator = (const f16_FRAM& Value) const;
 
-    // call write at destruction
+    // comparison
+    bool operator == (const f16_FRAM& Other) const;
+
+    // call clear at destruction
     ~f16_FRAM();
 
 private:
-    void Clear() override;
+    void Clear();
 
 };
 
 class f32_FRAM : protected Floating_point
 {
+public:
+    // Constructors
+    f32_FRAM();
+
+    f32_FRAM(const float& Input)
+            : Floating_point(Input, 32){};
+
+    // IO
+    void Write(const float& Value) override;
+
+    float Read() override;
+
+    // operators
+    // addition
+    f32_FRAM& operator + (const float& Value) const;
+    f32_FRAM& operator + (const f32_FRAM& Other) const;
+    // subtraction
+    f32_FRAM& operator - (const float& Value) const;
+    f32_FRAM& operator - (const f32_FRAM& Other) const;
+    // assignment
+    f32_FRAM& operator = (const float& Value) const;
+    f32_FRAM& operator = (const f32_FRAM& Value) const;
+    // comparison
+    bool operator == (const f32_FRAM& Other) const;
 
     ~f32_FRAM();
 private:
-    void Clear() override;
+    void Clear();
 };
 
 #endif //CPP_FLIGHT_COMPUTER_PROGRAM_FRAM_TEST_H
