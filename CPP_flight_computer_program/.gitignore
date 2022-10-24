@@ -6,3 +6,5 @@
 
 cmake-build-teensy41
 cmake-build-debug
+CMakeLists.txt
+CMakeListsPrivate.txt
