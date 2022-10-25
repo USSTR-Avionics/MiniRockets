@@ -48,8 +48,11 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 
         for (; Counter < Required; Counter++)
         {
-            // we might need to implement an addres limiter, but 256kb is a lot of address to use
-            // will crash the program tho
+            /* we might need to implement an addres limiter, but 256kb is a lot of address to use
+             * will crash the program if goes out of memory, unless adafruit made it wrap around
+             * in which case, Find_Addr() will search forever which is also bad
+            */
+
             const uint8_t Temp_Value = m_FRAM.read(Temp_Addr);
 
             if(Temp_Value != Zero)
@@ -85,7 +88,7 @@ std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Nam
  */
 void f16_FRAM::Write(const float& Value)
 {
-    if (Value > 127 || Value < -127)
+    if (Value > 127.127 || Value < -127.127)
     {
         // return AVR::Result -> AVR_Failed
     }
