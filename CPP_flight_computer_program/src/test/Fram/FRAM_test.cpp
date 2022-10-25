@@ -141,14 +141,14 @@ float f16_FRAM::Read()
 
     // chain
     // these casts will result in inaccuracy 99%
-    float Val1 = Register1.to_ulong(), Val2 = Register2.to_ulong();
+    float Whole = Register1.to_ulong(), Decimal = Register2.to_ulong();
 
-    while(Val2 >= 1)
+    while(Decimal >= 1)
     {
-        Val2 / 10;
+        Decimal /= 10;
     }
 
-    return Negative == true ? -(Val1 + Val2) : (Val1 + Val2);
+    return Negative == true ? -(Whole + Decimal) : (Whole + Decimal);
 }
 
 // Operators
