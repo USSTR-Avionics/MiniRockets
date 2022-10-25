@@ -13,8 +13,6 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 {
     uint16_t Counter = 0, Required = 0, Tracker = 0, Addr = 0x60;
 
-    const uint8_t Zero = 0x00;
-
     // Amount required
     switch(Size)
     {
@@ -55,7 +53,7 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 
             const uint8_t Temp_Value = m_FRAM.read(Temp_Addr);
 
-            if(Temp_Value != Zero)
+            if(Temp_Value != 0)
             {
                 Flag = true;
                 Tracker += ++Counter;
@@ -88,7 +86,7 @@ std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Nam
  */
 void f16_FRAM::Write(const float& Value)
 {
-    if (Value > 127.127 || Value < -127.127)
+    if (Value > 127.255 || Value < -127.255)
     {
         // return AVR::Result -> AVR_Failed
     }
