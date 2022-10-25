@@ -2,7 +2,6 @@
 #define CPP_FLIGHT_COMPUTER_PROGRAM_TEST_H
 
 #include <functional>
-#include "rusty_fram.h"
 
 namespace AVR
 {

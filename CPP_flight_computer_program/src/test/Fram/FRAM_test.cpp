@@ -83,8 +83,41 @@ std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Nam
  *                          f16_FRAM
  * =========================================================================
  */
-void Write(const float& Value)
+void f16_FRAM::Write(const float& Value)
 {
+    if (Value > 127 || Value < -127)
+    {
+        // return AVR::Result -> AVR_Failed
+    }
+
+    std::bitset<8> Whole;
+    uint8_t Decimal;
+    bool Negative = false;
+
+    // negative values are stored backwards, don't want that
+    if (Value < 0)
+    {
+        Whole = static_cast<uint8_t>(-Value);
+        Negative = true;
+    }
+    else
+    {
+        Whole = static_cast<uint8_t>(Value);
+    }
+
+    // narrowing conversion from int to float -> inaccuracy
+    Decimal = static_cast<uint8_t>((Value - Whole.to_ulong() * 1000));
+
+    if (Negative == true)
+    {
+        // Negative flag
+        Whole[0] = 1;
+    }
+
+    m_FRAM.write(m_Addr, static_cast<uint8_t>(Whole.to_ulong()));
+    m_FRAM.write(m_Addr++, Decimal);
+
+    // return AVR::Result -> AVR_SUCCESS
 
 }
 
@@ -100,18 +133,31 @@ float f16_FRAM::Read()
     if(Register1[0] == 1)
     {
         Negative = true;
-        // shift left to remove flag
-        Register1 << 1;
-    }
-    else
-    {
-        // shift left to remove flag
-        Register1 << 1;
+        Register1[0] = 0;
     }
 
+    // chain
+    // these casts will result in inaccuracy 99%
+    float Val1 = Register1.to_ulong(), Val2 = Register2.to_ulong();
+
+    while(Val2 >= 1)
+    {
+        Val2 / 10;
+    }
+
+    return Negative == true ? -(Val1 + Val2) : (Val1 + Val2);
 }
 
 // Operators
+f16_FRAM& f16_FRAM::operator = (const f16_FRAM& RHS)
+{   if(this != &RHS)
+    {
+        this->m_Value = RHS.m_Value;
+        this->m_Addr = RHS.m_Addr;
+    }
+    return *this;
+}
+
 bool f16_FRAM::operator == (const f16_FRAM& Other) const
 {
     return m_Value == Other.m_Value;

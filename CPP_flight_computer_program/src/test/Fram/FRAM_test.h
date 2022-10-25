@@ -27,10 +27,6 @@ public:
     // save data address in FRAM to container <"Name", Addr, Size(bits)>
     std::tuple<std::string, uint16_t, uint8_t> Store(std::string Name);
 
-    // operators
-    // equal
-    bool operator == (const Floating_point& Other) const;
-
 protected:
     // where
     uint16_t m_Addr = 0x60;
@@ -51,6 +47,10 @@ public:
     f16_FRAM(const float& Input)
     : Floating_point(Input, 16){};
 
+    f16_FRAM(const f16_FRAM& RHS)
+            : Floating_point(RHS.m_Value, 16){};
+
+
     // IO
     void Write(const float& Value) override;
 
@@ -59,15 +59,15 @@ public:
     // operators
     // addition
     f16_FRAM& operator + (const float& Value) const;
-    f16_FRAM& operator + (const f16_FRAM& Other) const;
+    f16_FRAM& operator + (const f16_FRAM& RHS) const;
     // subtraction
     f16_FRAM& operator - (const float& Value) const;
-    f16_FRAM& operator - (const f16_FRAM& Other) const;
+    f16_FRAM& operator - (const f16_FRAM& RHS) const;
     // assignment
-    f16_FRAM& operator = (const f16_FRAM& Value) const;
+    f16_FRAM& operator = (const f16_FRAM& Value);
 
     // comparison
-    bool operator == (const f16_FRAM& Other) const;
+    bool operator == (const f16_FRAM& RHS) const;
 
     // call clear at destruction
     ~f16_FRAM();
@@ -86,6 +86,9 @@ public:
     f32_FRAM(const float& Input)
             : Floating_point(Input, 32){};
 
+    f32_FRAM(const f32_FRAM& RHS)
+            : Floating_point(RHS.m_Value, 16){};
+
     // IO
     void Write(const float& Value) override;
 
@@ -94,15 +97,15 @@ public:
     // operators
     // addition
     f32_FRAM& operator + (const float& Value) const;
-    f32_FRAM& operator + (const f32_FRAM& Other) const;
+    f32_FRAM& operator + (const f32_FRAM& RHS) const;
     // subtraction
     f32_FRAM& operator - (const float& Value) const;
-    f32_FRAM& operator - (const f32_FRAM& Other) const;
+    f32_FRAM& operator - (const f32_FRAM& RHS) const;
     // assignment
     f32_FRAM& operator = (const float& Value) const;
     f32_FRAM& operator = (const f32_FRAM& Value) const;
     // comparison
-    bool operator == (const f32_FRAM& Other) const;
+    bool operator == (const f32_FRAM& RHS) const;
 
     ~f32_FRAM();
 private:
