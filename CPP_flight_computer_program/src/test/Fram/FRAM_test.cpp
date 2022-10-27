@@ -5,18 +5,16 @@
  * =========================================================================
  */
 // Constructor
-Floating_point::Floating_point(const float &Input, const uint8_t& Size)
-        : m_Addr(Find_Addr(Size)), m_Size(Size), m_Value(Input) {}
+Floating_point::Floating_point(const float &Input, const uint8_t &Bits)
+        : m_Bits(Bits), m_Value(Input) {}
 
 // Member functions
-uint16_t Floating_point::Find_Addr(const uint8_t& Size)
+void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Addr)
 {
-    uint16_t Counter = 0, Required = 0, Tracker = 0, Addr = 0x60;
-
-    const uint8_t Zero = 0x00;
+    uint16_t Counter = 0, Required = 0, Tracker = 0;
 
     // Amount required
-    switch(Size)
+    switch(Bits)
     {
         case 8:
             Required = 1;
@@ -55,7 +53,7 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
 
             const uint8_t Temp_Value = m_FRAM.read(Temp_Addr);
 
-            if(Temp_Value != Zero)
+            if(Temp_Value != 0)
             {
                 Flag = true;
                 Tracker += ++Counter;
@@ -74,12 +72,27 @@ uint16_t Floating_point::Find_Addr(const uint8_t& Size)
         }
     }
 
-    return Addr;
+    m_Addr = Addr;
 }
 
 std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Name)
 {
-    return std::tuple<std::string, uint16_t, uint8_t>(std::move(Name), m_Addr, m_Size);
+    return std::tuple<std::string, uint16_t, uint8_t>(std::move(Name), m_Addr, m_Bits);
+}
+
+float Floating_point::Get_Value() const
+{
+    return m_Value;
+}
+
+uint16_t Floating_point::Get_Addr() const
+{
+    return m_Addr;
+}
+
+uint8_t Floating_point::Get_Size() const
+{
+    return m_Bits;
 }
 
 /* =========================================================================
@@ -88,37 +101,48 @@ std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Nam
  */
 void f16_FRAM::Write(const float& Value)
 {
+    // Assign m_Addr to empty addr
+    Find_Addr(m_Bits, 0x60);
+
+    // rewrite this whole thing according to IEEE 754 floating point
     if (Value > 127.127 || Value < -127.127)
     {
         // return AVR::Result -> AVR_Failed
     }
 
-    std::bitset<8> Whole;
-    uint8_t Decimal;
-    bool Negative = false;
+    std::bitset<8> Register1, Register2;
+    uint16_t Whole, Decimal, Exponents;
+    bool Negative;
 
     // negative values are stored backwards, don't want that
     if (Value < 0)
     {
-        Whole = static_cast<uint8_t>(-Value);
+        Whole = static_cast<uint16_t>(-Value);
         Negative = true;
     }
     else
     {
-        Whole = static_cast<uint8_t>(Value);
+        Whole = static_cast<uint16_t>(Value);
     }
 
-    // narrowing conversion from int to float -> inaccuracy
-    Decimal = static_cast<uint8_t>((Value - Whole.to_ulong() * 1000));
+    // narrowing conversion from int to float
+    Decimal = static_cast<uint16_t>((Value - Whole) * 1000);
+
+    // Find exponent
+    while (Whole > 2)
+    {
+        Whole /= 2;
+        Exponents++;
+    }
 
     if (Negative == true)
     {
-        // Negative flag
-        Whole[0] = 1;
+        // Set negative flag
+
     }
 
-    m_FRAM.write(m_Addr, static_cast<uint8_t>(Whole.to_ulong()));
-    m_FRAM.write(m_Addr++, Decimal);
+    // m_FRAM.write(m_Addr, static_cast<uint8_t>(Whole.to_ulong()));
+    // m_FRAM.write(m_Addr++, Decimal);
 
     // return AVR::Result -> AVR_SUCCESS
 
@@ -152,7 +176,26 @@ float f16_FRAM::Read()
 }
 
 // Operators
-f16_FRAM& f16_FRAM::operator = (const f16_FRAM& RHS)
+f16_FRAM f16_FRAM::operator + (const f16_FRAM &RHS) const
+{
+    return f16_FRAM {m_Value + RHS.m_Value};
+}
+
+f16_FRAM f16_FRAM::operator - (const f16_FRAM &RHS) const
+{
+    return f16_FRAM {m_Value - RHS.m_Value};
+}
+
+f16_FRAM f16_FRAM::operator * (const f16_FRAM &RHS) const {
+    return f16_FRAM {m_Value * RHS.m_Value};
+}
+
+f16_FRAM f16_FRAM::operator / (const f16_FRAM &RHS) const {
+    return f16_FRAM {m_Value / RHS.m_Value};
+}
+
+
+f16_FRAM& f16_FRAM::operator = (const f16_FRAM &RHS)
 {   if(this != &RHS)
     {
         this->m_Value = RHS.m_Value;
@@ -161,9 +204,19 @@ f16_FRAM& f16_FRAM::operator = (const f16_FRAM& RHS)
     return *this;
 }
 
-bool f16_FRAM::operator == (const f16_FRAM& Other) const
+bool f16_FRAM::operator < (const f16_FRAM &RHS) const
 {
-    return m_Value == Other.m_Value;
+    return m_Value < RHS.m_Value;
+}
+
+bool f16_FRAM::operator > (const f16_FRAM &RHS) const
+{
+    return m_Value > RHS.m_Value;
+}
+
+bool f16_FRAM::operator == (const f16_FRAM& RHS) const
+{
+    return m_Value == RHS.m_Value;
 }
 
 // Destructor
@@ -175,14 +228,14 @@ f16_FRAM::~f16_FRAM()
 //clear storage
 void f16_FRAM::Clear()
 {
-    const uint8_t Zero = 0x00;
-
+    // overwrite the values with 0
     for(uint8_t i = 0; i < 2; i++)
     {
-        m_FRAM.write(m_Addr, Zero);
+        m_FRAM.write(m_Addr, 0);
         m_Addr++;
     }
 }
+
 
 /* =========================================================================
  *                          f32_FRAM
@@ -190,10 +243,12 @@ void f16_FRAM::Clear()
  */
 
 // Operators
+/*
 f32_FRAM& f32_FRAM::operator = (const float& Value) const
 {
     f32_FRAM Temp = Value;
 };
+*/
 
 bool f32_FRAM::operator == (const f32_FRAM& Other) const
 {
