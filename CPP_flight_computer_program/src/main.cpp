@@ -7,8 +7,8 @@
 #include "default_variables.h"
 #include "sensor_ms5611.h"
 #include "sensor_kx134.h"
-#include "Watchdog_t4.h"
 #include "memory_fram.h"
+#include "Watchdog_t4.h"
 #include "errorcodes.h"
 #include "rusty_fram.h"
 #include <Arduino.h>
@@ -18,6 +18,11 @@
 #include <SPI.h>
 #include <SD.h>
 // #include "MYTest.h"
+
+
+WDT_T4<WDT2> wdt;
+WDT_timings_t config;
+
 
 
 // PROGRAMMER VARS | vars for the programmer
@@ -263,13 +268,13 @@ void debug_data(bool time_delay)
 
     Serial.println("--- Rust lib ---");
     // get pointer and array checks
-    Serial.println(wrap_temperature_for_writing(0));
-    Serial.println(wrap_temperature_for_writing(100));
-    int32_t x = -10;
+    // Serial.println(wrap_temperature_for_writing(0));
+    // Serial.println(wrap_temperature_for_writing(100));
+    // int32_t x = -10;
     // Serial.print("pass and return ");
     // Serial.println(pass_and_return_through_ffi(x));
-    Serial.println(wrap_temperature_for_writing(x));
-    Serial.println(wrap_temperature_for_writing(5.9));
+    // Serial.println(wrap_temperature_for_writing(x));
+    // Serial.println(wrap_temperature_for_writing(5.9));
     Serial.println("called delay func");
     Serial.println(c_return_delay_test());
 
@@ -300,6 +305,9 @@ void setup()
     Wire.begin();
 
     // TODO: configure watchdog for error handling
+    config.trigger = 1 ; /* in seconds, 0->128 */
+    config.timeout = 1; /* in seconds, 0->128 */
+    wdt.begin(config);
 
     init_all();
     if (health_check() == EXIT_FAILURE)
@@ -307,10 +315,12 @@ void setup()
         Serial.println("[FAILED] Health Check"); // also write to reserved fram space
         exit(1); // this should also fail if init_all() fails;
         }
+    Serial.println("setup()");
     }
 
 void loop() 
     {
+    // wdt.feed();
     debug_data(true); // remove on prod;
 
     ground_idle_mode(rocket.ground_idle);
