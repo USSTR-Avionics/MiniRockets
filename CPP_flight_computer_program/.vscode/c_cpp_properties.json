@@ -10,6 +10,7 @@
             "includePath": [
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/include",
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/src",
+                "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/Watchdog_t4/src",
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/MS5611-0.3.8/src",
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/SparkFun_Qwiic_KX13X/src",
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/Adafruit_BMP280/src",
@@ -21,7 +22,6 @@
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/SD-master/src",
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/RadioHead",
                 "/home/home/.platformio/packages/framework-arduinoteensy/libraries/SPI",
-                "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/Watchdog_t4/src",
                 "/home/home/.platformio/packages/framework-arduinoteensy/cores/teensy4",
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/ACRF/src",
                 "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/BMI088/src",
@@ -129,6 +129,7 @@
                 "path": [
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/include",
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/src",
+                    "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/Watchdog_t4/src",
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/MS5611-0.3.8/src",
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/SparkFun_Qwiic_KX13X/src",
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/Adafruit_BMP280/src",
@@ -140,7 +141,6 @@
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/SD-master/src",
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/RadioHead",
                     "/home/home/.platformio/packages/framework-arduinoteensy/libraries/SPI",
-                    "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/Watchdog_t4/src",
                     "/home/home/.platformio/packages/framework-arduinoteensy/cores/teensy4",
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/ACRF/src",
                     "/home/home/Desktop/Projects/USST/Avionics/Avionics-code/CPP_flight_computer_program/lib/BMI088/src",

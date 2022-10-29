@@ -8,20 +8,16 @@
 #include "sensor_ms5611.h"
 #include "sensor_kx134.h"
 #include "memory_fram.h"
-#include "Watchdog_t4.h"
 #include "errorcodes.h"
 #include "rusty_fram.h"
+#include "watchdog.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
+#include <stdlib.h>
 #include <Wire.h>
 #include <SPI.h>
 #include <SD.h>
-// #include "MYTest.h"
-
-
-WDT_T4<WDT2> wdt;
-WDT_timings_t config;
 
 
 
@@ -72,8 +68,7 @@ int init_all()
         init_MS5611();
         init_fram();
 
-        // !TODO clarify and condense the following block
-        // if (CrashReport) Serial.print(CrashReport);
+        // TODO: clarify and condense the following block
         all_valid = true;
         if (all_valid == true) 
             {   
@@ -112,7 +107,7 @@ void ground_idle_mode(bool state)
 
             // DEBUG: Change from 2000 to 100
             // new time - starting time > 0.1 sec and accelation > threshold
-            if ( (millis() - starting_time > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
+            if ((millis() - starting_time > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
                 {
                 // reset the timer and go to next state
                 starting_time = 0UL;
@@ -148,7 +143,7 @@ void powered_flight_mode(bool state)
 
             // new time - starting time > 0.1 sec and accelation > threshold
             // DEBUG: Change from 5000 to 100
-            if ( (millis() - starting_time > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
+            if ((millis() - starting_time > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
                 {
                   // reset the timer and go to next state
                 starting_time = 0;
@@ -173,7 +168,7 @@ void apogee_check()
         }
 
     // GET BMP data on this line
-    if (last_alt - absolute_altitude > 2) // ? this doesnt make sense, wouldnt it always be 0
+    if ((last_alt - absolute_altitude) > 2) // ? this doesnt make sense, wouldnt it always be 0
         {
         decent_check += decent_check;
         }
@@ -258,6 +253,11 @@ void land_safe_mode(bool state)
         }
     }
 
+void watchdog_callback()
+    {
+    Serial.println("watchdog_callback()");
+    }
+
 void debug_data(bool time_delay)
     {
     // debug true then add delay
@@ -305,8 +305,9 @@ void setup()
     Wire.begin();
 
     // TODO: configure watchdog for error handling
-    config.trigger = 1 ; /* in seconds, 0->128 */
-    config.timeout = 1; /* in seconds, 0->128 */
+    config.trigger = 1; /* in seconds, 0->128 */
+    config.timeout = 2; /* in seconds, 0->128 */
+    config.callback = watchdog_callback;
     wdt.begin(config);
 
     init_all();

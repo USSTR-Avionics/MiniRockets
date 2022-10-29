@@ -20,8 +20,8 @@ typedef enum RTWDOG_CLK_TABLE {
 } RTWDOG_CLK_TABLE;
 
 typedef struct WDT_timings_t {
-  double trigger = 5;
-  double timeout = 10;
+  double trigger = 5;  // trigger is how long before the watchdog callback fires 
+  double timeout = 10; // timeout is how long before not feeding will the watchdog reset  
   double window = 0;
   uint8_t pin = 0;
   RTWDOG_CLK_TABLE clock = LPO_CLK; /* default clock, 32KHz */
