@@ -6,6 +6,7 @@
 //#include "Filter.h"
 #include "default_variables.h"
 #include "sensor_ms5611.h"
+#include "sensor_sdcard.h"
 #include "sensor_kx134.h"
 #include "memory_fram.h"
 #include "errorcodes.h"
@@ -17,7 +18,6 @@
 #include <stdlib.h>
 #include <Wire.h>
 #include <SPI.h>
-#include <SD.h>
 
 
 
@@ -67,6 +67,7 @@ int init_all()
         init_kx134();
         init_MS5611();
         init_fram();
+        init_SD();
 
         // TODO: clarify and condense the following block
         all_valid = true;
@@ -250,12 +251,14 @@ void land_safe_mode(bool state)
         // CHECK IF SD CARD CAN STILL BE WRITTEN TO
         // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
         // WRITE TO SD CARD
+        write_to_sd_card("[ROCKET] landed");
         }
     }
 
 void watchdog_callback()
     {
     Serial.println("watchdog_callback()");
+    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
     }
 
 void debug_data(bool time_delay)
@@ -316,7 +319,9 @@ void setup()
         Serial.println("[FAILED] Health Check"); // also write to reserved fram space
         exit(1); // this should also fail if init_all() fails;
         }
+
     Serial.println("setup()");
+    write_to_sd_card("setup exit");
     }
 
 void loop() 
