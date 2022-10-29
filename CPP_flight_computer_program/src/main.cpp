@@ -19,6 +19,11 @@
 #include <SD.h>
 // #include "MYTest.h"
 
+/*
+ * # ifdef DEBUG_SERIAL
+ *      <Code>
+ * # endif
+ */
 
 // PROGRAMMER VARS | vars for the programmer
 bool debug_mode = false; // remove these comparisons for production

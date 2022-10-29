@@ -25,7 +25,7 @@ public:
     uint8_t Get_Size() const;
     float Get_Value() const;
     // Calling this before writing is undefined behaviour, I'm too lazy to write a check
-    // use std::optional for check
+    // use
     uint16_t Get_Addr() const;
 
     // Assign m_Addr to empty addr
@@ -54,13 +54,14 @@ class f16_FRAM : protected Floating_point
      */
 public:
     // Constructors
-    f16_FRAM();
+    f16_FRAM()
+        : Floating_point (0, 16) {};
 
-    f16_FRAM(const float& Input)
-    : Floating_point(Input, 16){};
+    explicit f16_FRAM(const float& Input)
+        : Floating_point (Input, 16) {};
 
     f16_FRAM(const f16_FRAM& RHS)
-            : Floating_point(RHS.m_Value, 16){};
+        : Floating_point (RHS.m_Value, 16){};
 
     // IO
     void Write(const float& Value) override;

@@ -5,12 +5,15 @@
 
 namespace AVR
 {
-    enum Result
+    // use enum class over enum
+    enum class Result
     {
         AVR_FAILED,
         AVR_SUCCESS,
+        AVR_UNDEFINED
     };
 }
+
 template<typename T>
 class Test
 {
@@ -34,7 +37,7 @@ public:
     };
     */
     
-    enum AVR::Result Test_Value(const std::function<T(T, T)>& Function, const T& Value, const T& Expect) const
+    AVR::Result Test_Value(const std::function<T(T, T)>& Function, const T& Value, const T& Expect) const
     {
         return (Expect == Function(Value, Expect)) ?  AVR::Result::AVR_SUCCESS :  AVR::Result::AVR_FAILED;
     }
