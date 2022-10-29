@@ -16,3 +16,7 @@ Building robots
 Tianze Kuang <- David
 C++
 Raytracer
+
+cOONNERR TAmE
+python
+buttering breadboards
