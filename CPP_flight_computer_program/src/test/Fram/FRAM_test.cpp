@@ -87,17 +87,17 @@ std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Nam
     return std::tuple<std::string, uint16_t, uint8_t>(std::move(Name), m_Addr, m_Bits);
 }
 
-float Floating_point::Get_Value() const
+float Floating_point::Get_value() const
 {
     return m_Value;
 }
 
-uint16_t Floating_point::Get_Addr() const
+uint16_t Floating_point::Get_addr() const
 {
     return m_Addr;
 }
 
-uint8_t Floating_point::Get_Size() const
+uint8_t Floating_point::Get_size() const
 {
     return m_Bits;
 }
@@ -240,15 +240,13 @@ AVR::Result f16_FRAM::Write(float& Value)
                 if(Mantissa[i - 1] == 1)
                 {
                     Mantissa_bits = i;
-                    if(Mantissa_bits > 10)
-                    {
-                        uint8_t Shifts2 = Mantissa_bits - 10;
-                        Mantissa >> Shifts2;
-                        Exponent_value += Shifts2;
-                        break;
-                    }
+                    break;
                 }
             }
+
+            uint8_t Shifts2 = Mantissa_bits - 10;
+            Mantissa >> Shifts2;
+            Exponent_value += Shifts2;
         }
         else
         {

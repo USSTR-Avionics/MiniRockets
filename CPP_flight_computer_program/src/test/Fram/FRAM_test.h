@@ -32,10 +32,10 @@ public:
     virtual AVR::Result Write(float& Value) = 0;
 
     // util
-    uint8_t Get_Size() const;
-    float Get_Value() const;
+    uint8_t Get_size() const;
+    float Get_value() const;
     // Calling this before writing is undefined behaviour(will return 0), I'm too lazy to write a check
-    uint16_t Get_Addr() const;
+    uint16_t Get_addr() const;
 
     // Assign m_Addr to empty addr
     AVR::Result Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr = 0x60);
