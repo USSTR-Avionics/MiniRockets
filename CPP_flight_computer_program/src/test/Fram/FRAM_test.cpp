@@ -101,7 +101,7 @@ uint8_t Floating_point::Get_Size() const
  */
 void f16_FRAM::Write(float& Value)
 {
-    // Assign m_Addr to empty addr
+    // Find empty addr when start writing
     Find_Addr(m_Bits, 0x60);
 
     // bias
@@ -114,7 +114,7 @@ void f16_FRAM::Write(float& Value)
     // where everything comes together
     std::bitset<8> Register1, Register2;
 
-    // negative values are stored backwards apparently, don't want that
+    // Don't want to deal with 2's complement, so it's going to be all positive
     // any stored value that exceeds 16 bits will be cut off, could round
     if (Value < 0)
     {
@@ -218,7 +218,6 @@ void f16_FRAM::Write(float& Value)
         Mantissa[Temp_j] = bWhole[Temp_j];
     }
 
-
     uint8_t Mantissa_bits = Integer_bits + Decimal_bits;
     if(Mantissa_bits > 10)
     {
@@ -298,9 +297,9 @@ float f16_FRAM::Read()
         Mantissa[i] = Register2[i];
     }
 
-    const auto Value = static_cast<float>(Mantissa.to_ulong() * std::pow(2, Exponents.to_ulong()));
+    const auto Value = static_cast<float>(Mantissa.to_ulong() * std::pow(2, Exponents.to_ulong() - 15));
 
-    return Register1[7] == 1 ? -(Value) : Value;
+    return Register1[7] == 1 ? -Value : Value;
 }
 
 // Operators
