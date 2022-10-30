@@ -19,7 +19,7 @@ namespace AVR
     };
 }
 
-
+// THIS IS ONLY FOR POINTERS, DO NOT CREATE A Floating_point OBJ
 class Floating_point
 {
 public:
@@ -34,8 +34,7 @@ public:
     // util
     uint8_t Get_Size() const;
     float Get_Value() const;
-    // Calling this before writing is undefined behaviour, I'm too lazy to write a check
-    // use
+    // Calling this before writing is undefined behaviour(will return 0), I'm too lazy to write a check
     uint16_t Get_Addr() const;
 
     // Assign m_Addr to empty addr
@@ -43,6 +42,7 @@ public:
     // save data address in FRAM to container <"Name", Addr, Size(bits)>
     std::tuple<std::string, uint16_t, uint8_t> Store(std::string Name);
 
+    // in case someone decided to create a floating_point class.
 protected:
     // where
     uint16_t m_Addr{};
