@@ -3,6 +3,7 @@
 
 #include <tuple>
 #include <bitset>
+#include <cmath>
 #include <utility>
 
 #include "Adafruit_EEPROM_I2C.h"
@@ -19,7 +20,7 @@ public:
     // IO
     virtual float Read() = 0;
 
-    virtual void Write(const float& Value) = 0;
+    virtual void Write(float& Value) = 0;
 
     // util
     uint8_t Get_Size() const;
@@ -29,7 +30,7 @@ public:
     uint16_t Get_Addr() const;
 
     // Assign m_Addr to empty addr
-    void Find_Addr(const uint8_t &Bits, uint16_t Addr);
+    void Find_Addr(const uint8_t &Bits, uint16_t Addr = 0x60);
     // save data address in FRAM to container <"Name", Addr, Size(bits)>
     std::tuple<std::string, uint16_t, uint8_t> Store(std::string Name);
 
@@ -64,7 +65,7 @@ public:
         : Floating_point (RHS.m_Value, 16){};
 
     // IO
-    void Write(const float& Value) override;
+    void Write(float& Value) override;
 
     float Read() override;
 
@@ -96,7 +97,7 @@ private:
 class f24_FRAM : protected Floating_point
 {
     /*
-     * [  1       6      17 ]
+     * [  1      6       17 ]
      * [sign exponents value]
      */
 
@@ -111,7 +112,7 @@ public:
             : Floating_point(RHS.m_Value, 24){};
 
     // IO
-    void Write(const float& Value) override;
+    void Write(float& Value) override;
 
     float Read() override;
 
@@ -152,7 +153,7 @@ public:
             : Floating_point(RHS.m_Value, 32){};
 
     // IO
-    void Write(const float& Value) override;
+    void Write(float& Value) override;
 
     float Read() override;
 

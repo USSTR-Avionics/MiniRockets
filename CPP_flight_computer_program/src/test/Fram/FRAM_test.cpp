@@ -99,54 +99,190 @@ uint8_t Floating_point::Get_Size() const
  *                          f16_FRAM
  * =========================================================================
  */
-void f16_FRAM::Write(const float& Value)
+void f16_FRAM::Write(float& Value)
 {
     // Assign m_Addr to empty addr
     Find_Addr(m_Bits, 0x60);
 
-    // rewrite this whole thing according to IEEE 754 floating point
-    if (Value > 127.127 || Value < -127.127)
-    {
-        // return AVR::Result -> AVR_Failed
-    }
+    // bias
+    uint16_t Exponent_value = 15;
 
+    std::bitset<16> bWhole, bDecimal;
+    std::bitset<32> Mantissa = 0;
+    std::bitset<5> Exponent;
+
+    // where everything comes together
     std::bitset<8> Register1, Register2;
-    uint16_t Whole, Decimal, Exponents;
-    bool Negative;
 
-    // negative values are stored backwards, don't want that
+    // negative values are stored backwards apparently, don't want that
+    // any stored value that exceeds 16 bits will be cut off, could round
     if (Value < 0)
     {
-        Whole = static_cast<uint16_t>(-Value);
-        Negative = true;
+        bWhole = static_cast<uint16_t>(-Value);
+        // sign bit
+        Register1[7] = true;
     }
     else
     {
-        Whole = static_cast<uint16_t>(Value);
+        bWhole = static_cast<uint16_t>(Value);
     }
+
 
     // narrowing conversion from int to float
-    Decimal = static_cast<uint16_t>((Value - Whole) * 1000);
+    // 2^16 = 65536 -> 5 digits of accuracy possible, max 4 digits is usable
+    // can also use std::fmod()
+    float Decimal = (Value - static_cast<float>(bWhole.to_ulong()))  * 10000;
+    if(std::ceil(Decimal) - Decimal > Decimal - std::floor(Decimal))
+    {
+        Decimal = std::floor(Decimal);
+    }
+    else
+    {
+        Decimal = std::ceil(Decimal);
+    }
+    // bitset of decimal
+    bDecimal = static_cast<uint16_t>(Decimal);
 
     // Find exponent
-    while (Whole > 2)
+    while(Value >= 2)
     {
-        Whole /= 2;
-        Exponents++;
+        Value /= 2;
+        Exponent_value++;
     }
 
-    if (Negative == true)
+    while(Value < 1)
     {
-        // Set negative flag
+        Value *= 2;
+        Exponent_value--;
+    }
+
+    // Decimal trim
+    uint8_t Decimal_bits = 16;
+    if(bDecimal.to_ulong() > 0)
+    {
+        // prepare decimal for use
+        // right shift until there is no more 0
+        for (int i = 16; i > 0; i--)
+        {
+            if (bDecimal[0] == 0)
+            {
+                bDecimal >> 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // how many bits are decimal
+        for (uint8_t i = 16; i >= 0; i--)
+        {
+            if (bDecimal[i] == 1)
+            {
+                break;
+            }
+            else
+            {
+                Decimal_bits--;
+            }
+        }
+    }
+
+    // Integer trim
+    uint8_t Integer_bits = 16;
+    if(bWhole.to_ulong() > 0)
+    {
+        // how many bits are integers
+        for(uint8_t i = 16; i >= 0; i--)
+        {
+            if (bWhole[i] == 1)
+            {
+                break;
+            }
+            else
+            {
+                Integer_bits--;
+            }
+        }
+    }
+
+    // 11 1111 1111 = 1023, max mantissa value. (Mantissa > Max) = Max
+    // put the two together
+    uint8_t Temp_i = 0, Temp_j;
+    for(; Temp_i <= Decimal_bits; Temp_i++)
+    {
+        Mantissa[Temp_i] = bDecimal[Temp_i];
+    }
+    for(Temp_j = Temp_i; Temp_j <= Decimal_bits + Integer_bits; Temp_j++)
+    {
+        Mantissa[Temp_j] = bWhole[Temp_j];
+    }
+
+
+    uint8_t Mantissa_bits = Integer_bits + Decimal_bits;
+    if(Mantissa_bits > 10)
+    {
+        uint8_t Shifts = Mantissa_bits - 10;
+
+        // rounding
+        if(Mantissa[Shifts - 2] == 1)
+        {
+            Mantissa = Mantissa.to_ulong() + 1;
+            Mantissa >> (Shifts + 1);
+            Exponent_value += Shifts + 1;
+        }
+        else
+        {
+            Mantissa >> Shifts;
+            Exponent_value += Shifts;
+        }
 
     }
 
-    // m_FRAM.write(m_Addr, static_cast<uint8_t>(Whole.to_ulong()));
-    // m_FRAM.write(m_Addr++, Decimal);
 
-    // return AVR::Result -> AVR_SUCCESS
+    // same as std::clamp
+    // if the number is too large or small, the output WILL be wrong
+    if(Exponent_value > 31)
+    {
+        Exponent_value = 31;
+    }
+    if(Exponent_value < 0)
+    {
+        Exponent_value = 0;
+    }
 
+    // turn exponent value into bitset
+    Exponent = Exponent_value;
+
+    // load Register1, Register2
+    for(uint8_t i = 0; i < 8; i++)
+    {
+        Register2[i] = Mantissa[i];
+
+        if(i < 2)
+        {
+            Register1[i] = Mantissa[10 - i];
+        }
+
+        // can be simplified into just else()
+        else if(2 <= i && i < 8)
+        {
+            Register1[i] = Exponent[i - 2];
+        }
+
+        // the negative bit is already set
+    }
+
+    // write to memory
+    if(!m_FRAM.write(m_Addr, static_cast<uint8_t>(Register1.to_ulong()))
+        || !m_FRAM.write(++m_Addr, static_cast<uint8_t>(Register2.to_ulong())))
+    {
+        // return AVR::Result -> AVR_FAILED
+    }
+
+    // return AVR::SUCCESS;
 }
+
 
 float f16_FRAM::Read()
 {
@@ -229,11 +365,8 @@ f16_FRAM::~f16_FRAM()
 void f16_FRAM::Clear()
 {
     // overwrite the values with 0
-    for(uint8_t i = 0; i < 2; i++)
-    {
-        m_FRAM.write(m_Addr, 0);
-        m_Addr++;
-    }
+    m_FRAM.write(m_Addr, 0);
+    m_FRAM.write(++m_Addr, 0);
 }
 
 
