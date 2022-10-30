@@ -127,22 +127,6 @@ void f16_FRAM::Write(float& Value)
         bWhole = static_cast<uint16_t>(Value);
     }
 
-
-    // narrowing conversion from int to float
-    // 2^16 = 65536 -> 5 digits of accuracy possible, max 4 digits is usable
-    // can also use std::fmod()
-    float Decimal = (Value - static_cast<float>(bWhole.to_ulong()))  * 10000;
-    if(std::ceil(Decimal) - Decimal > Decimal - std::floor(Decimal))
-    {
-        Decimal = std::floor(Decimal);
-    }
-    else
-    {
-        Decimal = std::ceil(Decimal);
-    }
-    // bitset of decimal
-    bDecimal = static_cast<uint16_t>(Decimal);
-
     // Find exponent
     while(Value >= 2)
     {
@@ -156,24 +140,30 @@ void f16_FRAM::Write(float& Value)
         Exponent_value--;
     }
 
+    // narrowing conversion from int to float
+    // 2^16 = 65536 -> 5 digits of accuracy possible, max 4 digits is usable
+    // can also use std::fmod()
+    float Decimal = (Value - static_cast<float>(bWhole.to_ulong()))  * 10000;
+    if(std::ceil(Decimal) - Decimal > Decimal - std::floor(Decimal))
+    {
+        Decimal = std::floor(Decimal);
+    }
+    else
+    {
+        Decimal = std::ceil(Decimal);
+    }
+    // decimal in bits, reduced to its lowest value
+    auto iDecimal = static_cast<uint16_t>(Decimal);
+    while(iDecimal % 10 == 0)
+    {
+        iDecimal /= 10;
+    }
+    bDecimal = iDecimal;
+
     // Decimal trim
     uint8_t Decimal_bits = 16;
     if(bDecimal.to_ulong() > 0)
     {
-        // prepare decimal for use
-        // right shift until there is no more 0
-        for(int i = 15; i > 0; i--)
-        {
-            if(bDecimal[0] == 0)
-            {
-                bDecimal >> 1;
-            }
-            else
-            {
-                break;
-            }
-        }
-
         // how many bits are decimal
         for(uint8_t i = 15; i >= 0; i--)
         {
@@ -313,11 +303,13 @@ f16_FRAM f16_FRAM::operator - (const f16_FRAM &RHS) const
     return f16_FRAM {m_Value - RHS.m_Value};
 }
 
-f16_FRAM f16_FRAM::operator * (const f16_FRAM &RHS) const {
+f16_FRAM f16_FRAM::operator * (const f16_FRAM &RHS) const
+{
     return f16_FRAM {m_Value * RHS.m_Value};
 }
 
-f16_FRAM f16_FRAM::operator / (const f16_FRAM &RHS) const {
+f16_FRAM f16_FRAM::operator / (const f16_FRAM &RHS) const
+{
     return f16_FRAM {m_Value / RHS.m_Value};
 }
 
