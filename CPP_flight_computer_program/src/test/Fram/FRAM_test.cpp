@@ -58,7 +58,8 @@ AVR::Result Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
                 Tracker += ++Counter;
             }
 
-            if(++Temp_Addr > 32000)
+            // could limit it to 32k, and use the 768 address to do something else like storing a lookup table
+            if(++Temp_Addr > 32768)
             {
                 // exceeding all available memory addresses
                 return AVR::Result::AVR_FAILED;
@@ -305,7 +306,6 @@ float f16_FRAM::Read()
     std::bitset<8> Register1, Register2;
     std::bitset<5> Exponents;
     std::bitset<10> Mantissa;
-    bool Negative = false;
 
     // Assuming this works, pretty sure doesn't
     Register1 = m_FRAM.read(m_Addr);
