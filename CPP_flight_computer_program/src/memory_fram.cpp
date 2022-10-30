@@ -16,12 +16,13 @@ int init_fram()
 
 int write_to_fram(int what, int where)
     {
-
+    return EXIT_FAILURE;
     }
 
 int c_return_delay_test()
     {
-    delay(500);
-    delay(500);
+    while (true)
+        {
+        }
     return 0;
     }

@@ -6,18 +6,19 @@
 //#include "Filter.h"
 #include "default_variables.h"
 #include "sensor_ms5611.h"
+#include "sensor_sdcard.h"
 #include "sensor_kx134.h"
-#include "Watchdog_t4.h"
 #include "memory_fram.h"
 #include "errorcodes.h"
 #include "rusty_fram.h"
+#include "watchdog.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
+#include <stdlib.h>
 #include <Wire.h>
 #include <SPI.h>
-#include <SD.h>
-// #include "MYTest.h"
+
 
 /*
  * # ifdef DEBUG_SERIAL
@@ -71,9 +72,9 @@ int init_all()
         init_kx134();
         init_MS5611();
         init_fram();
+        init_SD();
 
-        // !TODO clarify and condense the following block
-        // if (CrashReport) Serial.print(CrashReport);
+        // TODO: clarify and condense the following block
         all_valid = true;
         if (all_valid == true) 
             {   
@@ -112,7 +113,7 @@ void ground_idle_mode(bool state)
 
             // DEBUG: Change from 2000 to 100
             // new time - starting time > 0.1 sec and accelation > threshold
-            if ( (millis() - starting_time > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
+            if ((millis() - starting_time > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
                 {
                 // reset the timer and go to next state
                 starting_time = 0UL;
@@ -148,7 +149,7 @@ void powered_flight_mode(bool state)
 
             // new time - starting time > 0.1 sec and accelation > threshold
             // DEBUG: Change from 5000 to 100
-            if ( (millis() - starting_time > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
+            if ((millis() - starting_time > 100) && (abs(kx134_accel_z) < LIFTOFF_THRESHOLD))
                 {
                   // reset the timer and go to next state
                 starting_time = 0;
@@ -173,7 +174,7 @@ void apogee_check()
         }
 
     // GET BMP data on this line
-    if (last_alt - absolute_altitude > 2) // ? this doesnt make sense, wouldnt it always be 0
+    if ((last_alt - absolute_altitude) > 2) // ? this doesnt make sense, wouldnt it always be 0
         {
         decent_check += decent_check;
         }
@@ -255,7 +256,14 @@ void land_safe_mode(bool state)
         // CHECK IF SD CARD CAN STILL BE WRITTEN TO
         // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
         // WRITE TO SD CARD
+        write_to_sd_card("[ROCKET] landed");
         }
+    }
+
+void watchdog_callback()
+    {
+    Serial.println("watchdog_callback()");
+    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
     }
 
 void debug_data(bool time_delay)
@@ -268,13 +276,13 @@ void debug_data(bool time_delay)
 
     Serial.println("--- Rust lib ---");
     // get pointer and array checks
-    Serial.println(wrap_temperature_for_writing(0));
-    Serial.println(wrap_temperature_for_writing(100));
-    int32_t x = -10;
+    // Serial.println(wrap_temperature_for_writing(0));
+    // Serial.println(wrap_temperature_for_writing(100));
+    // int32_t x = -10;
     // Serial.print("pass and return ");
     // Serial.println(pass_and_return_through_ffi(x));
-    Serial.println(wrap_temperature_for_writing(x));
-    Serial.println(wrap_temperature_for_writing(5.9));
+    // Serial.println(wrap_temperature_for_writing(x));
+    // Serial.println(wrap_temperature_for_writing(5.9));
     Serial.println("called delay func");
     Serial.println(c_return_delay_test());
 
@@ -305,6 +313,10 @@ void setup()
     Wire.begin();
 
     // TODO: configure watchdog for error handling
+    config.trigger = 1; /* in seconds, 0->128 */
+    config.timeout = 2; /* in seconds, 0->128 */
+    config.callback = watchdog_callback;
+    wdt.begin(config);
 
     init_all();
     if (health_check() == EXIT_FAILURE)
@@ -312,10 +324,14 @@ void setup()
         Serial.println("[FAILED] Health Check"); // also write to reserved fram space
         exit(1); // this should also fail if init_all() fails;
         }
+
+    Serial.println("setup()");
+    write_to_sd_card("setup exit");
     }
 
 void loop() 
     {
+    // wdt.feed();
     debug_data(true); // remove on prod;
 
     ground_idle_mode(rocket.ground_idle);

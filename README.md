@@ -21,8 +21,13 @@
 
 ## Next Steps
 
-1. Clone the codebase  
-    `git clone https://github.com/USSTR-Avionics/Avionics-code.git`  
+1. Fork the codebase  
+    `https://github.com/USSTR-Avionics/Avionics-code.git`  
+    a. Visit the link and fork the code base to your own profle by simply clicking fork  
+    b. Clone your own fork to your local machine  
+    c. Add the upstream repo to get latest changes  
+    d. Run this command which enables you to get the latest changes from master  
+    `git remote add upstream https://github.com/USSTR-Avionics/Avionics-code.git`  
 
     [troubleshooting] if you get an error saying https protocol not supported, simply erase the https:// from the pasted url and rewrite it in, there is a 
     hiddend character that gets pasted in on Windows.  
@@ -36,7 +41,7 @@
 4. Navigate to the root of rusty_fram_wrapper and run the terminal command  
     `make`  
 
-4. At the bottom click on the checkbox to build the codebase (this also links the rust lib)
+5. At the bottom click on the checkbox to build the codebase (this also links the rust lib)
 
 
 **NOTE : You may use any toolchain you like as long as it maintains compatibility and interoperability with "master", using different tools from the team also means that the team can't help you debug or troubleshoot as quickly**
