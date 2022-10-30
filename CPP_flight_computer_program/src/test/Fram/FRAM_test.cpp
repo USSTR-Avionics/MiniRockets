@@ -223,22 +223,9 @@ void f16_FRAM::Write(float& Value)
     if(Mantissa_bits > 10)
     {
         uint8_t Shifts = Mantissa_bits - 10;
-
-        // rounding
-        if(Mantissa[Shifts - 2] == 1)
-        {
-            Mantissa = Mantissa.to_ulong() + 1;
-            Mantissa >> (Shifts + 1);
-            Exponent_value += Shifts + 1;
-        }
-        else
-        {
-            Mantissa >> Shifts;
-            Exponent_value += Shifts;
-        }
-
+        Mantissa >> Shifts;
+        Exponent_value += Shifts;
     }
-
 
     // same as std::clamp
     // if the number is too large or small, the output WILL be wrong
