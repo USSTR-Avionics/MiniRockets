@@ -30,13 +30,13 @@ public:
     uint16_t Get_Addr() const;
 
     // Assign m_Addr to empty addr
-    void Find_Addr(const uint8_t &Bits, uint16_t Addr = 0x60);
+    void Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr = 0x60);
     // save data address in FRAM to container <"Name", Addr, Size(bits)>
     std::tuple<std::string, uint16_t, uint8_t> Store(std::string Name);
 
 protected:
     // where
-    uint16_t m_Addr;
+    uint16_t m_Addr{};
     // size in bits
     uint8_t m_Bits;
     // value stored in decimal
@@ -70,7 +70,6 @@ public:
     float Read() override;
 
     // operators
-
     f16_FRAM operator + (const f16_FRAM &RHS) const;
 
     f16_FRAM operator - (const f16_FRAM &RHS) const;
@@ -94,12 +93,16 @@ private:
 
 };
 
+/*
+ * they are on hold
 class f24_FRAM : protected Floating_point
 {
-    /*
+    */
+/*
      * [  1      6       17 ]
      * [sign exponents value]
-     */
+     *//*
+
 
 public:
     // Constructors
@@ -137,10 +140,12 @@ private:
 
 class f32_FRAM : protected Floating_point
 {
-    /*
+    */
+/*
      * [  1      8      23  ]
      * [sign exponents value]
-     */
+     *//*
+
 
 public:
     // Constructors
@@ -174,5 +179,6 @@ public:
 private:
     void Clear();
 };
+*/
 
 #endif //CPP_FLIGHT_COMPUTER_PROGRAM_FRAM_TEST_H

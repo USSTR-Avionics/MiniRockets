@@ -9,7 +9,7 @@ Floating_point::Floating_point(const float &Input, const uint8_t &Bits)
         : m_Bits(Bits), m_Value(Input) {}
 
 // Member functions
-void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Addr)
+void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
 {
     uint16_t Counter = 0, Required = 0, Tracker = 0;
 
@@ -40,7 +40,7 @@ void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Addr)
 
     while (true)
     {
-        uint16_t Temp_Addr = Addr;
+        uint16_t Temp_Addr = Begin_Addr;
 
         bool Flag = false;
 
@@ -63,7 +63,7 @@ void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Addr)
 
         if(Flag == true)
         {
-            Addr += Tracker;
+            Begin_Addr += Tracker;
             Tracker = 0;
         }
         else
@@ -72,7 +72,7 @@ void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Addr)
         }
     }
 
-    m_Addr = Addr;
+    m_Addr = Begin_Addr;
 }
 
 std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Name)
@@ -162,9 +162,9 @@ void f16_FRAM::Write(float& Value)
     {
         // prepare decimal for use
         // right shift until there is no more 0
-        for (int i = 16; i > 0; i--)
+        for(int i = 15; i > 0; i--)
         {
-            if (bDecimal[0] == 0)
+            if(bDecimal[0] == 0)
             {
                 bDecimal >> 1;
             }
@@ -175,9 +175,9 @@ void f16_FRAM::Write(float& Value)
         }
 
         // how many bits are decimal
-        for (uint8_t i = 16; i >= 0; i--)
+        for(uint8_t i = 15; i >= 0; i--)
         {
-            if (bDecimal[i] == 1)
+            if(bDecimal[i] == 1)
             {
                 break;
             }
@@ -213,7 +213,7 @@ void f16_FRAM::Write(float& Value)
     {
         Mantissa[Temp_i] = bDecimal[Temp_i];
     }
-    for(Temp_j = Temp_i; Temp_j <= Decimal_bits + Integer_bits; Temp_j++)
+    for(Temp_j = Temp_i + 1; Temp_j <= Decimal_bits + Integer_bits; Temp_j++)
     {
         Mantissa[Temp_j] = bWhole[Temp_j];
     }
@@ -274,28 +274,33 @@ void f16_FRAM::Write(float& Value)
 float f16_FRAM::Read()
 {
     std::bitset<8> Register1, Register2;
+    std::bitset<5> Exponents;
+    std::bitset<10> Mantissa;
     bool Negative = false;
 
     // Assuming this works, pretty sure doesn't
     Register1 = m_FRAM.read(m_Addr);
-    Register2 = m_FRAM.read(m_Addr++);
+    Register2 = m_FRAM.read(++m_Addr);
 
-    if(Register1[0] == 1)
+    // extract exponents
+    for(uint8_t i = 2; i < 7; i++)
     {
-        Negative = true;
-        Register1[0] = 0;
+        Exponents[i - 2] = Register1[i];
     }
 
-    // chain
-    // these casts will result in inaccuracy 99%
-    float Whole = Register1.to_ulong(), Decimal = Register2.to_ulong();
-
-    while(Decimal >= 1)
+    for(uint8_t i = 0; i < 8; i++)
     {
-        Decimal /= 10;
+        if(i < 2)
+        {
+            Mantissa[8 + i] = Register1[i];
+        }
+
+        Mantissa[i] = Register2[i];
     }
 
-    return Negative == true ? -(Whole + Decimal) : (Whole + Decimal);
+    const auto Value = static_cast<float>(Mantissa.to_ulong() * std::pow(2, Exponents.to_ulong()));
+
+    return Register1[7] == 1 ? -(Value) : Value;
 }
 
 // Operators
@@ -370,7 +375,7 @@ f32_FRAM& f32_FRAM::operator = (const float& Value) const
 };
 */
 
-bool f32_FRAM::operator == (const f32_FRAM& Other) const
+/*bool f32_FRAM::operator == (const f32_FRAM& Other) const
 {
     return m_Value == Other.m_Value;
 }
@@ -388,6 +393,6 @@ void f32_FRAM::Clear()
         m_FRAM.write(m_Addr, Zero);
         m_Addr++;
     }
-}
+}*/
 
 
