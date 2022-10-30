@@ -9,7 +9,7 @@ Floating_point::Floating_point(const float &Input, const uint8_t &Bits)
         : m_Bits(Bits), m_Value(Input) {}
 
 // Member functions
-void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
+AVR::Result Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
 {
     uint16_t Counter = 0, Required = 0, Tracker = 0;
 
@@ -38,15 +38,14 @@ void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
             break;
     }
 
+    uint16_t Temp_Addr = Begin_Addr;
     while (true)
     {
-        uint16_t Temp_Addr = Begin_Addr;
-
-        bool Flag = false;
+        bool Has_value = false;
 
         for (; Counter < Required; Counter++)
         {
-            /* we might need to implement an addres limiter, but 256kb is a lot of address to use
+            /*
              * will crash the program if goes out of memory, unless adafruit made it wrap around
              * in which case, Find_Addr() will search forever which is also bad
             */
@@ -55,13 +54,18 @@ void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
 
             if(Temp_Value != 0)
             {
-                Flag = true;
+                Has_value = true;
                 Tracker += ++Counter;
             }
-            Temp_Addr++;
+
+            if(++Temp_Addr > 32000)
+            {
+                // exceeding all available memory addresses
+                return AVR::Result::AVR_FAILED;
+            }
         }
 
-        if(Flag == true)
+        if(Has_value == true)
         {
             Begin_Addr += Tracker;
             Tracker = 0;
@@ -73,6 +77,8 @@ void Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
     }
 
     m_Addr = Begin_Addr;
+
+    return AVR::Result::AVR_SUCCESS;
 }
 
 std::tuple<std::string, uint16_t, uint8_t> Floating_point::Store(std::string Name)
@@ -99,10 +105,13 @@ uint8_t Floating_point::Get_Size() const
  *                          f16_FRAM
  * =========================================================================
  */
-void f16_FRAM::Write(float& Value)
+AVR::Result f16_FRAM::Write(float& Value)
 {
     // Find empty addr when start writing
-    Find_Addr(m_Bits, 0x60);
+    if(Find_Addr(m_Bits, 0x60) != AVR::Result::AVR_SUCCESS)
+    {
+        return AVR::Result::AVR_FAILED;
+    }
 
     // bias
     uint16_t Exponent_value = 15;
@@ -144,6 +153,7 @@ void f16_FRAM::Write(float& Value)
     // 2^16 = 65536 -> 5 digits of accuracy possible, max 4 digits is usable
     // can also use std::fmod()
     float Decimal = (Value - static_cast<float>(bWhole.to_ulong()))  * 10000;
+
     if(std::ceil(Decimal) - Decimal > Decimal - std::floor(Decimal))
     {
         Decimal = std::floor(Decimal);
@@ -212,8 +222,38 @@ void f16_FRAM::Write(float& Value)
     if(Mantissa_bits > 10)
     {
         uint8_t Shifts = Mantissa_bits - 10;
-        Mantissa >> Shifts;
-        Exponent_value += Shifts;
+
+        // rounding, optional
+        if(Mantissa[Shifts - 1] == 1)
+        {
+            // rounding
+            Mantissa >> (Shifts - 1);
+            Exponent_value += Shifts -1;
+            // Mantissa.size() will always be 32
+            Mantissa = Mantissa.to_ulong() + 1;
+
+            // truncate
+            // find how many bits are in there
+            for(uint8_t i = 32; i > 0; i--)
+            {
+                if(Mantissa[i - 1] == 1)
+                {
+                    Mantissa_bits = i;
+                    if(Mantissa_bits > 10)
+                    {
+                        uint8_t Shifts2 = Mantissa_bits - 10;
+                        Mantissa >> Shifts2;
+                        Exponent_value += Shifts2;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            Mantissa >> Shifts;
+            Exponent_value += Shifts;
+        }
     }
 
     // same as std::clamp

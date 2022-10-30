@@ -9,7 +9,16 @@
 #include "Adafruit_EEPROM_I2C.h"
 #include "Adafruit_FRAM_I2C.h"
 
-// test
+namespace AVR
+{
+    enum class Result
+    {
+        AVR_FAILED,
+        AVR_SUCCESS,
+        AVR_UNDEFINED
+    };
+}
+
 
 class Floating_point
 {
@@ -20,7 +29,7 @@ public:
     // IO
     virtual float Read() = 0;
 
-    virtual void Write(float& Value) = 0;
+    virtual AVR::Result Write(float& Value) = 0;
 
     // util
     uint8_t Get_Size() const;
@@ -30,7 +39,7 @@ public:
     uint16_t Get_Addr() const;
 
     // Assign m_Addr to empty addr
-    void Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr = 0x60);
+    AVR::Result Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr = 0x60);
     // save data address in FRAM to container <"Name", Addr, Size(bits)>
     std::tuple<std::string, uint16_t, uint8_t> Store(std::string Name);
 
@@ -65,7 +74,7 @@ public:
         : Floating_point (RHS.m_Value, 16){};
 
     // IO
-    void Write(float& Value) override;
+    AVR::Result Write(float& Value) override;
 
     float Read() override;
 
