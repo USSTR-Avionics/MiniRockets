@@ -56,24 +56,37 @@ struct rocket_state
     bool land_safe = false;
     } rocket;
 
+enum _rocket_state
+    {
+    ground_idle,
+    powered_flight,
+    unpowered_flight,
+    ballistic_descent,
+    chute_descent,
+    land_safe
+    } rocket_state;
 
 
 int init_all() 
     {
-    bool all_valid = false;
+    bool init_success = false;
 
-    while (all_valid == false)
+    while (init_success == false)
         {
         init_kx134();
         init_MS5611();
         init_fram();
         init_SD();
+        // TODO:
+        // init_bni088();
+        // init_LED();
+        // init_RFM95_TX();
 
-        // TODO: clarify and condense the following block
-        all_valid = true;
-        if (all_valid == true) 
+        init_success = true;
+        if (init_success == true) 
             {   
             rocket.ground_idle = true;
+            rocket_state = ground_idle;
             }
         }
     return EXIT_SUCCESS;
@@ -81,7 +94,7 @@ int init_all()
 
 int health_check()
     {
-    // ! TODO perform sensor checks
+    // TODO: perform sensor checks
     return EXIT_SUCCESS;
     }
 
@@ -94,11 +107,15 @@ void ground_idle_mode(bool state)
             Serial.println("[ROCKET STATE] GROUND IDLE");
             }
 
+        // TODO:
+        // ledON("GREEN");
+        // buzzerON(0); play state ok sound
+
         kx134_accel_x = get_kx134_accel_x();
         kx134_accel_y = get_kx134_accel_y();
         kx134_accel_z = get_kx134_accel_z();
     
-        if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD) // ? why take abs()
+        if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
             {
             // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
             if (starting_time == 0UL)
@@ -106,7 +123,6 @@ void ground_idle_mode(bool state)
                 starting_time = millis();
                 }
 
-            // DEBUG: Change from 2000 to 100
             // new time - starting time > 0.1 sec and accelation > threshold
             if ((millis() - starting_time > 100) && (abs(kx134_accel_z) > LIFTOFF_THRESHOLD))
                 {
@@ -114,6 +130,7 @@ void ground_idle_mode(bool state)
                 starting_time = 0UL;
                 rocket.powered_flight = true;
                 rocket.ground_idle = false;
+                rocket_state = powered_flight;
                 }
             // Otherwise restart the starting time since there was an issue
             else
@@ -134,6 +151,9 @@ void powered_flight_mode(bool state)
             Serial.println("[ROCKET STATE] POWERED FLIGHT");
             }
 
+        // ledON("RED");
+        // buzzerON(1);
+
         if (abs(kx134_accel_z) < LIFTOFF_THRESHOLD)
             {
             // START TIMER: starting time is always 0 when running the code for the first time, if this is true set the starting time to the current time
@@ -150,6 +170,7 @@ void powered_flight_mode(bool state)
                 starting_time = 0;
                 rocket.unpowered_flight = true;
                 rocket.powered_flight = false;
+                rocket_state = unpowered_flight;
                 }
             }
           }
@@ -166,6 +187,7 @@ void apogee_check()
         {
         rocket.ballistic_descent = true;
         rocket.unpowered_flight = false;
+        rocket_state = ballistic_descent;
         }
 
     // GET BMP data on this line
@@ -183,6 +205,10 @@ void unpowered_flight_mode(bool state)
             {
             Serial.println("[ROCKET STATE] UNPOWERED FLIGHT");
             }
+
+        // TODO:
+        // ledON("BLUE");
+
         apogee_check();
         }
     }
@@ -195,6 +221,8 @@ void ballistic_descent_mode(bool state)
             {
             Serial.println("[ROCKET STATE] BALLISTIC DESCENT");
             }
+        // TODO:
+        // ledON("YELLOW");
 
         // 1000 ft = 304.8 m
         // Add a backup deployment height
@@ -212,6 +240,7 @@ void ballistic_descent_mode(bool state)
                 starting_time = 0;
                 rocket.chute_descent = true;
                 rocket.ballistic_descent = false;
+                rocket_state = chute_descent;
                 }
             }
         }
@@ -222,6 +251,8 @@ void chute_descent_mode(bool state)
     if (state == true)
         {
         // DEPLOY PARACHUTE
+        // TODO:
+        // ledON("ORANGE");
         if (rocket_altitude < 5)
             {
             // START TIMER
@@ -238,6 +269,7 @@ void chute_descent_mode(bool state)
                 starting_time = 0;
                 rocket.land_safe = true;
                 rocket.chute_descent = false;
+                rocket_state = land_safe;
                 }
             }
         }
@@ -251,7 +283,9 @@ void land_safe_mode(bool state)
         // CHECK IF SD CARD CAN STILL BE WRITTEN TO
         // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
         // WRITE TO SD CARD
-        write_to_sd_card("[ROCKET] landed");
+        write_to_sd_card("[ROCKET] Landed");
+        // TODO: call on func to read, unzip and write date to SD card
+        // ledON(somecolour);
         }
     }
 
@@ -299,6 +333,12 @@ void debug_data(bool time_delay)
     Serial.println(ms5611_temp);
     Serial.print("pressure: ");
     Serial.println(ms5611_press);
+
+    rocket_state = ground_idle;
+    Serial.println(rocket_state);
+    if (rocket_state == ground_idle){ Serial.println("if detected rocket state to be ground idle"); }
+    rocket_state = powered_flight;
+    Serial.println(rocket_state);
     }
 
 // STANDARD ENTRY POINTS
