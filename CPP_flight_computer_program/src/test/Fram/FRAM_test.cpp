@@ -292,10 +292,10 @@ AVR::Result f16_FRAM::Write(float& Value)
     if(!m_FRAM.write(m_Addr, static_cast<uint8_t>(Register1.to_ulong()))
         || !m_FRAM.write(++m_Addr, static_cast<uint8_t>(Register2.to_ulong())))
     {
-        // return AVR::Result -> AVR_FAILED
+        return AVR::Result::AVR_FAILED;
     }
 
-    // return AVR::SUCCESS;
+    return AVR::Result::AVR_SUCCESS;
 }
 
 
