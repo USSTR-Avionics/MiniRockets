@@ -13,6 +13,10 @@ CPP_flight_computer_program/.vscode/c_cpp_properties.json
 CPP_flight_computer_program/.vscode/launch.json
 CPP_flight_computer_program/.vscode/ipch
 CPP_flight_computer_program/.vscode/
+CPP_flight_computer_program/.vscode/*
+CPP_flight_computer_program/.pio/*
+CPP_flight_computer_program/.pio
+
 
 CPP_flight_computer_program/cmake-build-teensy41
 CPP_flight_computer_program/cmake-build-debug

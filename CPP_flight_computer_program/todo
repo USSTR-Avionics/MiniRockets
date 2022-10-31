@@ -2,7 +2,7 @@
     - BMI088 (don't have the sensor yet)
     - RadioHead (too lazy to do it now)
 
-[IN PROGRESS @frroossst] impl fram wrapper (maybe in Rust)
+[IN PROGRESS @frroossst] impl fram wrapper 
 
 [TODO] impl startup health checkups
 
@@ -13,13 +13,9 @@
 [IN PROGRESS @djh293] add a wiring diagram for the microcontroller
  
 [TODO] ifndef
+    - check core c compatibility
 
-[IN PROGRESS @frroossst @snowy-shadow] write a custom panic handler in rust
-    - test panic abort in Carog.toml
-    - test panic halt in lib.rs
-    - ^^^ test both sequentially    
-    - https://doc.rust-lang.org/nomicon/ffi.html
+[TODO] conver state machine to enum instead of struct
 
 [TODO] configure the watchdog timer on the Teensy 4.1
     - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
-    - 
