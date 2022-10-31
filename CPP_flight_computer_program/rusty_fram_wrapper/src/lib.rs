@@ -60,6 +60,6 @@ pub extern "C" fn wrap_temperature_for_writing(temp_reading: c_float) -> *const 
 #[no_mangle]
 pub extern "C" fn wrap_acceleration_for_writing(acc: c_float) -> *const u8
     {
-    let ptr: [u8; 4] = acc.to_ne_bytes(); // native byte ordering
+    let ptr: [u8; 4] = acc.to_le_bytes(); // little endian encoding 
     return ptr.as_ptr();
     }
