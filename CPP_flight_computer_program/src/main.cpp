@@ -283,7 +283,7 @@ void land_safe_mode(bool state)
         // CHECK IF SD CARD CAN STILL BE WRITTEN TO
         // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
         // WRITE TO SD CARD
-        write_to_sd_card("[ROCKET] Landed");
+//        write_to_sd_card("[ROCKET] Landed");
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
         }
@@ -292,7 +292,7 @@ void land_safe_mode(bool state)
 void watchdog_callback()
     {
     Serial.println("watchdog_callback()");
-    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
+//    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
     }
 
 void debug_data(bool time_delay)
@@ -361,7 +361,7 @@ void setup()
         }
 
     Serial.println("setup()");
-    write_to_sd_card("setup exit");
+//    write_to_sd_card("setup exit");
     }
 
 void loop() 

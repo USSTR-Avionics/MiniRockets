@@ -31,6 +31,8 @@ int write_temperature_to_fram(float t)
     write_to_fram(pointerToIndex0[0], last_write_temp + WRITE_OFFSET);
     write_to_fram(pointerToIndex0[1], last_write_temp + 1 + WRITE_OFFSET);
     last_write_temp += 2;
+
+    return EXIT_SUCCESS;
     }
 
 int write_acceleration_to_fram(float a)
@@ -41,6 +43,8 @@ int write_acceleration_to_fram(float a)
     write_to_fram(pointerToIndex0[2], last_write_accl + 2 + WRITE_OFFSET);
     write_to_fram(pointerToIndex0[3], last_write_accl + 3 + WRITE_OFFSET);
     last_write_accl += 4;
+
+    return EXIT_SUCCESS;
     }
     
 
