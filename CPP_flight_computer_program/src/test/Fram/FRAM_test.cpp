@@ -163,15 +163,19 @@ AVR::Result f16_FRAM::Write(float& Value)
     {
         Decimal = std::ceil(Decimal);
     }
+
+    // Decimal trim
     // decimal in bits, reduced to its lowest value
     auto iDecimal = static_cast<uint16_t>(Decimal);
-    while(iDecimal % 10 == 0)
+    if(iDecimal != 0)
     {
-        iDecimal /= 10;
+        while (iDecimal % 10 == 0)
+        {
+            iDecimal /= 10;
+        }
     }
     bDecimal = iDecimal;
 
-    // Decimal trim
     uint8_t Decimal_bits = 16;
     if(bDecimal.to_ulong() > 0)
     {
