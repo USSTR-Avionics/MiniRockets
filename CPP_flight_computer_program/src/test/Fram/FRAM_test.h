@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CPP_FLIGHT_COMPUTER_PROGRAM_FRAM_TEST_H
 #define CPP_FLIGHT_COMPUTER_PROGRAM_FRAM_TEST_H
 
@@ -64,9 +65,6 @@ class f16_FRAM : protected Floating_point
      */
 public:
     // Constructors
-    f16_FRAM()
-        : Floating_point (0, 16) {};
-
     explicit f16_FRAM(const float& Input)
         : Floating_point (Input, 16) {};
 
@@ -102,12 +100,11 @@ private:
 
 };
 
-/*
- * they are on hold
-class f24_FRAM : protected Floating_point
+
+/*class f24_FRAM : protected Floating_point
 {
-    */
-/*
+
+*//*
      * [  1      6       17 ]
      * [sign exponents value]
      *//*
@@ -144,50 +141,50 @@ public:
     ~f24_FRAM();
 private:
     void Clear();
-};
+};*/
 
 
 class f32_FRAM : protected Floating_point
 {
-    */
-/*
+    /*
      * [  1      8      23  ]
      * [sign exponents value]
-     *//*
+     */
 
 
 public:
     // Constructors
-    f32_FRAM();
-
-    f32_FRAM(const float& Input)
+    explicit f32_FRAM(const float& Input)
             : Floating_point(Input, 32){};
 
     f32_FRAM(const f32_FRAM& RHS)
             : Floating_point(RHS.m_Value, 32){};
 
     // IO
-    void Write(float& Value) override;
+    AVR::Result Write(float& Value) override;
 
     float Read() override;
 
     // operators
-    // addition
-    f32_FRAM& operator + (const float& Value) const;
-    f32_FRAM& operator + (const f32_FRAM& RHS) const;
-    // subtraction
-    f32_FRAM& operator - (const float& Value) const;
-    f32_FRAM& operator - (const f32_FRAM& RHS) const;
+    f32_FRAM operator + (const f32_FRAM &RHS) const;
+
+    f32_FRAM operator - (const f32_FRAM &RHS) const;
+
+    f32_FRAM operator * (const f32_FRAM &RHS) const;
+
+    f32_FRAM operator / (const f32_FRAM &RHS) const;
     // assignment
-    f32_FRAM& operator = (const float& Value) const;
-    f32_FRAM& operator = (const f32_FRAM& Value) const;
+    f32_FRAM& operator = (const f32_FRAM &RHS);
+
     // comparison
-    bool operator == (const f32_FRAM& RHS) const;
+    bool operator < (const f32_FRAM &RHS) const;
+    bool operator > (const f32_FRAM &RHS) const;
+    bool operator == (const f32_FRAM &RHS) const;
 
     ~f32_FRAM();
 private:
     void Clear();
 };
-*/
+
 
 #endif //CPP_FLIGHT_COMPUTER_PROGRAM_FRAM_TEST_H

@@ -263,7 +263,7 @@ void land_safe_mode(bool state)
 void watchdog_callback()
     {
     Serial.println("watchdog_callback()");
-    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
+    write_to_sd_card(const_cast<char*>("[MICROCONTROLLER] watchdog callback"));
     }
 
 void debug_data(bool time_delay)

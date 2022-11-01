@@ -293,8 +293,10 @@ AVR::Result f16_FRAM::Write(float& Value)
     }
 
     // write to memory
-    if(!m_FRAM.write(m_Addr, static_cast<uint8_t>(Register1.to_ulong()))
-        || !m_FRAM.write(++m_Addr, static_cast<uint8_t>(Register2.to_ulong())))
+    uint8_t Temp_addr = m_Addr;
+
+    if(!m_FRAM.write(Temp_addr, static_cast<uint8_t>(Register1.to_ulong()))
+        || !m_FRAM.write(++Temp_addr, static_cast<uint8_t>(Register2.to_ulong())))
     {
         return AVR::Result::AVR_FAILED;
     }
@@ -308,10 +310,11 @@ float f16_FRAM::Read()
     std::bitset<8> Register1, Register2;
     std::bitset<5> Exponents;
     std::bitset<10> Mantissa;
+    uint8_t Temp_addr = m_Addr;
 
     // Assuming this works, pretty sure doesn't
-    Register1 = m_FRAM.read(m_Addr);
-    Register2 = m_FRAM.read(++m_Addr);
+    Register1 = m_FRAM.read(Temp_addr);
+    Register2 = m_FRAM.read(++Temp_addr);
 
     // extract exponents
     for(uint8_t i = 2; i < 7; i++)
@@ -400,17 +403,93 @@ void f16_FRAM::Clear()
  * =========================================================================
  */
 
-// Operators
-/*
-f32_FRAM& f32_FRAM::operator = (const float& Value) const
+// I/O
+AVR::Result f32_FRAM::Write(float &Value)
 {
-    f32_FRAM Temp = Value;
-};
-*/
+    if(Find_Addr(m_Bits, 0x60) != AVR::Result::AVR_SUCCESS)
+    {
+        return AVR::Result::AVR_FAILED;
+    }
 
-/*bool f32_FRAM::operator == (const f32_FRAM& Other) const
+    union Temp
+    {
+        float Value;
+        char Bytes[4];
+    } Temp{};
+
+    Temp.Value = Value;
+
+    for(auto &iter : Temp.Bytes)
+    {
+        m_FRAM.write(m_Addr, iter);
+        m_Addr++;
+    }
+
+    return AVR::Result::AVR_SUCCESS;
+}
+
+// read
+float f32_FRAM::Read()
 {
-    return m_Value == Other.m_Value;
+    uint8_t Temp_addr = m_Addr;
+    union Temp
+    {
+        float Value;
+        char Bytes[4];
+    } Temp{};
+
+    for(auto &iter : Temp.Bytes)
+    {
+        iter = m_FRAM.read(Temp_addr);
+        Temp_addr++;
+    }
+    return Temp.Value;
+}
+
+// Operators
+f32_FRAM f32_FRAM::operator + (const f32_FRAM &RHS) const
+{
+    return f32_FRAM {m_Value + RHS.m_Value};
+}
+
+f32_FRAM f32_FRAM::operator - (const f32_FRAM &RHS) const
+{
+    return f32_FRAM {m_Value - RHS.m_Value};
+}
+
+f32_FRAM f32_FRAM::operator * (const f32_FRAM &RHS) const
+{
+    return f32_FRAM {m_Value * RHS.m_Value};
+}
+
+f32_FRAM f32_FRAM::operator / (const f32_FRAM &RHS) const
+{
+    return f32_FRAM {m_Value / RHS.m_Value};
+}
+
+
+f32_FRAM& f32_FRAM::operator = (const f32_FRAM &RHS)
+{   if(this != &RHS)
+    {
+        this->m_Value = RHS.m_Value;
+        this->m_Addr = RHS.m_Addr;
+    }
+    return *this;
+}
+
+bool f32_FRAM::operator < (const f32_FRAM &RHS) const
+{
+    return m_Value < RHS.m_Value;
+}
+
+bool f32_FRAM::operator > (const f32_FRAM &RHS) const
+{
+    return m_Value > RHS.m_Value;
+}
+
+bool f32_FRAM::operator == (const f32_FRAM& RHS) const
+{
+    return m_Value == RHS.m_Value;
 }
 
 f32_FRAM::~f32_FRAM()
@@ -419,13 +498,11 @@ f32_FRAM::~f32_FRAM()
 }
 void f32_FRAM::Clear()
 {
-    const uint8_t Zero = 0x00;
-
     for(uint8_t i = 0; i < 4; i++)
     {
-        m_FRAM.write(m_Addr, Zero);
+        m_FRAM.write(m_Addr, 0);
         m_Addr++;
     }
-}*/
+}
 
 
