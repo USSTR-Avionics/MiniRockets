@@ -1,4 +1,0 @@
-{
-    "editor.detectIndentation": false,
-    "cmake.sourceDirectory": "${workspaceFolder}/lib/Adafruit_BusIO"
-}

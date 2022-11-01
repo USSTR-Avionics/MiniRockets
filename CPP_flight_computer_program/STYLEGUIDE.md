@@ -1,3 +1,8 @@
+## programming language
+
+- For now we are sticking to core/ embedded C to maintain portability with any future microcontroller changes
+
+
 ## headers
 
 - arrange headers in a descending order, in case of same length use alphabetical order  
