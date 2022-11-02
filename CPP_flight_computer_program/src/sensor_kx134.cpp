@@ -3,6 +3,8 @@
 QwiicKX134 kxAccel; 
 outputData accel_data;
 
+#define g 9.8067f
+
 bool init_kx134()
     {
     if( !kxAccel.begin() )
@@ -24,17 +26,17 @@ bool init_kx134()
 float get_kx134_accel_x()
     {
     accel_data = kxAccel.getAccelData(); 
-    return accel_data.xData*9.81108;
+    return accel_data.xData * g; // g * 9.8 => raw accel in ms^-2
     }
 
 float get_kx134_accel_y()
     {
     accel_data = kxAccel.getAccelData(); 
-    return accel_data.yData*9.81108;
+    return accel_data.yData * g; 
     }
 
 float get_kx134_accel_z()
     {
     accel_data = kxAccel.getAccelData(); 
-    return accel_data.zData*9.81108;
+    return accel_data.zData * g;
     }

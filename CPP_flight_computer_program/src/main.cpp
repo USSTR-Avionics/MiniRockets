@@ -41,7 +41,7 @@ float rocket_altitude   = 0.0;
 
 // LIMIT VARS | vars defining important limits and thresholds
 // NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
-#define LIFTOFF_THRESHOLD 9.9//1.15f (had 15)
+#define LIFTOFF_THRESHOLD 10.0f
 
 
 
@@ -100,8 +100,6 @@ void ground_idle_mode(bool state)
         // ledON("GREEN");
         // buzzerON(0); play state ok sound
 
-        kx134_accel_x = get_kx134_accel_x();
-        kx134_accel_y = get_kx134_accel_y();
         kx134_accel_z = get_kx134_accel_z();
     
         if (abs(kx134_accel_z) > LIFTOFF_THRESHOLD)
@@ -372,16 +370,8 @@ void setup()
 
 void loop() 
     {
-    wdt.feed();
-    debug_data(true); // remove on prod;
+    debug_data(false); // remove on prod;
 
+    wdt.feed();
     select_flight_mode(rocket_state);
-    /* 
-    ground_idle_mode(rocket.ground_idle);
-    powered_flight_mode(rocket.powered_flight);
-    unpowered_flight_mode(rocket.unpowered_flight);
-    ballistic_descent_mode(rocket.ballistic_descent);
-    chute_descent_mode(rocket.chute_descent);
-    land_safe_mode(rocket.land_safe);
-    */
     }
