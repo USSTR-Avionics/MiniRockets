@@ -15,7 +15,9 @@
 [TODO] ifndef
     - check core c compatibility
 
-[TODO] conver state machine to enum instead of struct
+[TODO] convert state machine to enum instead of struct
 
 [TODO] configure the watchdog timer on the Teensy 4.1
     - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
+
+[TODO] convert strings to const char* as sometimes the code will throw compiler errors

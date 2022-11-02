@@ -56,7 +56,7 @@ struct rocket_state
     bool land_safe = false;
     } rocket;
 
-enum _rocket_state
+enum e_rocket_state
     {
     ground_idle,
     powered_flight,
@@ -289,6 +289,35 @@ void land_safe_mode(bool state)
         }
     }
 
+int select_flight_mode(e_rocket_state rs)
+    {
+    if (rs == ground_idle)
+        {
+        ground_idle_mode(rs);
+        }
+    else if (rs == powered_flight)
+        {
+        powered_flight_mode(rs);
+        }
+    else if (rs == unpowered_flight)
+        {
+        unpowered_flight_mode(rs);
+        }
+    else if (rs == unpowered_flight)
+        {
+        ballistic_descent_mode(rs);
+        }
+    else if (rs == unpowered_flight)
+        {
+        chute_descent_mode(rs);
+        }
+    else if (rs == unpowered_flight)
+        {
+        land_safe_mode(rs);
+        }
+    return EXIT_FAILURE;
+    }
+
 void watchdog_callback()
     {
     Serial.println("watchdog_callback()");
@@ -369,10 +398,13 @@ void loop()
     wdt.feed();
     debug_data(true); // remove on prod;
 
+    select_flight_mode(rocket_state);
+    /* 
     ground_idle_mode(rocket.ground_idle);
     powered_flight_mode(rocket.powered_flight);
     unpowered_flight_mode(rocket.unpowered_flight);
     ballistic_descent_mode(rocket.ballistic_descent);
     chute_descent_mode(rocket.chute_descent);
     land_safe_mode(rocket.land_safe);
+    */
     }
