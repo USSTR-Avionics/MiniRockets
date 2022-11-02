@@ -283,7 +283,7 @@ void land_safe_mode(bool state)
         // CHECK IF SD CARD CAN STILL BE WRITTEN TO
         // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
         // WRITE TO SD CARD
-//        write_to_sd_card("[ROCKET] Landed");
+        write_to_sd_card("[ROCKET] Landed");
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
         }
@@ -321,7 +321,7 @@ int select_flight_mode(e_rocket_state rs)
 void watchdog_callback()
     {
     Serial.println("watchdog_callback()");
-//    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
+    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
     }
 
 void debug_data(bool time_delay)
@@ -332,22 +332,14 @@ void debug_data(bool time_delay)
         delay(500);
         }
 
+    // Rust FFI lib
     Serial.println("--- Rust lib ---");
-    // get pointer and array checks
-    // Serial.println(wrap_temperature_for_writing(0));
-    // Serial.println(wrap_temperature_for_writing(100));
-    // int32_t x = -10;
-    // Serial.print("pass and return ");
-    // Serial.println(pass_and_return_through_ffi(x));
-    // Serial.println(wrap_temperature_for_writing(x));
-    // Serial.println(wrap_temperature_for_writing(5.9));
-    // Serial.println("called delay func");
-    // Serial.println(c_return_delay_test());
 
+    // KX134
+    Serial.println("--- KX134 ---");
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
     kx134_accel_z = get_kx134_accel_z();
-    Serial.println("--- KX134 ---");
     Serial.print("x: ");
     Serial.println(kx134_accel_x);
     Serial.print("y: ");
@@ -355,19 +347,25 @@ void debug_data(bool time_delay)
     Serial.print("z: ");
     Serial.println(kx134_accel_z);
 
+    // MS5611
+    Serial.println("--- MS5611 ---");
     ms5611_temp = get_ms5611_temp();
     ms5611_press = get_ms5611_press();
-    Serial.println("--- MS5611 ---");
     Serial.print("temperature: ");
     Serial.println(ms5611_temp);
     Serial.print("pressure: ");
     Serial.println(ms5611_press);
 
-    rocket_state = ground_idle;
+    // Rocket State enum
+    Serial.println("---Enum Rocket State---");
+    Serial.print("current enum state: ");
     Serial.println(rocket_state);
     if (rocket_state == ground_idle){ Serial.println("if detected rocket state to be ground idle"); }
-    rocket_state = powered_flight;
-    Serial.println(rocket_state);
+    if (rocket_state == powered_flight){ Serial.println("if detected rocket state to be powered flight"); }
+    if (rocket_state == unpowered_flight){ Serial.println("if detected rocket state to be unpowered flight"); }
+    if (rocket_state == ballistic_descent){ Serial.println("if detected rocket state to be ballistic decent"); }
+    if (rocket_state == chute_descent){ Serial.println("if detected rocket state to be chute descent"); }
+    if (rocket_state == land_safe){ Serial.println("if detected rocket state to be land safe"); }
     }
 
 // STANDARD ENTRY POINTS
@@ -390,7 +388,7 @@ void setup()
         }
 
     Serial.println("setup()");
-//    write_to_sd_card("setup exit");
+    write_to_sd_card("setup exit");
     }
 
 void loop() 
