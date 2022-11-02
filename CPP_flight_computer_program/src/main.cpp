@@ -46,16 +46,6 @@ float rocket_altitude   = 0.0;
 
 
 // STATE MACHINE
-struct rocket_state
-    {
-    bool ground_idle = false;
-    bool powered_flight = false;
-    bool unpowered_flight = false;
-    bool ballistic_descent = false;
-    bool chute_descent = false;
-    bool land_safe = false;
-    } rocket;
-
 enum e_rocket_state
     {
     ground_idle,
@@ -85,7 +75,6 @@ int init_all()
         init_success = true;
         if (init_success == true) 
             {   
-            rocket.ground_idle = true;
             rocket_state = ground_idle;
             }
         }
@@ -128,8 +117,6 @@ void ground_idle_mode(bool state)
                 {
                 // reset the timer and go to next state
                 starting_time = 0UL;
-                rocket.powered_flight = true;
-                rocket.ground_idle = false;
                 rocket_state = powered_flight;
                 }
             // Otherwise restart the starting time since there was an issue
@@ -168,8 +155,6 @@ void powered_flight_mode(bool state)
                 {
                   // reset the timer and go to next state
                 starting_time = 0;
-                rocket.unpowered_flight = true;
-                rocket.powered_flight = false;
                 rocket_state = unpowered_flight;
                 }
             }
@@ -185,8 +170,6 @@ void apogee_check()
 
     if (decent_check > 10) 
         {
-        rocket.ballistic_descent = true;
-        rocket.unpowered_flight = false;
         rocket_state = ballistic_descent;
         }
 
@@ -238,8 +221,6 @@ void ballistic_descent_mode(bool state)
                 {
                 // reset the timer and go to next state
                 starting_time = 0;
-                rocket.chute_descent = true;
-                rocket.ballistic_descent = false;
                 rocket_state = chute_descent;
                 }
             }
@@ -267,8 +248,6 @@ void chute_descent_mode(bool state)
                 {
                 // reset the timer and go to next state
                 starting_time = 0;
-                rocket.land_safe = true;
-                rocket.chute_descent = false;
                 rocket_state = land_safe;
                 }
             }
