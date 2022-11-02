@@ -303,15 +303,15 @@ int select_flight_mode(e_rocket_state rs)
         {
         unpowered_flight_mode(rs);
         }
-    else if (rs == unpowered_flight)
+    else if (rs == ballistic_descent)
         {
         ballistic_descent_mode(rs);
         }
-    else if (rs == unpowered_flight)
+    else if (rs == chute_descent)
         {
         chute_descent_mode(rs);
         }
-    else if (rs == unpowered_flight)
+    else if (rs == land_safe)
         {
         land_safe_mode(rs);
         }
