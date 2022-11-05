@@ -46,7 +46,7 @@ AVR::Result Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
         for (; Counter < Required; Counter++)
         {
             /*
-             * will crash the program if goes out of memory, unless adafruit made it wrap around
+             * will crash the program if it goes out of memory, unless adafruit made it wrap around
              * in which case, Find_Addr() will search forever which is also bad
             */
 
@@ -115,7 +115,7 @@ AVR::Result f16_FRAM::Write(float& Value)
     }
 
     // bias
-    uint16_t Exponent_value = 15;
+    int8_t Exponent_value = 15;
 
     std::bitset<16> bWhole, bDecimal;
     std::bitset<32> Mantissa = 0;
@@ -126,87 +126,71 @@ AVR::Result f16_FRAM::Write(float& Value)
 
     // Don't want to deal with 2's complement, so it's going to be all positive
     // any stored value that exceeds 16 bits will be cut off, could round
+
     if (Value < 0)
     {
-        bWhole = static_cast<uint16_t>(-Value);
+        Value = -Value;
+
         // sign bit
-        Register1[7] = true;
-    }
-    else
-    {
-        bWhole = static_cast<uint16_t>(Value);
+        Register1[7] = 1;
     }
 
-    // Find exponent
-    while(Value >= 2)
+    while (Value >= 2)
     {
         Value /= 2;
         Exponent_value++;
     }
-
-    while(Value < 1)
+    while (Value < 1)
     {
         Value *= 2;
         Exponent_value--;
     }
+    bWhole = static_cast<uint16_t>(Value);
 
-    // narrowing conversion from int to float
-    // 2^16 = 65536 -> 5 digits of accuracy possible, max 4 digits is usable
-    // can also use std::fmod()
-    float Decimal = (Value - static_cast<float>(bWhole.to_ulong()))  * 10000;
-
-    if(std::ceil(Decimal) - Decimal > Decimal - std::floor(Decimal))
-    {
-        Decimal = std::floor(Decimal);
-    }
-    else
-    {
-        Decimal = std::ceil(Decimal);
-    }
-
-    // Decimal trim
-    // decimal in bits, reduced to its lowest value
-    auto iDecimal = static_cast<uint16_t>(Decimal);
-    if(iDecimal != 0)
-    {
-        while (iDecimal % 10 == 0)
-        {
-            iDecimal /= 10;
-        }
-    }
-    bDecimal = iDecimal;
+    // decimal conversion
+    float Decimal = Value - static_cast<float>(bWhole.to_ulong());
 
     uint8_t Decimal_bits = 16;
-    if(bDecimal.to_ulong() > 0)
+    if (Decimal != 0)
     {
-        // how many bits are decimal
-        for(uint8_t i = 15; i >= 0; i--)
+        // compute decimal to 16 bit digits
+        for (int16_t i = 15; i >= 0; i--)
         {
-            if(bDecimal[i] == 1)
+            // Find next bit in fraction
+            Decimal *= 2;
+
+            // if it is over 1
+            if (Decimal > 1.f)
             {
-                break;
-            }
-            else
+                Decimal -= 1;
+                bDecimal[i] = 1;
+            } else
             {
-                Decimal_bits--;
+                bDecimal[i] = 0;
             }
         }
+    } else
+    {
+        Decimal_bits = 0;
     }
 
+    // Find exponent
+    Exponent_value -= Decimal_bits;
+
+
     // Integer trim
-    uint8_t Integer_bits = 16;
-    if(bWhole.to_ulong() > 0)
+    uint8_t Integer_bits = 0;
+    if (bWhole.to_ulong() > 0)
     {
         // how many bits are integers
-        for(uint8_t i = 16; i >= 0; i--)
+        for (int16_t i = 16; i > 0; i--)
         {
             if (bWhole[i] == 1)
             {
                 break;
-            }
-            else
+            } else
             {
-                Integer_bits--;
+                Integer_bits = i;
             }
         }
     }
@@ -214,58 +198,43 @@ AVR::Result f16_FRAM::Write(float& Value)
     // 11 1111 1111 = 1023, max mantissa value. (Mantissa > Max) = Max
     // put the two together
     uint8_t Temp_i = 0, Temp_j;
-    for(; Temp_i <= Decimal_bits; Temp_i++)
+    for (; Temp_i < Decimal_bits; Temp_i++)
     {
         Mantissa[Temp_i] = bDecimal[Temp_i];
     }
-    for(Temp_j = Temp_i + 1; Temp_j <= Decimal_bits + Integer_bits; Temp_j++)
+    for (Temp_j = Temp_i; Temp_j < (Decimal_bits + Integer_bits); Temp_j++)
     {
-        Mantissa[Temp_j] = bWhole[Temp_j];
+        Mantissa[Temp_j] = bWhole[Temp_j - Temp_i];
     }
 
+    // Mantissa cannot be bigger than 10
     uint8_t Mantissa_bits = Integer_bits + Decimal_bits;
-    if(Mantissa_bits > 10)
+    if (Mantissa_bits > 10)
     {
         uint8_t Shifts = Mantissa_bits - 10;
 
         // rounding, optional
-        if(Mantissa[Shifts - 1] == 1)
+        if (Mantissa[Shifts - 1] == 1)
         {
             // rounding
-            Mantissa >> (Shifts - 1);
-            Exponent_value += Shifts -1;
-            // Mantissa.size() will always be 32
             Mantissa = Mantissa.to_ulong() + 1;
 
-            // truncate
-            // find how many bits are in there
-            for(uint8_t i = 32; i > 0; i--)
-            {
-                if(Mantissa[i - 1] == 1)
-                {
-                    Mantissa_bits = i;
-                    break;
-                }
-            }
-
             uint8_t Shifts2 = Mantissa_bits - 10;
-            Mantissa >> Shifts2;
+            Mantissa = Mantissa >> Shifts2;
             Exponent_value += Shifts2;
-        }
-        else
+        } else
         {
-            Mantissa >> Shifts;
+            Mantissa = Mantissa >> Shifts;
             Exponent_value += Shifts;
         }
     }
 
     // same as std::clamp
-    // if the number is too large or small, the output WILL be wrong
-    if(Exponent_value > 31)
+    if (Exponent_value > 31)
     {
         Exponent_value = 31;
     }
-    if(Exponent_value < 0)
+    if (Exponent_value < 0)
     {
         Exponent_value = 0;
     }
@@ -274,17 +243,14 @@ AVR::Result f16_FRAM::Write(float& Value)
     Exponent = Exponent_value;
 
     // load Register1, Register2
-    for(uint8_t i = 0; i < 8; i++)
+    for (int16_t i = 0; i < 8; i++)
     {
         Register2[i] = Mantissa[i];
 
-        if(i < 2)
+        if (i < 2)
         {
-            Register1[i] = Mantissa[10 - i];
-        }
-
-        // can be simplified into just else()
-        else if(2 <= i && i < 8)
+            Register1[i] = Mantissa[8 + i];
+        } else if (i < 7)
         {
             Register1[i] = Exponent[i - 2];
         }
@@ -310,19 +276,19 @@ float f16_FRAM::Read()
     std::bitset<8> Register1, Register2;
     std::bitset<5> Exponents;
     std::bitset<10> Mantissa;
-    uint8_t Temp_addr = m_Addr;
+    uint16_t Temp_addr = m_Addr;
 
     // Assuming this works, pretty sure doesn't
     Register1 = m_FRAM.read(Temp_addr);
     Register2 = m_FRAM.read(++Temp_addr);
 
     // extract exponents
-    for(uint8_t i = 2; i < 7; i++)
+    for(int16_t i = 2; i < 7; i++)
     {
         Exponents[i - 2] = Register1[i];
     }
 
-    for(uint8_t i = 0; i < 8; i++)
+    for(int16_t i = 0; i < 8; i++)
     {
         if(i < 2)
         {
@@ -332,28 +298,28 @@ float f16_FRAM::Read()
         Mantissa[i] = Register2[i];
     }
 
-    const auto Value = static_cast<float>(Mantissa.to_ulong() * std::pow(2, Exponents.to_ulong() - 15));
+    const auto Value = static_cast<float>(Mantissa.to_ulong() * std::pow(2, static_cast<int>(Exponents.to_ulong() - 15)));
 
     return Register1[7] == 1 ? -Value : Value;
 }
 
 // Operators
-f16_FRAM f16_FRAM::operator + (const f16_FRAM &RHS) const
+f16_FRAM f16_FRAM::operator + (const f16_FRAM &RHS)
 {
     return f16_FRAM {m_Value + RHS.m_Value};
 }
 
-f16_FRAM f16_FRAM::operator - (const f16_FRAM &RHS) const
+f16_FRAM f16_FRAM::operator - (const f16_FRAM &RHS)
 {
     return f16_FRAM {m_Value - RHS.m_Value};
 }
 
-f16_FRAM f16_FRAM::operator * (const f16_FRAM &RHS) const
+f16_FRAM f16_FRAM::operator * (const f16_FRAM &RHS)
 {
     return f16_FRAM {m_Value * RHS.m_Value};
 }
 
-f16_FRAM f16_FRAM::operator / (const f16_FRAM &RHS) const
+f16_FRAM f16_FRAM::operator / (const f16_FRAM &RHS)
 {
     return f16_FRAM {m_Value / RHS.m_Value};
 }
@@ -447,22 +413,22 @@ float f32_FRAM::Read()
 }
 
 // Operators
-f32_FRAM f32_FRAM::operator + (const f32_FRAM &RHS) const
+f32_FRAM f32_FRAM::operator + (const f32_FRAM &RHS)
 {
     return f32_FRAM {m_Value + RHS.m_Value};
 }
 
-f32_FRAM f32_FRAM::operator - (const f32_FRAM &RHS) const
+f32_FRAM f32_FRAM::operator - (const f32_FRAM &RHS)
 {
     return f32_FRAM {m_Value - RHS.m_Value};
 }
 
-f32_FRAM f32_FRAM::operator * (const f32_FRAM &RHS) const
+f32_FRAM f32_FRAM::operator * (const f32_FRAM &RHS)
 {
     return f32_FRAM {m_Value * RHS.m_Value};
 }
 
-f32_FRAM f32_FRAM::operator / (const f32_FRAM &RHS) const
+f32_FRAM f32_FRAM::operator / (const f32_FRAM &RHS)
 {
     return f32_FRAM {m_Value / RHS.m_Value};
 }

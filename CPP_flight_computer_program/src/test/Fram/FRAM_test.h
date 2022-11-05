@@ -77,13 +77,13 @@ public:
     float Read() override;
 
     // operators
-    f16_FRAM operator + (const f16_FRAM &RHS) const;
+    f16_FRAM operator + (const f16_FRAM &RHS);
 
-    f16_FRAM operator - (const f16_FRAM &RHS) const;
+    f16_FRAM operator - (const f16_FRAM &RHS);
 
-    f16_FRAM operator * (const f16_FRAM &RHS) const;
+    f16_FRAM operator * (const f16_FRAM &RHS);
 
-    f16_FRAM operator / (const f16_FRAM &RHS) const;
+    f16_FRAM operator / (const f16_FRAM &RHS);
     // assignment
     f16_FRAM& operator = (const f16_FRAM &RHS);
 
@@ -166,13 +166,13 @@ public:
     float Read() override;
 
     // operators
-    f32_FRAM operator + (const f32_FRAM &RHS) const;
+    f32_FRAM operator + (const f32_FRAM &RHS);
 
-    f32_FRAM operator - (const f32_FRAM &RHS) const;
+    f32_FRAM operator - (const f32_FRAM &RHS);
 
-    f32_FRAM operator * (const f32_FRAM &RHS) const;
+    f32_FRAM operator * (const f32_FRAM &RHS);
 
-    f32_FRAM operator / (const f32_FRAM &RHS) const;
+    f32_FRAM operator / (const f32_FRAM &RHS);
     // assignment
     f32_FRAM& operator = (const f32_FRAM &RHS);
 
