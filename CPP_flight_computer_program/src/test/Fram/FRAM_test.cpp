@@ -11,7 +11,7 @@ Floating_point::Floating_point(const float &Input, const uint8_t &Bits)
 // Member functions
 AVR::Result Floating_point::Find_Addr(const uint8_t &Bits, uint16_t Begin_Addr)
 {
-    uint16_t Counter = 0, Required = 0, Tracker = 0;
+    uint16_t Counter = 0, Required, Tracker = 0;
 
     // Amount required
     switch(Bits)
@@ -150,7 +150,7 @@ AVR::Result f16_FRAM::Write(float& Value)
     // decimal conversion
     float Decimal = Value - static_cast<float>(bWhole.to_ulong());
 
-    uint8_t Decimal_bits = 16;
+    int8_t Decimal_bits = 16;
     if (Decimal != 0)
     {
         // compute decimal to 16 bit digits
@@ -208,7 +208,7 @@ AVR::Result f16_FRAM::Write(float& Value)
     }
 
     // Mantissa cannot be bigger than 10
-    uint8_t Mantissa_bits = Integer_bits + Decimal_bits;
+    int8_t Mantissa_bits = Integer_bits + Decimal_bits;
     if (Mantissa_bits > 10)
     {
         uint8_t Shifts = Mantissa_bits - 10;
@@ -219,7 +219,7 @@ AVR::Result f16_FRAM::Write(float& Value)
             // rounding
             Mantissa = Mantissa.to_ulong() + 1;
 
-            uint8_t Shifts2 = Mantissa_bits - 10;
+            int8_t Shifts2 = Mantissa_bits - 10;
             Mantissa = Mantissa >> Shifts2;
             Exponent_value += Shifts2;
         } else

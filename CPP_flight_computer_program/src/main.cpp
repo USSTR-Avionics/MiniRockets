@@ -18,8 +18,8 @@
 #include "watchdog.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
-#include <stdint.h> // switch to machine independent types
-#include <stdlib.h>
+#include <cstdint> // switch to machine independent types
+#include <cstdlib>
 #include <Wire.h>
 #include <SPI.h>
 
