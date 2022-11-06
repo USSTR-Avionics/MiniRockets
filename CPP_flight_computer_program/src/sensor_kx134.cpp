@@ -1,7 +1,10 @@
 #include "SparkFun_Qwiic_KX13X.h"
+#include "default_variables.h"
 
 QwiicKX134 kxAccel; 
 outputData accel_data;
+
+#define g 9.8067f
 
 bool init_kx134()
     {
@@ -24,17 +27,36 @@ bool init_kx134()
 float get_kx134_accel_x()
     {
     accel_data = kxAccel.getAccelData(); 
-    return accel_data.xData*9.81108;
+    return accel_data.xData * g; // g * 9.8 => raw accel in ms^-2
     }
 
 float get_kx134_accel_y()
     {
     accel_data = kxAccel.getAccelData(); 
-    return accel_data.yData*9.81108;
+    return accel_data.yData * g; 
     }
 
 float get_kx134_accel_z()
     {
+    // TODO: calibrate the sensor with angle to get the cos and sin component of the vector
     accel_data = kxAccel.getAccelData(); 
-    return accel_data.zData*9.81108;
+    return accel_data.zData * g;
+    }
+
+bool confirm_acceleration_z()
+    {
+    uint8_t count = 0;
+    uint8_t deceleration_count = 5;
+    float last_acceleration_reading = 1000;
+    float current_acceleration_reading = FLO_DEF;
+    while (count < 5)  
+        {
+        current_acceleration_reading = get_kx134_accel_z();
+        if (current_acceleration_reading < last_acceleration_reading)
+            {
+            deceleration_count += 1;
+            }
+        count += 1;
+        }
+    return true;
     }

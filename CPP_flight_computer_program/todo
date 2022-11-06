@@ -2,7 +2,7 @@
     - BMI088 (don't have the sensor yet)
     - RadioHead (too lazy to do it now)
 
-[IN PROGRESS @frroossst] impl fram wrapper
+[IN PROGRESS @frroossst] impl fram wrapper 
 
 [TODO] impl startup health checkups
 
@@ -19,6 +19,7 @@
 
 [TODO] configure the watchdog timer on the Teensy 4.1
     - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
-    -
 
-[TODO] If there is time, rewrite the state machine. Two states can exist at the same time
+[TODO] convert strings to const char* as sometimes the code will throw compiler errors
+
+[TODO] wrap debugs in ifndef

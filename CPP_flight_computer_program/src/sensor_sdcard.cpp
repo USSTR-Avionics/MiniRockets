@@ -22,7 +22,7 @@ int init_SD()
     return EXIT_SUCCESS;
     }
 
-int write_to_sd_card(char* str)
+int write_to_sd_card(const char* str)
     {
     File dataFile = SD.open(SD_DATA_FILE_NAME, FILE_WRITE);
 
