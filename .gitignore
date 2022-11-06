@@ -35,3 +35,6 @@ CPP_flight_computer_program/rusty_fram_wrapper/target/*
 
 Rust_flight_computer_program/*
 Rust_flight_computer_program/
+
+linted_flight_computer_program/
+linted_flight_computer_program/*

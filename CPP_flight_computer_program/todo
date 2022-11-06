@@ -21,3 +21,5 @@
     - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
 
 [TODO] convert strings to const char* as sometimes the code will throw compiler errors
+
+[TODO] wrap debugs in ifndef
