@@ -65,7 +65,8 @@ int init_all()
     // init_LED();
     // init_RFM95_TX();
 
-    ground_base_pressure = get_bmp280_pressure();
+    ground_base_pressure = 1013.25; // get_bmp280_pressure();
+    ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
 
     return EXIT_SUCCESS;
@@ -159,7 +160,7 @@ void ballistic_descent_mode()
     // 1000 ft = 304.8 m
     // Add a backup deployment height
     
-    rocket_altitude = get_bmp280_altitude(ground_base_pressure); 
+    rocket_altitude = get_bmp280_altitude(ground_base_pressure) - ground_base_altitude; 
 
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
         {
@@ -268,7 +269,7 @@ void debug_data(bool time_delay)
     Serial.print("ground base pressure: ");
     Serial.println(ground_base_pressure);
     Serial.print("altitude: ");
-    Serial.println(get_bmp280_altitude(ground_base_pressure)); 
+    Serial.println(get_bmp280_altitude(ground_base_pressure) - ground_base_altitude); 
 
     // Rocket State enum
     Serial.println("---Enum Rocket State---");
