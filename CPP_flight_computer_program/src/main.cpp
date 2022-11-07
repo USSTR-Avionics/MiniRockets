@@ -56,9 +56,9 @@ int init_all()
     {
     init_kx134();
     init_MS5611();
-    init_fram();
-    init_SD();
     init_bmp280();
+    init_SD();
+    init_fram();
     // init_bmi088();
 
     // TODO:
@@ -79,6 +79,7 @@ int health_check()
     }
 
 void ground_idle_mode()
+
     {
     if (debug_mode == true) 
         {
@@ -189,14 +190,14 @@ void land_safe_mode()
         write_to_sd_card("[ROCKET] Landed");
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
-        }
+    }
 
 int select_flight_mode(statemachine::e_rocket_state &rs)
     {
     // TODO: change to switch case
     if (rs == statemachine::unarmed)
         {
-        get_start_signal_from_ground_station(rs);
+        get_start_signal_from_ground_station(rs); // not armed until ground station tells it to!
         }
     else if (rs == statemachine::ground_idle)
         {
@@ -280,7 +281,7 @@ void debug_data(bool time_delay)
     if (rocket_state == statemachine::unpowered_flight){ Serial.println("if detected rocket state to be unpowered flight"); }
     if (rocket_state == statemachine::ballistic_descent){ Serial.println("if detected rocket state to be ballistic decent"); }
     if (rocket_state == statemachine::chute_descent){ Serial.println("if detected rocket state to be chute descent"); }
-    if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); }
+    if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); exit(1);}
 
     scanner.Scan();
     }
