@@ -10,7 +10,7 @@
         0 to 251 octets DATA
         CRC (default CCITT, handled internally by the radio)
 
-    Options:
+    LoRa Chirp Options:
         typedef enum
         {
             Bw125Cr45Sf128 = 0,	   ///< Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Default medium range
@@ -20,37 +20,52 @@
         } ModemConfigChoice;
 */
 #include <RH_RF95.h>
-#include <string>
 #include <memory>
 #include <cstdlib>
+#include <tuple>
 
 class RFM95W
 {
-
 public:
-    RFM95W(const uint8_t &Slave, const uint8_t &Interrupt);
+    enum Mode
+    {
+        RX,
+        TX,
+        IDLE
+    };
 
-    bool Send(const std::string &Data);
-    bool Recieve();
+    RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type);
 
+
+    // core
+    bool Send(const uint8_t Data[], const uint16_t &Time_Out, const uint16_t &Time_Out_RX);
+
+    std::tuple<bool, const char*> Recieve();
+    // Time_Out in miliseconds
+    std::tuple<bool, const char*> Recieve(const uint8_t &Time_Out);
+
+    // util
+    uint16_t Max_Message_Length() const;
+
+
+    // Settings
     // It is very important therefore, that if you are using the RH_RF95 driver with another SPI based deviced,
     // that you disable interrupts while you transfer data to and from that other device.
     // Use cli() to disable interrupts and sei() to reenable them.
-    bool Set_Frequency(const float& Frequency);
-
+    bool Set_Frequency(const float &Frequency);
     // default RH_RF95::Bw125Cr45Sf128
     void Set_Modem_Config_Choice(const uint8_t &Index);
+    // in bytes
+    void Set_Preamble_Length(const uint8_t &Length);
+    void Switch_Mode(const Mode &Type);
 
 
+    RFM95W() = delete;
+    RFM95W(const RFM95W &RHS) = delete;
 
-protected:
 private:
-    std::unique_ptr<RH_RF95> RF95;
-    RFM95W();
-    RFM95W(const RFM95W &RHS);
+    std::unique_ptr<RH_RF95> m_RF95;
+    uint16_t m_Max_Message_Length{};
 };
-
-
-
 
 #endif //CPP_FLIGHT_COMPUTER_PROGRAM_RFM95W_H
