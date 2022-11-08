@@ -33,3 +33,13 @@ void setLedBlue()
     digitalWrite(RED, LOW);
     digitalWrite(GREEN, LOW);
     }
+
+void flashSOS()
+    {
+    while (true)
+        {
+        digitalWrite(BLUE, HIGH);
+        delay(500);
+        digitalWrite(BLUE, LOW);
+        }
+    }

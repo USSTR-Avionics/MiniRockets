@@ -292,9 +292,8 @@ void setup()
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
 
-    // TODO: configure watchdog for error handling
-    config.trigger = 5; /* in seconds, 0->128 */
-    config.timeout = 6; /* in seconds, 0->128 */
+    config.trigger = 2; /* in seconds, 0->128 */
+    config.timeout = 3; /* in seconds, 0->128 */
     config.callback = watchdog_callback;
     wdt.begin(config);
 
@@ -312,7 +311,7 @@ void setup()
 
 void loop() 
     {
-    debug_data(false); // remove on prod;
     wdt.feed();
+    debug_data(false); // remove on prod;
     select_flight_mode(rocket_state);
     }
