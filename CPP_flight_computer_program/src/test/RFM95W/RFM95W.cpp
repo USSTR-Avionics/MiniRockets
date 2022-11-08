@@ -6,14 +6,7 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type)
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
     m_RF95->init();
 
-    if(Type == Mode::RX)
-    {
-        m_RF95->setModeRx();
-    }
-    else
-    {
-        m_RF95->setModeTx();
-    }
+    Switch_Mode(Type);
 
     m_Max_Message_Length = m_RF95->maxMessageLength();
 }
