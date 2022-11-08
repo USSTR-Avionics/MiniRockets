@@ -15,6 +15,7 @@
 #include "statemachine.h"
 #include "memory_fram.h"
 #include "errorcodes.h"
+#include "sensor_led.h"
 #include "rusty_fram.h"
 
 #include "I2CScanner.h"
@@ -59,10 +60,10 @@ int init_all()
     init_bmp280();
     init_SD();
     init_fram();
-    // init_bmi088();
+    init_LED();
 
     // TODO:
-    // init_LED();
+    // init_bmi088();
     // init_RFM95_TX();
 
     ground_base_pressure = 1013.25; // get_bmp280_pressure();
@@ -86,8 +87,8 @@ void ground_idle_mode()
         Serial.println("[ROCKET STATE] GROUND IDLE");
         }
 
+    setLedGreen();
     // TODO:
-    // ledON("GREEN");
     // buzzerON(0); play state ok sound
 
     kx134_accel_z = get_kx134_accel_z();
@@ -107,7 +108,7 @@ void powered_flight_mode()
         Serial.println("[ROCKET STATE] POWERED FLIGHT");
         }
 
-    // ledON("RED");
+    setLedRed();
     // buzzerON(1);
 
     // TODO: add to apogee buffer
@@ -140,8 +141,7 @@ void unpowered_flight_mode()
         Serial.println("[ROCKET STATE] UNPOWERED FLIGHT");
         }
 
-        // TODO:
-        // ledON("BLUE");
+    setLedBlue();
 
     if (apogee_check() == true)
         {
