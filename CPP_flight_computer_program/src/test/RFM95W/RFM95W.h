@@ -38,7 +38,7 @@ public:
 
 
     // core
-    bool Send(const uint8_t Data[], const uint16_t &Time_Out, const uint16_t &Time_Out_RX);
+    bool Send(char *Data, const uint16_t &Time_Out, const uint16_t &Time_Out_RX) const;
 
     std::tuple<bool, const char*> Recieve();
     // Time_Out in miliseconds

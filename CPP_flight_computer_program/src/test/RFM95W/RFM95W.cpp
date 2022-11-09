@@ -11,7 +11,7 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type)
     m_Max_Message_Length = m_RF95->maxMessageLength();
 }
 
-bool RFM95W::Send(const uint8_t Data[], const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX)
+bool RFM95W::Send(char *Data, const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
 {
     // 'atoi' used to convert a string to an integer value,
     // but function will not report conversion errors; consider using 'strtoul' instead
@@ -20,7 +20,7 @@ bool RFM95W::Send(const uint8_t Data[], const uint16_t &Time_Out_TX, const uint1
     // returns false if message too long
 
     // need to double check to make sure sizeof(*Data) does not return sizeof(Data_ptr)
-    m_RF95->send(Data, sizeof(*Data));
+    m_RF95->send(reinterpret_cast<uint8_t*>(Data), sizeof(*Data));
 
     if(!m_RF95->waitPacketSent(Time_Out_TX))
     {
