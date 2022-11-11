@@ -28,6 +28,7 @@
 
 
 // PROGRAMMER VARS | vars for the programmer
+unsigned long debug_time = 0UL;
 bool debug_mode = false; // remove these comparisons for production
 I2CScanner scanner;
 
@@ -239,12 +240,17 @@ void watchdog_callback()
     loop();
     }
 
-void debug_data(bool time_delay)
+int debug_data()
     {
     // debug true then add delay
-    if (time_delay == true)
+    if (debug_time == 0UL)
         {
-        delay(500);
+        debug_time = millis();
+        }
+
+    if ((millis() - debug_time) < 500)
+        {
+        return EXIT_FAILURE;
         }
 
     // Rust FFI lib
@@ -319,7 +325,7 @@ void loop()
     {
     flashInternalLed(true);
     wdt.feed();
-    debug_data(false); // remove on prod;
+    debug_data(); // remove on prod;
     select_flight_mode(rocket_state);
     flashInternalLed(false);
     }
