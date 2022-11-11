@@ -34,20 +34,13 @@ bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_
             if (m_RF95->recv(Buffer, &Length) == true)
             {
                 // this is not necessary if RX is only performing handshake
-                if (strcmp(reinterpret_cast<const char *>(Buffer), m_HandShake) == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return Send(Data, Time_Out_TX, Time_Out_RX);
-                }
+                return strcmp(reinterpret_cast<const char *>(Buffer), m_HandShake) == 0;
             }
             return false;
         }
         else
         {
-            return Send(Data, Time_Out_TX, Time_Out_RX);
+            return false;
         }
     }
     return false;
