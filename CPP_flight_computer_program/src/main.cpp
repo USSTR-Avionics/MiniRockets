@@ -323,6 +323,7 @@ void setup()
 
 void loop() 
     {
+    // this function flashes an internal led
     flashInternalLed(true);
     wdt.feed();
     debug_data(); // remove on prod;
