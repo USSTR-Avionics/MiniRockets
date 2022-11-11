@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+#define BUILTIN_LED 13
 #define GREEN 5
 #define BLUE 4
 #define RED 3
@@ -7,6 +8,7 @@
 
 int init_LED()  
     {
+    pinMode(BUILTIN_LED, OUTPUT);
     pinMode(GREEN, OUTPUT);
     pinMode(BLUE, OUTPUT);
     pinMode(RED, OUTPUT);
@@ -41,5 +43,17 @@ void flashSOS()
         digitalWrite(BLUE, HIGH);
         delay(500);
         digitalWrite(BLUE, LOW);
+        }
+    }
+
+void flashInternalLed(bool x)
+    {
+    if (x == true)
+        {
+        digitalWrite(BUILTIN_LED, HIGH);
+        }
+    else
+        {
+        digitalWrite(BUILTIN_LED, LOW);
         }
     }

@@ -17,10 +17,7 @@
 #include "errorcodes.h"
 #include "sensor_led.h"
 #include "rusty_fram.h"
-
 #include "I2CScanner.h"
-I2CScanner scanner;
-
 #include "watchdog.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
@@ -32,8 +29,10 @@ I2CScanner scanner;
 
 // PROGRAMMER VARS | vars for the programmer
 bool debug_mode = false; // remove these comparisons for production
+I2CScanner scanner;
 
 // PROGRAM VARS | vars generally required for the program
+unsigned long starting_time = 0UL;
 
 // SENSOR VARS | vars handling sensor data
 float kx134_accel_x = FLO_DEF;
@@ -80,7 +79,6 @@ int health_check()
     }
 
 void ground_idle_mode()
-
     {
     if (debug_mode == true) 
         {
@@ -92,10 +90,14 @@ void ground_idle_mode()
     // buzzerON(0); play state ok sound
 
     kx134_accel_z = get_kx134_accel_z();
-    delay(500);
-
-    if ((get_kx134_accel_z() - kx134_accel_z) > LIFTOFF_THRESHOLD)
+    if (starting_time == 0)
         {
+        starting_time = millis();
+        }
+
+    if (((millis() - starting_time) > 250) && (get_kx134_accel_z() - kx134_accel_z) > LIFTOFF_THRESHOLD)
+        {
+        starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::powered_flight;
         }
     }
@@ -118,10 +120,14 @@ void powered_flight_mode()
     */
 
     kx134_accel_z = get_kx134_accel_z();
-    delay(500);
-
-    if ((kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+    if (starting_time == 0)
         {
+        starting_time = millis();
+        }
+
+    if ((millis() - starting_time > 250) &&(kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+        {
+        starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::unpowered_flight;
         }
 
@@ -311,7 +317,9 @@ void setup()
 
 void loop() 
     {
+    flashInternalLed(true);
     wdt.feed();
     debug_data(false); // remove on prod;
     select_flight_mode(rocket_state);
+    flashInternalLed(false);
     }

@@ -1,6 +1,8 @@
 #include "SD.h"
 
-const int chipSelect = 10;
+#define BUILTIN_SDCARD 254;
+
+const int chipSelect = BUILTIN_SDCARD;
 File myFile;
 
 int init_SD()
