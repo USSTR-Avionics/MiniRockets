@@ -30,3 +30,13 @@ float get_bmp280_pressure()
     {
     return bmp.readPressure();
     }
+
+float radians_to_degrees(float r)
+    {
+    return r * (180 / M_PI);
+    }
+
+float degrees_to_radians(float d)
+    {
+    return d * (M_PI / 180);
+    }

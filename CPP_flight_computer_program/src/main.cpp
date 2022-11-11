@@ -7,6 +7,7 @@
 #include "default_variables.h"
 #include "parachuteDeploy.h"
 #include "sensor_ms5611.h"
+#include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
 #include "sensor_sdcard.h"
 #include "sensor_kx134.h"
@@ -14,7 +15,9 @@
 #include "statemachine.h"
 #include "memory_fram.h"
 #include "errorcodes.h"
+#include "sensor_led.h"
 #include "rusty_fram.h"
+#include "I2CScanner.h"
 #include "watchdog.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
@@ -25,10 +28,12 @@
 
 
 // PROGRAMMER VARS | vars for the programmer
+unsigned long debug_time = 0UL;
 bool debug_mode = false; // remove these comparisons for production
+I2CScanner scanner;
 
 // PROGRAM VARS | vars generally required for the program
-uint64_t starting_time = 0;
+unsigned long starting_time = 0UL;
 
 // SENSOR VARS | vars handling sensor data
 float kx134_accel_x = FLO_DEF;
@@ -36,16 +41,11 @@ float kx134_accel_y = FLO_DEF;
 float kx134_accel_z = FLO_DEF;
 float ms5611_temp   = FLO_DEF;
 float ms5611_press  = FLO_DEF;
-float ground_base_pressure = FLO_DEF;
 
 // STATE VARS | vars that are important for the state machine
-float absolute_altitude = FLO_DEF;
-float rocket_altitude   = 0.0;
 
 // LIMIT VARS | vars defining important limits and thresholds
-// NOTE: LIFTOFF_THRESHOLD could be 2 m/s^2, test to see what works best
-#define LIFTOFF_THRESHOLD 10.0f // confirm with propulsion
-#define PARACHUTE_DEPLOYMENT_HEIGHT 350
+#define LIFTOFF_THRESHOLD 15.0f // confirm with propulsion, nominal is 8.5 to 10.5
 
 
 
@@ -57,15 +57,17 @@ int init_all()
     {
     init_kx134();
     init_MS5611();
-    init_fram();
+    init_bmp280();
     init_SD();
+    init_fram();
+    init_LED();
 
     // TODO:
-    // init_bni088();
-    // init_LED();
+    // init_bmi088();
     // init_RFM95_TX();
 
-    ground_base_pressure = get_bmp280_pressure();
+    ground_base_pressure = 1013.25; // get_bmp280_pressure();
+    ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
 
     return EXIT_SUCCESS;
@@ -84,15 +86,19 @@ void ground_idle_mode()
         Serial.println("[ROCKET STATE] GROUND IDLE");
         }
 
+    setLedGreen();
     // TODO:
-    // ledON("GREEN");
     // buzzerON(0); play state ok sound
 
     kx134_accel_z = get_kx134_accel_z();
-    delay(500);
-
-    if ((get_kx134_accel_z() - kx134_accel_z) > LIFTOFF_THRESHOLD)
+    if (starting_time == 0)
         {
+        starting_time = millis();
+        }
+
+    if (((millis() - starting_time) > 250) && (get_kx134_accel_z() - kx134_accel_z) > LIFTOFF_THRESHOLD)
+        {
+        starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::powered_flight;
         }
     }
@@ -105,7 +111,7 @@ void powered_flight_mode()
         Serial.println("[ROCKET STATE] POWERED FLIGHT");
         }
 
-    // ledON("RED");
+    setLedRed();
     // buzzerON(1);
 
     // TODO: add to apogee buffer
@@ -115,10 +121,14 @@ void powered_flight_mode()
     */
 
     kx134_accel_z = get_kx134_accel_z();
-    delay(500);
-
-    if ((kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+    if (starting_time == 0)
         {
+        starting_time = millis();
+        }
+
+    if ((millis() - starting_time > 250) &&(kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+        {
+        starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::unpowered_flight;
         }
 
@@ -138,8 +148,7 @@ void unpowered_flight_mode()
         Serial.println("[ROCKET STATE] UNPOWERED FLIGHT");
         }
 
-        // TODO:
-        // ledON("BLUE");
+    setLedBlue();
 
     if (apogee_check() == true)
         {
@@ -159,7 +168,7 @@ void ballistic_descent_mode()
     // 1000 ft = 304.8 m
     // Add a backup deployment height
     
-    rocket_altitude = get_bmp280_altitude(ground_base_pressure); 
+    rocket_altitude = get_bmp280_altitude(ground_base_pressure) - ground_base_altitude; 
 
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
         {
@@ -188,14 +197,14 @@ void land_safe_mode()
         write_to_sd_card("[ROCKET] Landed");
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
-        }
+    }
 
 int select_flight_mode(statemachine::e_rocket_state &rs)
     {
     // TODO: change to switch case
     if (rs == statemachine::unarmed)
         {
-        get_start_signal_from_ground_station(rs);
+        get_start_signal_from_ground_station(rs); // not armed until ground station tells it to!
         }
     else if (rs == statemachine::ground_idle)
         {
@@ -228,14 +237,20 @@ void watchdog_callback()
     {
     Serial.println("watchdog_callback()");
     write_to_sd_card("[MICROCONTROLLER] watchdog callback");
+    loop();
     }
 
-void debug_data(bool time_delay)
+int debug_data()
     {
     // debug true then add delay
-    if (time_delay == true)
+    if (debug_time == 0UL)
         {
-        delay(500);
+        debug_time = millis();
+        }
+
+    if ((millis() - debug_time) < 500)
+        {
+        return EXIT_FAILURE;
         }
 
     // Rust FFI lib
@@ -262,6 +277,13 @@ void debug_data(bool time_delay)
     Serial.print("pressure: ");
     Serial.println(ms5611_press);
 
+    // BMP280
+    Serial.println("---BMP280---");
+    Serial.print("ground base pressure: ");
+    Serial.println(ground_base_pressure);
+    Serial.print("altitude: ");
+    Serial.println(get_bmp280_altitude(ground_base_pressure) - ground_base_altitude); 
+
     // Rocket State enum
     Serial.println("---Enum Rocket State---");
     Serial.print("current enum state: ");
@@ -271,7 +293,9 @@ void debug_data(bool time_delay)
     if (rocket_state == statemachine::unpowered_flight){ Serial.println("if detected rocket state to be unpowered flight"); }
     if (rocket_state == statemachine::ballistic_descent){ Serial.println("if detected rocket state to be ballistic decent"); }
     if (rocket_state == statemachine::chute_descent){ Serial.println("if detected rocket state to be chute descent"); }
-    if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); }
+    if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); exit(1);}
+
+    scanner.Scan();
     }
 
 // STANDARD ENTRY POINTS
@@ -280,9 +304,8 @@ void setup()
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
 
-    // TODO: configure watchdog for error handling
-    config.trigger = 1; /* in seconds, 0->128 */
-    config.timeout = 2; /* in seconds, 0->128 */
+    config.trigger = 2; /* in seconds, 0->128 */
+    config.timeout = 3; /* in seconds, 0->128 */
     config.callback = watchdog_callback;
     wdt.begin(config);
 
@@ -300,8 +323,10 @@ void setup()
 
 void loop() 
     {
-    debug_data(false); // remove on prod;
-
+    // this function flashes an internal led
+    flashInternalLed(true);
     wdt.feed();
+    debug_data(); // remove on prod;
     select_flight_mode(rocket_state);
+    flashInternalLed(false);
     }
