@@ -21,7 +21,7 @@
 */
 #include <RH_RF95.h>
 #include <memory>
-#include <cstdlib>
+#include <cstring>
 #include <tuple>
 
 class RFM95W
@@ -34,15 +34,15 @@ public:
         IDLE
     };
 
-    RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type);
+    RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type = Mode::IDLE);
 
 
     // core
-    bool Send(char *Data, const uint16_t &Time_Out, const uint16_t &Time_Out_RX) const;
+    bool Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const;
 
-    std::tuple<bool, const char*> Recieve();
+    std::tuple<bool, const char*> Received();
     // Time_Out in miliseconds
-    std::tuple<bool, const char*> Recieve(const uint8_t &Time_Out);
+    std::tuple<bool, const char*> Received(const uint8_t &Time_Out);
 
     // util
     uint16_t Max_Message_Length() const;
@@ -66,6 +66,7 @@ public:
 private:
     std::unique_ptr<RH_RF95> m_RF95;
     uint16_t m_Max_Message_Length{};
+    constexpr static char m_HandShake[]{"Received"};
 };
 
 #endif //CPP_FLIGHT_COMPUTER_PROGRAM_RFM95W_H
