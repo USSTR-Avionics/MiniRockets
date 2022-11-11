@@ -16,7 +16,7 @@
 - [ ] VSCode  
 - [ ] platformIO extension  
 - [ ] install git bash for your platform  
-- [ ] install rustc and cargo for your platform  
+- [ ] install [Rust](https://www.rust-lang.org/tools/install) for your platform  
 
 
 ## Next Steps
