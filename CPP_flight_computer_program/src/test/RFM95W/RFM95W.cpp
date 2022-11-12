@@ -11,35 +11,44 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type)
     m_Max_Message_Length = m_RF95->maxMessageLength();
 }
 
-bool RFM95W::Send(char *Data, const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
+bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
 {
-    // 'atoi' used to convert a string to an integer value,
+    // 'atoi()' used to convert a string to an integer value,
     // but function will not report conversion errors; consider using 'strtoul' instead
     // const uint8_t Message = std::atoi(Data);
 
     // returns false if message too long
 
     // need to double check to make sure sizeof(*Data) does not return sizeof(Data_ptr)
-    m_RF95->send(reinterpret_cast<uint8_t*>(Data), sizeof(*Data));
+    m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data));
 
-    if(!m_RF95->waitPacketSent(Time_Out_TX))
+    if(m_RF95->waitPacketSent(Time_Out_TX) == true)
     {
-        return false;
-    }
+        // TODO hand shake
+        if (m_RF95->waitAvailableTimeout(Time_Out_RX) == true)
+        {
+            uint8_t Buffer[m_Max_Message_Length];
+            uint8_t Length = sizeof(Buffer);
 
-    // hand shake
-    if(!m_RF95->waitAvailableTimeout(Time_Out_RX))
-    {
-        return false;
+            // this hand shake could happen forever
+            if (m_RF95->recv(Buffer, &Length) == true)
+            {
+                // this is not necessary if RX is only performing handshake
+                return strcmp(reinterpret_cast<const char *>(Buffer), m_HandShake) == 0;
+            }
+            return false;
+        }
+        else
+        {
+            return false;
+        }
     }
-
-    return true;
+    return false;
 }
 
-std::tuple<bool,  const char*> RFM95W::Recieve()
+std::tuple<bool,  const char*> RFM95W::Received()
 {
     uint8_t Buffer[m_Max_Message_Length];
-    // isn't this just m_Max_Message_Length + 1
     uint8_t Length = sizeof(Buffer);
 
     m_RF95->waitAvailable();
@@ -47,22 +56,19 @@ std::tuple<bool,  const char*> RFM95W::Recieve()
     if(m_RF95->recv(Buffer, &Length) == true)
     {
         // TODO perform handshake
-
-
-
-
+        m_RF95->send(reinterpret_cast<const uint8_t*>(m_HandShake), sizeof(m_HandShake));
 
         // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
         return std::make_tuple(true, reinterpret_cast<const char*>(Buffer));
     }
     else
     {
-        return std::make_tuple(false, "");
+        return std::make_tuple(false, "Failed to receive message");
     }
 }
 
 
-std::tuple<bool,  const char*> RFM95W::Recieve(const uint8_t &Time_Out)
+std::tuple<bool,  const char*> RFM95W::Received(const uint8_t &Time_Out)
 {
     uint8_t Buffer[m_Max_Message_Length];
     // isn't this just m_Max_Message_Length + 1
@@ -73,25 +79,20 @@ std::tuple<bool,  const char*> RFM95W::Recieve(const uint8_t &Time_Out)
         if(m_RF95->recv(Buffer, &Length) == true)
         {
             // TODO perform handshake
-
-
-
-
-
-
+            m_RF95->send(reinterpret_cast<const uint8_t*>(m_HandShake), sizeof(m_HandShake));
 
             // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
             return std::make_tuple(true, reinterpret_cast<const char*>(Buffer));
         }
         else
         {
-            return std::make_tuple(false, "");
+            return std::make_tuple(false, "Failed to receive message");
         }
     }
     else
     {
         // timed out
-        return std::make_tuple(false, "");
+        return std::make_tuple(false, "Timed out");
     }
 
 }
