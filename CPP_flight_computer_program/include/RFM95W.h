@@ -13,16 +13,16 @@
     LoRa Chirp Options:
         typedef enum
         {
-            Bw125Cr45Sf128 = 0,	   ///< Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Default medium range
-            Bw500Cr45Sf128,	           ///< Bw = 500 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Fast+short range
-            Bw31_25Cr48Sf512,	   ///< Bw = 31.25 kHz, Cr = 4/8, Sf = 512chips/symbol, CRC on. Slow+long range
-            Bw125Cr48Sf4096,           ///< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
+            Bw125Cr45Sf128 = 0,	   //< Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Default medium range
+            Bw500Cr45Sf128,	           //< Bw = 500 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Fast+short range
+            Bw31_25Cr48Sf512,	   //< Bw = 31.25 kHz, Cr = 4/8, Sf = 512chips/symbol, CRC on. Slow+long range
+            Bw125Cr48Sf4096,           //< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
         } ModemConfigChoice;
 */
-#include <RH_RF95.h>
-#include <memory>
-#include <cstring>
-#include <tuple>
+#include "../lib/RadioHead/RH_RF95.h"
+#include "../../../../../../../../.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include/c++/5.4.1/memory"
+#include "../../../../../../../../.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include/c++/5.4.1/cstring"
+#include "../../../../../../../../.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include/c++/5.4.1/tuple"
 
 class RFM95W
 {
@@ -41,7 +41,7 @@ public:
     bool Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const;
 
     std::tuple<bool, const char*> Received();
-    // Time_Out in miliseconds
+    // Time_Out in milliseconds
     std::tuple<bool, const char*> Received(const uint8_t &Time_Out);
 
     // util

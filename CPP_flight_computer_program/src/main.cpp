@@ -20,7 +20,7 @@
 #include "I2CScanner.h"
 #include "watchdog.h"
 #include <Arduino.h>
-#include <RH_RF95.h>
+#include "RFM95W.h"
 #include <cstdint> // switch to machine independent types
 #include <cstdlib>
 #include <Wire.h>

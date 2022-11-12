@@ -1,4 +1,4 @@
-#include "RFM95W.h"
+#include "../include/RFM95W.h"
 
 RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type)
 {
