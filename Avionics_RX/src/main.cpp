@@ -7,7 +7,6 @@ void setup()
 {
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
-    RFM95W RX();
 }
 
 void loop()

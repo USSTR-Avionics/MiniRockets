@@ -3,10 +3,11 @@
 RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type)
 {
     m_RF95 = std::make_unique<RH_RF95>(Slave, Interrupt);
-    m_RF95->setFrequency(911.1);
 
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
     m_RF95->init();
+
+    m_RF95->setFrequency(911.1);
 
     Switch_Mode(Type);
 
