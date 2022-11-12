@@ -46,7 +46,7 @@ bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_
     return false;
 }
 
-std::tuple<bool,  const char*> RFM95W::Received()
+std::tuple<bool,  const char*> RFM95W::Receive()
 {
     uint8_t Buffer[m_Max_Message_Length];
     uint8_t Length = sizeof(Buffer);
@@ -68,7 +68,7 @@ std::tuple<bool,  const char*> RFM95W::Received()
 }
 
 
-std::tuple<bool,  const char*> RFM95W::Received(const uint8_t &Time_Out)
+std::tuple<bool,  const char*> RFM95W::Receive(const uint8_t &Time_Out)
 {
     uint8_t Buffer[m_Max_Message_Length];
     // isn't this just m_Max_Message_Length + 1

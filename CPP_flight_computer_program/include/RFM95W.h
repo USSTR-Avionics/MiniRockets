@@ -19,10 +19,10 @@
             Bw125Cr48Sf4096,           //< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
         } ModemConfigChoice;
 */
-#include "../lib/RadioHead/RH_RF95.h"
-#include "../../../../../../../../.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include/c++/5.4.1/memory"
-#include "../../../../../../../../.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include/c++/5.4.1/cstring"
-#include "../../../../../../../../.platformio/packages/toolchain-gccarmnoneeabi/arm-none-eabi/include/c++/5.4.1/tuple"
+#include <RH_RF95.h>
+#include <memory>
+#include <cstring>
+#include <tuple>
 
 class RFM95W
 {
@@ -40,9 +40,9 @@ public:
     // core
     bool Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const;
 
-    std::tuple<bool, const char*> Received();
+    std::tuple<bool, const char*> Receive();
     // Time_Out in milliseconds
-    std::tuple<bool, const char*> Received(const uint8_t &Time_Out);
+    std::tuple<bool, const char*> Receive(const uint8_t &Time_Out);
 
     // util
     uint16_t Max_Message_Length() const;
