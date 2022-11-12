@@ -1,13 +1,10 @@
 #include <Arduino.h>
 void setup()
 {
-    // put your setup code here, to run once:
-    Serial.begin(9600);
-    Serial.println("Hello World!");
+    // write your initialization code here
 }
 
 void loop()
 {
-    // put your main code here, to run repeatedly:
-
+    // write your code here
 }
