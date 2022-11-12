@@ -19,8 +19,8 @@
 #include "rusty_fram.h"
 #include "I2CScanner.h"
 #include "watchdog.h"
-#include <Arduino.h>
 #include "RFM95W.h"
+#include <Arduino.h>
 #include <cstdint> // switch to machine independent types
 #include <cstdlib>
 #include <Wire.h>
@@ -319,6 +319,15 @@ void setup()
 
     Serial.println("setup()");
     write_to_sd_card("setup exit");
+
+    RFM95W TX(10, 31, 32);
+
+
+
+
+
+
+
     }
 
 void loop() 
