@@ -7,16 +7,14 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Re
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
     m_RF95->init();
 
-    m_RF95->setFrequency(911.1);
-
     Switch_Mode(Type);
 
-    m_Max_Message_Length = m_RF95->maxMessageLength();
+    m_Max_message_length = m_RF95->maxMessageLength();
 
     m_RST = Reset;
 }
 
-bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
+bool RFM95W::Send(const std::string &Data, const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
 {
     // 'atoi()' used to convert a string to an integer value,
     // but function will not report conversion errors; consider using 'strtoul' instead
@@ -25,21 +23,21 @@ bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_
     // returns false if message too long
 
     // need to double check to make sure sizeof(*Data) does not return sizeof(Data_ptr)
-    m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data));
+    m_RF95->send(reinterpret_cast<const uint8_t*>(Data.c_str()), sizeof(Data.c_str()));
 
     if(m_RF95->waitPacketSent(Time_Out_TX) == true)
     {
         // TODO hand shake
         if (m_RF95->waitAvailableTimeout(Time_Out_RX) == true)
         {
-            uint8_t Buffer[m_Max_Message_Length];
+            uint8_t Buffer[m_Max_message_length];
             uint8_t Length = sizeof(Buffer);
 
             // this hand shake could happen forever
             if (m_RF95->recv(Buffer, &Length) == true)
             {
                 // this is not necessary if RX is only performing handshake
-                return strcmp(reinterpret_cast<const char *>(Buffer), m_HandShake) == 0;
+                return std::string{reinterpret_cast<const char *>(Buffer)} == m_Handshake;
             }
             return false;
         }
@@ -51,9 +49,9 @@ bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_
     return false;
 }
 
-std::tuple<bool,  const char*> RFM95W::Receive()
+std::tuple<bool,  const std::string> RFM95W::Receive()
 {
-    uint8_t Buffer[m_Max_Message_Length];
+    uint8_t Buffer[m_Max_message_length];
     uint8_t Length = sizeof(Buffer);
 
     m_RF95->waitAvailable();
@@ -61,10 +59,10 @@ std::tuple<bool,  const char*> RFM95W::Receive()
     if(m_RF95->recv(Buffer, &Length) == true)
     {
         // TODO perform handshake
-        m_RF95->send(reinterpret_cast<const uint8_t*>(m_HandShake), sizeof(m_HandShake));
+        m_RF95->send(reinterpret_cast<const uint8_t*>(m_Handshake.c_str()), sizeof(m_Handshake.c_str()));
 
         // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
-        return std::make_tuple(true, reinterpret_cast<const char*>(Buffer));
+        return std::make_tuple(true, std::string{reinterpret_cast<const char*>(Buffer)});
     }
     else
     {
@@ -73,9 +71,9 @@ std::tuple<bool,  const char*> RFM95W::Receive()
 }
 
 
-std::tuple<bool,  const char*> RFM95W::Receive(const uint8_t &Time_Out)
+std::tuple<bool,  const std::string> RFM95W::Receive(const uint8_t &Time_Out)
 {
-    uint8_t Buffer[m_Max_Message_Length];
+    uint8_t Buffer[m_Max_message_length];
     // isn't this just m_Max_Message_Length + 1
     uint8_t Length = sizeof(Buffer);
 
@@ -84,10 +82,10 @@ std::tuple<bool,  const char*> RFM95W::Receive(const uint8_t &Time_Out)
         if(m_RF95->recv(Buffer, &Length) == true)
         {
             // TODO perform handshake
-            m_RF95->send(reinterpret_cast<const uint8_t*>(m_HandShake), sizeof(m_HandShake));
+            m_RF95->send(reinterpret_cast<const uint8_t*>(m_Handshake.c_str()), sizeof(m_Handshake.c_str()));
 
             // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
-            return std::make_tuple(true, reinterpret_cast<const char*>(Buffer));
+            return std::make_tuple(true, std::string{reinterpret_cast<const char*>(Buffer)});
         }
         else
         {
@@ -150,10 +148,14 @@ void RFM95W::Switch_Mode(const RFM95W::Mode &Type)
 
 uint16_t RFM95W::Max_Message_Length() const
 {
-    return m_Max_Message_Length;
+    return m_Max_message_length;
 }
 
 void RFM95W::Set_Preamble_Length(const uint8_t &Length)
 {
     m_RF95->setPreambleLength(Length);
 }
+
+
+
+
