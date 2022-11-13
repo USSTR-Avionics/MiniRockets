@@ -320,10 +320,14 @@ void setup()
     Serial.println("setup()");
     write_to_sd_card("setup exit");
 
+    Serial.println("test");
+
     RFM95W TX(10, 31, 32);
-
-
-
+    TX.Set_Frequency(911.1);
+    if(!TX.Send("Hello from the other side", 1000, 1000))
+    {
+        Serial.println("radio failed");
+    }
 
     }
 

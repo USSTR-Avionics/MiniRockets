@@ -7,16 +7,16 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Re
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
     m_RF95->init();
 
-    m_RF95->setFrequency(911.1);
-
     Switch_Mode(Type);
 
     m_Max_Message_Length = m_RF95->maxMessageLength();
 
     m_RST = Reset;
+
+
 }
 
-bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
+bool RFM95W::Send(const char *Data, const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
 {
     // 'atoi()' used to convert a string to an integer value,
     // but function will not report conversion errors; consider using 'strtoul' instead
@@ -39,7 +39,7 @@ bool RFM95W::Send(const char *Data[], const uint16_t &Time_Out_TX, const uint16_
             if (m_RF95->recv(Buffer, &Length) == true)
             {
                 // this is not necessary if RX is only performing handshake
-                return strcmp(reinterpret_cast<const char *>(Buffer), m_HandShake) == 0;
+                return strcmp(reinterpret_cast<const char *>(Buffer), "Received") == 0;
             }
             return false;
         }
@@ -61,7 +61,7 @@ std::tuple<bool,  const char*> RFM95W::Receive()
     if(m_RF95->recv(Buffer, &Length) == true)
     {
         // TODO perform handshake
-        m_RF95->send(reinterpret_cast<const uint8_t*>(m_HandShake), sizeof(m_HandShake));
+        m_RF95->send(reinterpret_cast<const uint8_t*>("Received"), sizeof("Received"));
 
         // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
         return std::make_tuple(true, reinterpret_cast<const char*>(Buffer));
@@ -84,7 +84,7 @@ std::tuple<bool,  const char*> RFM95W::Receive(const uint8_t &Time_Out)
         if(m_RF95->recv(Buffer, &Length) == true)
         {
             // TODO perform handshake
-            m_RF95->send(reinterpret_cast<const uint8_t*>(m_HandShake), sizeof(m_HandShake));
+            m_RF95->send(reinterpret_cast<const uint8_t*>("Received"), sizeof("Received"));
 
             // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
             return std::make_tuple(true, reinterpret_cast<const char*>(Buffer));
