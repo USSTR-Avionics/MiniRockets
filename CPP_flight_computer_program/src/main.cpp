@@ -17,7 +17,7 @@
 #include "errorcodes.h"
 #include "sensor_led.h"
 #include "rusty_fram.h"
-#include "I2CScanner.h"
+// #include "I2CScanner.h"
 #include "watchdog.h"
 #include "RFM95W.h"
 #include <Arduino.h>
@@ -28,9 +28,10 @@
 
 
 // PROGRAMMER VARS | vars for the programmer
-unsigned long debug_time = 0UL;
+unsigned long debug_time = 0;
+
 bool debug_mode = false; // remove these comparisons for production
-I2CScanner scanner;
+// I2CScanner scanner;
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
@@ -295,7 +296,9 @@ int debug_data()
     if (rocket_state == statemachine::chute_descent){ Serial.println("if detected rocket state to be chute descent"); }
     if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); exit(1);}
 
-    scanner.Scan();
+    // scanner.Scan();
+
+    // TODO return something, or make this function void
     }
 
 // STANDARD ENTRY POINTS
