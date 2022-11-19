@@ -247,7 +247,7 @@ int debug_data()
         {
         debug_time = millis();
         }
-
+ 
     if ((millis() - debug_time) < 500)
         {
         return EXIT_FAILURE;
@@ -296,6 +296,7 @@ int debug_data()
     if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); exit(1);}
 
     scanner.Scan();
+    return EXIT_SUCCESS;
     }
 
 // STANDARD ENTRY POINTS
@@ -307,9 +308,10 @@ void setup()
     config.trigger = 2; /* in seconds, 0->128 */
     config.timeout = 3; /* in seconds, 0->128 */
     config.callback = watchdog_callback;
-    wdt.begin(config);
+    // wdt.begin(config);
 
     init_all();
+    // wdt.feed();
 
     if (health_check() == EXIT_FAILURE)
         {
@@ -319,13 +321,14 @@ void setup()
 
     Serial.println("setup()");
     write_to_sd_card("setup exit");
+    // wdt.feed();
     }
 
 void loop() 
     {
     // this function flashes an internal led
     flashInternalLed(true);
-    wdt.feed();
+    // wdt.feed();
     debug_data(); // remove on prod;
     select_flight_mode(rocket_state);
     flashInternalLed(false);
