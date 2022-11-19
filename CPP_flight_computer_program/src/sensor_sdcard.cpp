@@ -13,17 +13,19 @@ int init_SD()
     {
     Serial.println("called init_SD()");
     
-    if (!SD.begin(chipSelect)) 
-        {
-        Serial.println("failed init");
-        exit(1);
-        return EXIT_FAILURE;
-        }
+    uint8_t x = SD.begin(chipSelect);
+    Serial.print("sd init: ");
+    Serial.println(x);
+
+    // if (!SD.begin(chipSelect)) 
+    //     {
+    //     Serial.println("failed init");
+    //     exit(1);
+    //     return EXIT_FAILURE;
+    //     }
 
     Serial.print("Card type: ");
     Serial.println(card.type());
-
-    exit(1);
 
     bool result_rm = SD.remove("datalog.txt");
     // bool result_rm = true;
