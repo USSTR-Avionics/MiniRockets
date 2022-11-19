@@ -15,17 +15,24 @@ int init_SD()
     
     if (!SD.begin(chipSelect)) 
         {
+        Serial.println("failed init");
+        exit(1);
         return EXIT_FAILURE;
         }
 
-    // bool result_rm = SD.remove("datalog.txt");
-    bool result_rm = true;
+    Serial.print("Card type: ");
+    Serial.println(card.type());
+
+    exit(1);
+
+    bool result_rm = SD.remove("datalog.txt");
+    // bool result_rm = true;
     bool result_mkdir = SD.mkdir("datalog.txt");
 
-    if (!(result_mkdir && result_rm))
-        {
-        return EXIT_FAILURE;
-        }
+    // if (!(result_mkdir && result_rm))
+    //     {
+    //     return EXIT_FAILURE;
+    //     }
 
     return EXIT_SUCCESS;
     }
