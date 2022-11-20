@@ -25,7 +25,3 @@
 [TODO] wrap debugs in ifndef
 
 [TODO] impl health checks; impl exit on failure I2C
-
-[TODO] figure out SD card
-
-[TODO] 
