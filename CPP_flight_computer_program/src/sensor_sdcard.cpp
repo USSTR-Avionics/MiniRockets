@@ -1,22 +1,21 @@
 #include "SD.h"
 
-#define BUILTIN_SDCARD 254;
-
 const int chipSelect = BUILTIN_SDCARD;
+
 File myFile;
+Sd2Card card;
+SdVolume volume;
+SdFile root;
 
 int init_SD()
     {
+    Serial.println("init_SD()");
+
+    SD.begin(chipSelect);
+    
     if (!SD.begin(chipSelect)) 
         {
-        return EXIT_FAILURE;
-        }
-
-    bool result_rm = SD.remove("datalog.txt");
-    bool result_mkdir = SD.mkdir("datalog.txt");
-
-    if (!(result_mkdir && result_rm))
-        {
+        Serial.println("failed init_SD()");
         return EXIT_FAILURE;
         }
 
@@ -31,10 +30,13 @@ int write_to_sd_card(const char* str)
         {
         dataFile.println(str);
         dataFile.close();
+        Serial.println("write to SD card");
         return EXIT_SUCCESS;
         }
     else 
         {
+        Serial.println("write to file failed");
+        dataFile.close();
         return EXIT_FAILURE;
         }
     }
