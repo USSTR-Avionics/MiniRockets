@@ -45,8 +45,7 @@ jobs:
     - name: Install PlatformIO Core
       run: pip install --upgrade platformio
 
-    - name: Build PlatformIO Project
-      run: pio run --project-dir "./CPP_flight_computer_program"
+
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -66,7 +65,10 @@ jobs:
 
     #   If the Autobuild fails above, remove it and uncomment the following three lines.
     #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
-    
+
+    # - name: Build PlatformIO Project
+    - run: pio run --project-dir "./CPP_flight_computer_program"
+        
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
