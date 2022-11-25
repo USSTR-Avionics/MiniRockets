@@ -6,6 +6,7 @@
 .vscode/*
 target/*
 .secret
+.DS_Store
 
 CPP_flight_computer_program/.pio
 CPP_flight_computer_program/.vscode/.browse.c_cpp.db*
