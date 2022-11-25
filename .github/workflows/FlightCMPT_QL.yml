@@ -12,12 +12,8 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
-    
+  [ push, pull_request ]
+
 jobs:
   analyze:
     name: Analyze
@@ -36,7 +32,21 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/pip
+          ~/.platformio/.cache
+        key: ${{ runner.os }}-pio
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: Install PlatformIO Core
+      run: pip install --upgrade platformio
+
+    - name: Build PlatformIO Project
+      run: pio run --project-dir "./CPP_flight_computer_program"
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -56,9 +66,7 @@ jobs:
 
     #   If the Autobuild fails above, remove it and uncomment the following three lines.
     #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
-
-    - run: ./CPP_flight_computer_program/platformio.ini
-
+    
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
