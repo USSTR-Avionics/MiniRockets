@@ -3,3 +3,4 @@
 CMakeListsPrivate.txt
 CMakeLists.txt
 cmake-build-*/ 
+.DS_Store
