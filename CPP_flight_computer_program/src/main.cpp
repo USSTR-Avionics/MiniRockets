@@ -6,6 +6,7 @@
 //#include "Filter.h"
 #include "default_variables.h"
 #include "parachuteDeploy.h"
+#include "rocket_profile.h"
 #include "sensor_ms5611.h"
 #include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
@@ -66,7 +67,7 @@ int init_all()
     // init_bmi088();
     // init_RFM95_TX();
 
-    ground_base_pressure = 1013.25; // get_bmp280_pressure();
+    ground_base_pressure = get_bmp280_pressure();
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
 
@@ -75,7 +76,43 @@ int init_all()
 
 int health_check()
     {
-    // TODO: perform sensor checks
+    // KX134 checks
+    float z_thresh_low = 9.0;
+    float z_thresh_high = 10.0;
+    float curr_z_reading = get_kx134_accel_z();
+    int count = 0;
+
+    while (count < 10)
+        {
+        if (curr_z_reading < z_thresh_high && curr_z_reading > z_thresh_low)
+            {
+            count++;
+            }
+        else
+            {
+            return EXIT_FAILURE;
+            }
+        }
+
+    // BMP280
+    float alt_thresh_low = 0.0;
+    float alt_thresh_high = ROCKET_HEIGHT;
+    float curr_alt_reading = get_bmp280_altitude(ground_base_pressure) - ground_base_altitude;
+    count = 0;
+
+    while (count < 10)
+        {
+        if (curr_alt_reading > alt_thresh_low && curr_alt_reading < alt_thresh_high)
+            {
+            count++;
+            }
+        else
+            {
+            return EXIT_FAILURE;
+            }
+        }
+
+
     return EXIT_SUCCESS;
     }
 
@@ -308,10 +345,8 @@ void setup()
     config.trigger = 2; /* in seconds, 0->128 */
     config.timeout = 3; /* in seconds, 0->128 */
     config.callback = watchdog_callback;
-    // wdt.begin(config);
 
     init_all();
-    // wdt.feed();
 
     if (health_check() == EXIT_FAILURE)
         {
@@ -321,14 +356,16 @@ void setup()
 
     Serial.println("setup()");
     write_to_sd_card("setup exit");
-    // wdt.feed();
+
+    wdt.begin(config);
+    wdt.feed();
     }
 
 void loop() 
     {
     // this function flashes an internal led
     flashInternalLed(true);
-    // wdt.feed();
+    wdt.feed();
     debug_data(); // remove on prod;
     select_flight_mode(rocket_state);
     flashInternalLed(false);

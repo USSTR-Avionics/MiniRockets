@@ -4,6 +4,10 @@
 
 [IN PROGRESS @frroossst] impl fram wrapper 
 
+[RESEARCH] FFT for data compression
+
+[RESEARCH] data loss over radio transmission
+
 [TODO] impl startup health checkups
 
 [IN PROGRESS @snowy-shadow]figure out platformIO tests, run tests before startup on debug
@@ -25,3 +29,5 @@
 [TODO] wrap debugs in ifndef
 
 [TODO] impl health checks; impl exit on failure I2C
+
+[TODO] get relative bmp 2801 altitude

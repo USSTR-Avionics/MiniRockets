@@ -1,0 +1,1 @@
+#define ROCKET_HEIGHT 1 // in metres
