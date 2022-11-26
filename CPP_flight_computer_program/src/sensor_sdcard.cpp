@@ -1,7 +1,8 @@
 #include "SD.h"
 
-#define SD_DATA_FILE_NAME "datalog.txt"
-const int chipSelect = 10;
+#define BUILTIN_SDCARD 254;
+
+const int chipSelect = BUILTIN_SDCARD;
 File myFile;
 
 int init_SD()
@@ -11,8 +12,8 @@ int init_SD()
         return EXIT_FAILURE;
         }
 
-    bool result_rm = SD.remove(SD_DATA_FILE_NAME);
-    bool result_mkdir = SD.mkdir(SD_DATA_FILE_NAME);
+    bool result_rm = SD.remove("datalog.txt");
+    bool result_mkdir = SD.mkdir("datalog.txt");
 
     if (!(result_mkdir && result_rm))
         {
@@ -24,9 +25,9 @@ int init_SD()
 
 int write_to_sd_card(const char* str)
     {
-    File dataFile = SD.open(SD_DATA_FILE_NAME, FILE_WRITE);
+    File dataFile = SD.open("datalog.txt", FILE_WRITE);
 
-    if (dataFile == true) 
+    if (dataFile) 
         {
         dataFile.println(str);
         dataFile.close();
