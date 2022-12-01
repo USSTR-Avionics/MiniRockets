@@ -28,6 +28,6 @@
 
 [TODO] wrap debugs in ifndef
 
-[TODO] impl health checks; impl exit on failure I2C
+[TBT] impl health checks; impl exit on failure I2C
 
 [TODO] get relative bmp 2801 altitude

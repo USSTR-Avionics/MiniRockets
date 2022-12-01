@@ -97,7 +97,7 @@ int health_check()
     // BMP280
     float alt_thresh_low = 0.0;
     float alt_thresh_high = ROCKET_HEIGHT;
-    float curr_alt_reading = get_bmp280_altitude(ground_base_pressure) - ground_base_altitude;
+    float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
     count = 0;
 
     while (count < 10)
@@ -205,7 +205,7 @@ void ballistic_descent_mode()
     // 1000 ft = 304.8 m
     // Add a backup deployment height
     
-    rocket_altitude = get_bmp280_altitude(ground_base_pressure) - ground_base_altitude; 
+    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
         {
