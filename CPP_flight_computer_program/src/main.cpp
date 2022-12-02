@@ -50,7 +50,6 @@ float ms5611_press  = FLO_DEF;
 #define LIFTOFF_THRESHOLD 15.0f // confirm with propulsion, nominal is 8.5 to 10.5
 
 
-
 // STATE MACHINE
 static statemachine::e_rocket_state rocket_state;
 
@@ -72,13 +71,14 @@ int init_all()
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
 
-    write_to_sd_card("time, state,kx134_x, kx134_y, kx134_z, bmp280_alt");
+    write_to_sd_card("time, state, kx134_x, kx134_y, kx134_z, bmp280_alt");
 
     return EXIT_SUCCESS;
     }
 
 int health_check()
     {
+    return EXIT_SUCCESS;
     // KX134 checks
     float z_thresh_low = 9.0;
     float z_thresh_high = 10.0;
@@ -166,7 +166,7 @@ void powered_flight_mode()
         starting_time = millis();
         }
 
-    if ((millis() - starting_time > 250) &&(kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+    if ((millis() - starting_time > 100) &&(kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
         {
         starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::unpowered_flight;
@@ -221,7 +221,6 @@ void chute_descent_mode()
     {
     // TODO:
     // ledON("ORANGE");
-
          
     // TODO: check gyroscope stabilisation over time
 
@@ -290,64 +289,30 @@ int debug_data()
         debug_time = millis();
         }
  
-    if ((millis() - debug_time) < 500)
+    if ((millis() - debug_time) < 1000)
         {
         return EXIT_FAILURE;
         }
 
-    data_string += millis();
-    data_string += rocket_state;
+    data_string += String(millis()) + ",";
+    data_string += String(rocket_state) + ",";
 
-    // Rust FFI lib
-    Serial.println("--- Rust lib ---");
-
-    // KX134
-    Serial.println("--- KX134 ---");
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
     kx134_accel_z = get_kx134_accel_z();
-    Serial.print("x: ");
-    Serial.println(kx134_accel_x);
-    Serial.print("y: ");
-    Serial.println(kx134_accel_y);
-    Serial.print("z: ");
-    Serial.println(kx134_accel_z);
+    data_string += String(kx134_accel_x) + ",";
+    data_string += String(kx134_accel_y) + ",";
+    data_string += String(kx134_accel_z) + ",";
 
-    data_string += kx134_accel_x;
-    data_string += kx134_accel_y;
-    data_string += kx134_accel_z;
-
-    // MS5611
-    Serial.println("--- MS5611 ---");
-    ms5611_temp = get_ms5611_temp();
-    ms5611_press = get_ms5611_press();
-    Serial.print("temperature: ");
-    Serial.println(ms5611_temp);
-    Serial.print("pressure: ");
-    Serial.println(ms5611_press);
-
-    // BMP280
-    Serial.println("---BMP280---");
-    Serial.print("ground base pressure: ");
-    Serial.println(ground_base_pressure);
-    Serial.print("altitude: ");
     float bmp280_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    Serial.println(bmp280_altitude);
+    data_string = String(bmp280_altitude) + ",";
 
-    data_string += bmp280_altitude;
-
-    // Rocket State enum
-    Serial.println("---Enum Rocket State---");
-    Serial.print("current enum state: ");
-    Serial.println(rocket_state);
-    if (rocket_state == statemachine::ground_idle){ Serial.println("if detected rocket state to be ground idle"); }
-    if (rocket_state == statemachine::powered_flight){ Serial.println("if detected rocket state to be powered flight"); }
-    if (rocket_state == statemachine::unpowered_flight){ Serial.println("if detected rocket state to be unpowered flight"); }
-    if (rocket_state == statemachine::ballistic_descent){ Serial.println("if detected rocket state to be ballistic decent"); }
-    if (rocket_state == statemachine::chute_descent){ Serial.println("if detected rocket state to be chute descent"); }
-    if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); exit(1);}
+    Serial.print("data_string: ");
+    Serial.println(data_string);
+    write_to_sd_card(data_string.c_str());
 
     scanner.Scan();
+
     return EXIT_SUCCESS;
     }
 
