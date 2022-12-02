@@ -19,6 +19,8 @@ int init_SD()
         return EXIT_FAILURE;
         }
 
+    // SD.remove("datalog.txt");
+
     return EXIT_SUCCESS;
     }
 

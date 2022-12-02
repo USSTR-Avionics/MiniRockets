@@ -57,7 +57,7 @@ int init_all()
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
 
-    write_to_sd_card(datalog_fmt);
+    write_to_sd_card(datalog_fmt_header);
 
     return EXIT_SUCCESS;
     }
@@ -295,6 +295,9 @@ int debug_data()
 
     scanner.Scan();
 
+    Serial.print("rocket state: ");
+    Serial.println(rocket_state);
+
     return EXIT_SUCCESS;
     }
 
@@ -310,11 +313,12 @@ void setup()
 
     init_all();
 
-    if (health_check() == EXIT_FAILURE)
-        {
-        Serial.println("[FAILED] Health Check"); // also write to reserved fram space
-        exit(1); // this should also fail if init_all() fails;
-        }
+    // ! impl health checks
+    // if (health_check() == EXIT_FAILURE)
+    //     {
+    //     Serial.println("[FAILED] Health Check"); // also write to reserved fram space
+    //     exit(1); // this should also fail if init_all() fails;
+    //     }
 
     Serial.println("setup()");
     write_to_sd_card("setup exit");
