@@ -102,6 +102,8 @@ int health_check()
             }
         }
 
+    write_to_sd_card("health checks passed");
+
     return EXIT_SUCCESS;
     }
 
@@ -282,12 +284,12 @@ int debug_data()
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
     kx134_accel_z = get_kx134_accel_z();
-    data_string += String(kx134_accel_x) + ",";
-    data_string += String(kx134_accel_y) + ",";
-    data_string += String(kx134_accel_z) + ",";
+    data_string = data_string + String(kx134_accel_x) + ",";
+    data_string = data_string + String(kx134_accel_y) + ",";
+    data_string = data_string + String(kx134_accel_z) + ",";
 
     rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    data_string = String(rocket_altitude) + ",";
+    data_string = data_string + String(rocket_altitude);
 
     write_to_sd_card(data_string.c_str());
 
@@ -331,10 +333,7 @@ void setup()
 
 void loop() 
     {
-    // this function flashes an internal led
-    flashInternalLed(true);
     wdt.feed();
-    debug_data(); // remove on prod;
+    debug_data();
     select_flight_mode(rocket_state);
-    flashInternalLed(false);
     }
