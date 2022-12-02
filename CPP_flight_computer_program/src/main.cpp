@@ -64,12 +64,14 @@ int init_all()
 
 int health_check()
     {
+    Serial.println("health_check()");
+
     // KX134 checks
     float z_thresh_low = 9.0;
-    float z_thresh_high = 10.0;
+    float z_thresh_high = 11.0;
     float curr_z_reading = get_kx134_accel_z();
-    int count = 0;
 
+    int count = 0;
     while (count < 10)
         {
         if (curr_z_reading < z_thresh_high && curr_z_reading > z_thresh_low)
@@ -83,11 +85,11 @@ int health_check()
         }
 
     // BMP280
-    float alt_thresh_low = 0.0;
-    float alt_thresh_high = ROCKET_HEIGHT;
+    float alt_thresh_low = -0.25; 
+    float alt_thresh_high = 0.50;
     float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    count = 0;
 
+    count = 0;
     while (count < 10)
         {
         if (curr_alt_reading > alt_thresh_low && curr_alt_reading < alt_thresh_high)
@@ -99,7 +101,6 @@ int health_check()
             return EXIT_FAILURE;
             }
         }
-
 
     return EXIT_SUCCESS;
     }
@@ -314,6 +315,7 @@ void setup()
     init_all();
 
     // ! impl health checks
+    health_check();
     // if (health_check() == EXIT_FAILURE)
     //     {
     //     Serial.println("[FAILED] Health Check"); // also write to reserved fram space
