@@ -1,9 +1,3 @@
-/* NOT USING THESE RIGHT NOW; JUST TESTING OUT A MVP*/
-//#include "kalmanFilter1dconst.h"
-//#include "BasicLinearAlgebra.h"
-//#include "movingAverage.h"
-//using namespace BLA;
-//#include "Filter.h"
 #include "default_variables.h"
 #include "parachuteDeploy.h"
 #include "rocket_profile.h"
@@ -29,6 +23,7 @@
 #include <SPI.h>
 
 
+
 // PROGRAMMER VARS | vars for the programmer
 unsigned long debug_time = 0UL;
 bool debug_mode = false; // remove these comparisons for production
@@ -37,21 +32,12 @@ I2CScanner scanner;
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
 
-// SENSOR VARS | vars handling sensor data
-float kx134_accel_x = FLO_DEF;
-float kx134_accel_y = FLO_DEF;
-float kx134_accel_z = FLO_DEF;
-float ms5611_temp   = FLO_DEF;
-float ms5611_press  = FLO_DEF;
-
-// STATE VARS | vars that are important for the state machine
-
 // LIMIT VARS | vars defining important limits and thresholds
 #define LIFTOFF_THRESHOLD 15.0f // confirm with propulsion, nominal is 8.5 to 10.5
 
-
 // STATE MACHINE
 static statemachine::e_rocket_state rocket_state;
+
 
 
 int init_all()
@@ -71,14 +57,13 @@ int init_all()
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
 
-    write_to_sd_card("time, state, kx134_x, kx134_y, kx134_z, bmp280_alt");
+    write_to_sd_card(datalog_fmt);
 
     return EXIT_SUCCESS;
     }
 
 int health_check()
     {
-    return EXIT_SUCCESS;
     // KX134 checks
     float z_thresh_low = 9.0;
     float z_thresh_high = 10.0;
@@ -159,8 +144,8 @@ void powered_flight_mode()
     /*
     powered to unpowered flight is typical to deceleration
     */
-
     kx134_accel_z = get_kx134_accel_z();
+
     if (starting_time == 0)
         {
         starting_time = millis();
@@ -176,7 +161,6 @@ void powered_flight_mode()
 
 bool apogee_check() 
     {
-    // deleted decent_check var
     // TODO: create an apogee buffer
     return true;
     }
@@ -203,11 +187,9 @@ void ballistic_descent_mode()
         Serial.println("[ROCKET STATE] BALLISTIC DESCENT");
         }
 
-    // TODO:
     // ledON("YELLOW");
-    // 1000 ft = 304.8 m
-    // Add a backup deployment height
-    
+
+    // TODO: Add a backup deployment height
     rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
@@ -283,7 +265,6 @@ int debug_data()
     {
     String data_string = ""; 
 
-    // debug true then add delay
     if (debug_time == 0UL)
         {
         debug_time = millis();
@@ -304,12 +285,13 @@ int debug_data()
     data_string += String(kx134_accel_y) + ",";
     data_string += String(kx134_accel_z) + ",";
 
-    float bmp280_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    data_string = String(bmp280_altitude) + ",";
+    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    data_string = String(rocket_altitude) + ",";
+
+    write_to_sd_card(data_string.c_str());
 
     Serial.print("data_string: ");
     Serial.println(data_string);
-    write_to_sd_card(data_string.c_str());
 
     scanner.Scan();
 
