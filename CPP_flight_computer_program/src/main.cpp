@@ -24,6 +24,7 @@
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
 #include <stdlib.h>
+#include <string>
 #include <Wire.h>
 #include <SPI.h>
 
@@ -70,6 +71,8 @@ int init_all()
     ground_base_pressure = get_bmp280_pressure();
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
+
+    write_to_sd_card("time, state,kx134_x, kx134_y, kx134_z, bmp280_alt");
 
     return EXIT_SUCCESS;
     }
@@ -279,6 +282,8 @@ void watchdog_callback()
 
 int debug_data()
     {
+    String data_string = ""; 
+
     // debug true then add delay
     if (debug_time == 0UL)
         {
@@ -289,6 +294,9 @@ int debug_data()
         {
         return EXIT_FAILURE;
         }
+
+    data_string += millis();
+    data_string += rocket_state;
 
     // Rust FFI lib
     Serial.println("--- Rust lib ---");
@@ -305,6 +313,10 @@ int debug_data()
     Serial.print("z: ");
     Serial.println(kx134_accel_z);
 
+    data_string += kx134_accel_x;
+    data_string += kx134_accel_y;
+    data_string += kx134_accel_z;
+
     // MS5611
     Serial.println("--- MS5611 ---");
     ms5611_temp = get_ms5611_temp();
@@ -319,7 +331,10 @@ int debug_data()
     Serial.print("ground base pressure: ");
     Serial.println(ground_base_pressure);
     Serial.print("altitude: ");
-    Serial.println(get_bmp280_altitude(ground_base_pressure) - ground_base_altitude); 
+    float bmp280_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    Serial.println(bmp280_altitude);
+
+    data_string += bmp280_altitude;
 
     // Rocket State enum
     Serial.println("---Enum Rocket State---");
