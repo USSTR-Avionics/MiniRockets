@@ -27,7 +27,3 @@
 [TODO] convert strings to const char* as sometimes the code will throw compiler errors
 
 [TODO] wrap debugs in ifndef
-
-[TBT] impl health checks; impl exit on failure I2C
-
-[TODO] get relative bmp 2801 altitude

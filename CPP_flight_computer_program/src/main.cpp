@@ -57,7 +57,7 @@ int init_all()
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
 
-    write_to_sd_card(datalog_fmt_header);
+    write_to_sd_card(DATALOG, datalog_fmt_header);
 
     return EXIT_SUCCESS;
     }
@@ -102,7 +102,7 @@ int health_check()
             }
         }
 
-    write_to_sd_card("health checks passed");
+    write_to_sd_card(EVENTLOG, "health checks passed");
 
     return EXIT_SUCCESS;
     }
@@ -130,7 +130,6 @@ void ground_idle_mode()
         rocket_state = statemachine::e_rocket_state::powered_flight;
         }
     }
-
 
 void powered_flight_mode()
     {
@@ -218,7 +217,7 @@ void land_safe_mode()
         // CHECK IF SD CARD CAN STILL BE WRITTEN TO
         // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
         // WRITE TO SD CARD
-        write_to_sd_card("[ROCKET] Landed");
+        write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
     }
@@ -260,7 +259,7 @@ int select_flight_mode(statemachine::e_rocket_state &rs)
 void watchdog_callback()
     {
     Serial.println("watchdog_callback()");
-    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
+    write_to_sd_card(EVENTLOG, "[MICROCONTROLLER] watchdog callback");
     loop();
     }
 
@@ -291,7 +290,7 @@ int debug_data()
     rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
     data_string = data_string + String(rocket_altitude);
 
-    write_to_sd_card(data_string.c_str());
+    write_to_sd_card(DATALOG, data_string.c_str());
 
     Serial.print("data_string: ");
     Serial.println(data_string);
@@ -316,16 +315,14 @@ void setup()
 
     init_all();
 
-    // ! impl health checks
-    health_check();
-    // if (health_check() == EXIT_FAILURE)
-    //     {
-    //     Serial.println("[FAILED] Health Check"); // also write to reserved fram space
-    //     exit(1); // this should also fail if init_all() fails;
-    //     }
+    if (health_check() == EXIT_FAILURE)
+        {
+        Serial.println("[FAILED] Health Check"); // also write to reserved fram space
+        exit(1); // this should also fail if init_all() fails;
+        }
 
     Serial.println("setup()");
-    write_to_sd_card("setup exit");
+    write_to_sd_card(EVENTLOG, "setup exit");
 
     wdt.begin(config);
     wdt.feed();

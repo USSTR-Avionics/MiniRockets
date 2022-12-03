@@ -2,6 +2,9 @@
 
 const int chipSelect = BUILTIN_SDCARD;
 
+#define DATALOG  0
+#define EVENTLOG 1
+
 File myFile;
 Sd2Card card;
 SdVolume volume;
@@ -19,16 +22,23 @@ int init_SD()
         return EXIT_FAILURE;
         }
 
-    // SD.remove("datalog.txt");
-
     return EXIT_SUCCESS;
     }
 
-int write_to_sd_card(const char* str)
+int write_to_sd_card(int f, const char* str)
     {
-    File dataFile = SD.open("datalog.txt", FILE_WRITE);
+    File dataFile = NULL;
 
-    if (dataFile) 
+    if (f == DATALOG)
+        {
+        dataFile = SD.open("datalog.txt", FILE_WRITE);
+        }
+    else if (f == EVENTLOG)
+        {
+        dataFile = SD.open("eventlog.txt", FILE_WRITE);
+        }
+
+    if (dataFile != NULL)  
         {
         dataFile.println(str);
         dataFile.close();
