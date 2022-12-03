@@ -27,3 +27,5 @@
 [TODO] convert strings to const char* as sometimes the code will throw compiler errors
 
 [TODO] wrap debugs in ifndef
+
+[TODO] get variance for sensors

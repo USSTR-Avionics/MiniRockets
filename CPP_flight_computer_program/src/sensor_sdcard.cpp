@@ -38,7 +38,7 @@ int write_to_sd_card(int f, const char* str)
         dataFile = SD.open("eventlog.txt", FILE_WRITE);
         }
 
-    if (dataFile != NULL)  
+    if (dataFile)  
         {
         dataFile.println(str);
         dataFile.close();

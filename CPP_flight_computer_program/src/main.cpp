@@ -309,9 +309,9 @@ void setup()
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
 
-    config.trigger = 2; /* in seconds, 0->128 */
-    config.timeout = 3; /* in seconds, 0->128 */
-    config.callback = watchdog_callback;
+    // config.trigger = 2; /* in seconds, 0->128 */
+    // config.timeout = 3; /* in seconds, 0->128 */
+    // config.callback = watchdog_callback;
 
     init_all();
 
@@ -324,13 +324,13 @@ void setup()
     Serial.println("setup()");
     write_to_sd_card(EVENTLOG, "setup exit");
 
-    wdt.begin(config);
-    wdt.feed();
+    // wdt.begin(config);
+    // wdt.feed();
     }
 
 void loop() 
     {
-    wdt.feed();
+    // wdt.feed();
     debug_data();
     select_flight_mode(rocket_state);
     }
