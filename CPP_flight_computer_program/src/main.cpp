@@ -117,14 +117,14 @@ void ground_idle_mode()
     setLedGreen();
     // TODO:
     // buzzerON(0); play state ok sound
-
     kx134_accel_z = get_kx134_accel_z();
-    if (starting_time == 0)
+
+    if ( (starting_time == 0) && (kx134_accel_z) > LIFTOFF_THRESHOLD)
         {
         starting_time = millis();
         }
 
-    if (((millis() - starting_time) > 250) && (get_kx134_accel_z() - kx134_accel_z) > LIFTOFF_THRESHOLD)
+    if (((millis() - starting_time) > 250) && (kx134_accel_z) > LIFTOFF_THRESHOLD)
         {
         starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::powered_flight;
@@ -148,12 +148,12 @@ void powered_flight_mode()
     */
     kx134_accel_z = get_kx134_accel_z();
 
-    if (starting_time == 0)
+    if ( (starting_time == 0) && (kx134_accel_z) < LIFTOFF_THRESHOLD)
         {
         starting_time = millis();
         }
 
-    if ((millis() - starting_time > 100) &&(kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+    if ((millis() - starting_time > 100) && (kx134_accel_z) < (LIFTOFF_THRESHOLD))
         {
         starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::unpowered_flight;
@@ -289,16 +289,23 @@ int debug_data()
 
     rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
     data_string = data_string + String(rocket_altitude);
+    
 
     write_to_sd_card(DATALOG, data_string.c_str());
 
-    Serial.print("data_string: ");
+    if (debug_mode == true) 
+        {
+        Serial.print("data_string: ");
+        }
     Serial.println(data_string);
 
     scanner.Scan();
 
-    Serial.print("rocket state: ");
-    Serial.println(rocket_state);
+    if (debug_mode == true) 
+        {
+        Serial.print("rocket state: ");
+        Serial.println(rocket_state);
+        }
 
     return EXIT_SUCCESS;
     }
