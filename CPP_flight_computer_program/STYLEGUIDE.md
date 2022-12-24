@@ -2,6 +2,9 @@
 
 - For now we are sticking to core/ embedded C to maintain portability with any future microcontroller changes
 
+## naming things
+
+Use snake_case, this also applies to files and folders, I do not wanna see folders with spaces in them.
 
 ## headers
 
