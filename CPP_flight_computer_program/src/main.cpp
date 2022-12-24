@@ -117,14 +117,14 @@ void ground_idle_mode()
     setLedGreen();
     // TODO:
     // buzzerON(0); play state ok sound
-
     kx134_accel_z = get_kx134_accel_z();
-    if (starting_time == 0)
+
+    if ( (starting_time == 0) && (kx134_accel_z) > LIFTOFF_THRESHOLD)
         {
         starting_time = millis();
         }
 
-    if (((millis() - starting_time) > 250) && (get_kx134_accel_z() - kx134_accel_z) > LIFTOFF_THRESHOLD)
+    if (((millis() - starting_time) > 250) && (kx134_accel_z) > LIFTOFF_THRESHOLD)
         {
         starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::powered_flight;
