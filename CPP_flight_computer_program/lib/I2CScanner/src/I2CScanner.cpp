@@ -2,17 +2,17 @@
 
 void I2CScanner::printHeader()
 {
-	Serial.println(F("--- Scan started ---"));
+	//Serial.println(F("--- Scan started ---"));
 }
 
 void I2CScanner::printAdressResult(byte error, byte address)
 {
 	if (error == 0)
 	{
-		Serial.print(F("I2C device found at address 0x"));
+		//Serial.print(F("I2C device found at address 0x"));
 		if (address < 16) Serial.print("0");
-		Serial.print(address, HEX);
-		Serial.println(F("  !"));
+		//Serial.print(address, HEX);
+		//Serial.println(F("  !"));
 
 		Devices_Count++;
 	}
@@ -27,7 +27,7 @@ void I2CScanner::printAdressResult(byte error, byte address)
 void I2CScanner::printResult()
 {
 	if (Devices_Count == 0) Serial.println(F("No I2C devices found"));
-	Serial.println(F("--- Scan finished ---\n"));
+	//Serial.println(F("--- Scan finished ---\n"));
 }
 
 

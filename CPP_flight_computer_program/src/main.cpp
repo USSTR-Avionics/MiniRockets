@@ -290,16 +290,23 @@ int debug_data()
 
     rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
     data_string = data_string + String(rocket_altitude);
+    
 
     write_to_sd_card(data_string.c_str());
 
-    Serial.print("data_string: ");
+    if (debug_mode == true) 
+        {
+        Serial.print("data_string: ");
+        }
     Serial.println(data_string);
 
     scanner.Scan();
 
-    Serial.print("rocket state: ");
-    Serial.println(rocket_state);
+    if (debug_mode == true) 
+        {
+        Serial.print("rocket state: ");
+        Serial.println(rocket_state);
+        }
 
     return EXIT_SUCCESS;
     }

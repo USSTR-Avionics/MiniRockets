@@ -32,7 +32,7 @@ int write_to_sd_card(const char* str)
         {
         dataFile.println(str);
         dataFile.close();
-        Serial.println("write to SD card");
+        //Serial.println("write to SD card");
         return EXIT_SUCCESS;
         }
     else 
