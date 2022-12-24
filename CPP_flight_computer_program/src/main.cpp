@@ -149,12 +149,12 @@ void powered_flight_mode()
     */
     kx134_accel_z = get_kx134_accel_z();
 
-    if (starting_time == 0)
+    if ( (starting_time == 0) && (kx134_accel_z) < LIFTOFF_THRESHOLD)
         {
         starting_time = millis();
         }
 
-    if ((millis() - starting_time > 100) &&(kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+    if ((millis() - starting_time > 100) && (kx134_accel_z) < (LIFTOFF_THRESHOLD))
         {
         starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::unpowered_flight;
