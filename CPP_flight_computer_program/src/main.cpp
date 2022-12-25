@@ -31,6 +31,8 @@ I2CScanner scanner;
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
+int descent_check = 0;
+float last_alt = 0;
 
 // LIMIT VARS | vars defining important limits and thresholds
 #define LIFTOFF_THRESHOLD 15.0f // confirm with propulsion, nominal is 8.5 to 10.5
@@ -163,8 +165,54 @@ void powered_flight_mode()
 
 bool apogee_check() 
     {
+    Serial.println(descent_check);
+    Serial.println(last_alt- get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude));
+    if (descent_check > 3)
+    {
+        return true;
+    }
+    else if (starting_time == 0)
+    {
+    last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    starting_time = millis();
+    }
+
+    else if ( (millis() - starting_time > 100) && (last_alt- get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) > 0.15) )
+    {
+    starting_time = 0UL;
+    descent_check++;
+    }
+    else if (millis() - starting_time > 5000)
+    {
+    starting_time = 0UL;
+    }
+
     // TODO: create an apogee buffer
+    // I
+    /*if (last_alt == 0)
+    {
+    
+    Serial.println("LAST ALTTT");
+    Serial.println(descent_check);
+    }
+
+    if (descent_check > 3) 
+    {
     return true;
+    Serial.println("MOVE ON");
+    }
+    // GET BMP data on this line
+    if (last_alt - get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) > 0.05) 
+    {
+    descent_check++;
+    last_alt = 0;
+    Serial.println("DESCENT CHECK AGAIN");
+    }
+    else
+    {
+    last_alt = 0;
+    }*/
+    return false;
     }
 
 void unpowered_flight_mode()
