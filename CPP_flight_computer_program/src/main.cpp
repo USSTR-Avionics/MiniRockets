@@ -187,31 +187,6 @@ bool apogee_check()
     starting_time = 0UL;
     }
 
-    // TODO: create an apogee buffer
-    // I
-    /*if (last_alt == 0)
-    {
-    
-    Serial.println("LAST ALTTT");
-    Serial.println(descent_check);
-    }
-
-    if (descent_check > 3) 
-    {
-    return true;
-    Serial.println("MOVE ON");
-    }
-    // GET BMP data on this line
-    if (last_alt - get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) > 0.05) 
-    {
-    descent_check++;
-    last_alt = 0;
-    Serial.println("DESCENT CHECK AGAIN");
-    }
-    else
-    {
-    last_alt = 0;
-    }*/
     return false;
     }
 
@@ -255,8 +230,12 @@ void chute_descent_mode()
     // ledON("ORANGE");
          
     // TODO: check gyroscope stabilisation over time
+    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    if (rocket_altitude<5)
+        {
+        rocket_state = statemachine::e_rocket_state::land_safe;
+        }
 
-    rocket_state = statemachine::e_rocket_state::land_safe;
     }
 
 void land_safe_mode()

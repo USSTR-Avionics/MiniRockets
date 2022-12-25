@@ -1,3 +1,3 @@
-#define PARACHUTE_DEPLOYMENT_HEIGHT 350
+#define PARACHUTE_DEPLOYMENT_HEIGHT -0.5
 
 void deploy_parachute();
