@@ -7,6 +7,7 @@
 #include "sensor_sdcard.h"
 #include "sensor_kx134.h"
 #include "sensor_radio.h"
+#include "sensor_buzzer.h"
 #include "statemachine.h"
 #include "memory_fram.h"
 #include "errorcodes.h"
@@ -35,7 +36,11 @@ int descent_check = 0;
 float last_alt = 0;
 
 // LIMIT VARS | vars defining important limits and thresholds
-#define LIFTOFF_THRESHOLD 15.0f // confirm with propulsion, nominal is 8.5 to 10.5
+#define LIFTOFF_THRESHOLD 12.0f // confirm with propulsion, nominal is 8.5 to 10.5
+#define DESCENT_CHECK_AMOUNT 2
+#define ALTITUDE_CHANGE 0.1
+#define PARACHUTE_DEPLOYMENT_HEIGHT 0.2
+#define LANDING_ALTITUDE 0.0f
 
 // STATE MACHINE
 static statemachine::e_rocket_state rocket_state;
@@ -167,7 +172,7 @@ bool apogee_check()
     {
     Serial.println(descent_check);
     Serial.println(last_alt- get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude));
-    if (descent_check > 3)
+    if (descent_check > DESCENT_CHECK_AMOUNT)
     {
         return true;
     }
@@ -177,7 +182,7 @@ bool apogee_check()
     starting_time = millis();
     }
 
-    else if ( (millis() - starting_time > 100) && (last_alt- get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) > 0.15) )
+    else if ( (millis() - starting_time > 100) && (last_alt- get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) > ALTITUDE_CHANGE) )
     {
     starting_time = 0UL;
     descent_check++;
@@ -231,7 +236,7 @@ void chute_descent_mode()
          
     // TODO: check gyroscope stabilisation over time
     rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    if (rocket_altitude<5)
+    if (rocket_altitude<LANDING_ALTITUDE)
         {
         rocket_state = statemachine::e_rocket_state::land_safe;
         }
@@ -346,7 +351,7 @@ void setup()
     // config.trigger = 2; /* in seconds, 0->128 */
     // config.timeout = 3; /* in seconds, 0->128 */
     // config.callback = watchdog_callback;
-
+    
     init_all();
 
     if (health_check() == EXIT_FAILURE)
