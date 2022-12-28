@@ -4,5 +4,7 @@
 #define PARACHUTE_DEPLOYMENT_HEIGHT 0.2
 #define LANDING_ALTITUDE 0.0f
 
-int debug_mode = true;
-int test_mode = true;
+int debug_mode = false;
+
+int test_mode = false;
+#define STATE_TO_ENTER 7

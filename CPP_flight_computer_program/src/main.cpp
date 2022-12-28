@@ -61,7 +61,7 @@ int init_all()
     
     if (test_mode==true)
     {
-        rocket_state = enter_state();
+        rocket_state = enter_state(STATE_TO_ENTER);
     }
 
     write_to_sd_card(DATALOG, datalog_fmt_header);
@@ -284,6 +284,10 @@ int select_flight_mode(statemachine::e_rocket_state &rs)
     else if (rs == statemachine::land_safe)
         {
         land_safe_mode();
+        }
+    else if (rs == statemachine::test)
+        {
+        test_mode_state();
         }
     return EXIT_FAILURE;
     }

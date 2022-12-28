@@ -1,9 +1,9 @@
 #include "statemachine.h"
 #include "testmode.h"
 
-statemachine::e_rocket_state enter_state()
+statemachine::e_rocket_state enter_state(int state)
 {
-    switch(STATE_TO_ENTER) 
+    switch(state) 
     {
         case 0:
             return statemachine::e_rocket_state::unarmed;
@@ -21,8 +21,16 @@ statemachine::e_rocket_state enter_state()
             return statemachine::e_rocket_state::chute_descent;
         case 6:
             return statemachine::e_rocket_state::land_safe;
+        case 7:
+            return statemachine::e_rocket_state::test;
         default:
             return statemachine::e_rocket_state::unarmed;
     }
 
+}
+void test_mode_state()
+{
+    
+
+    return ;
 }

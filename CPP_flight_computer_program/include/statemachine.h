@@ -11,5 +11,6 @@ namespace statemachine
         ballistic_descent,
         chute_descent,
         land_safe,
+        test,
         } e_rocket_state;
     }

@@ -1,5 +1,6 @@
 #include "statemachine.h"
 
-#define STATE_TO_ENTER 2
 
-statemachine::e_rocket_state enter_state();
+
+statemachine::e_rocket_state enter_state(int state);
+void test_mode_state();
