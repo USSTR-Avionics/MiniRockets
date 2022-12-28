@@ -1,5 +1,7 @@
 #include "statemachine.h"
 #include "testmode.h"
+#include "Arduino.h"
+#include "sensor_led.h"
 
 statemachine::e_rocket_state enter_state(int state)
 {
@@ -30,7 +32,6 @@ statemachine::e_rocket_state enter_state(int state)
 }
 void test_mode_state()
 {
-    
 
     return ;
 }

@@ -170,8 +170,7 @@ void powered_flight_mode()
 
 bool apogee_check() 
     {
-    Serial.println(descent_check);
-    Serial.println(last_alt- get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude));
+
     if (descent_check > DESCENT_CHECK_AMOUNT)
     {
         return true;
