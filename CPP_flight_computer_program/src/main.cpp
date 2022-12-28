@@ -15,6 +15,8 @@
 #include "rusty_fram.h"
 #include "I2CScanner.h"
 #include "watchdog.h"
+#include "testmode.h"
+#include "user_variables.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
@@ -27,7 +29,6 @@
 
 // PROGRAMMER VARS | vars for the programmer
 unsigned long debug_time = 0UL;
-bool debug_mode = false; // remove these comparisons for production
 I2CScanner scanner;
 
 // PROGRAM VARS | vars generally required for the program
@@ -35,12 +36,6 @@ unsigned long starting_time = 0UL;
 int descent_check = 0;
 float last_alt = 0;
 
-// LIMIT VARS | vars defining important limits and thresholds
-#define LIFTOFF_THRESHOLD 12.0f // confirm with propulsion, nominal is 8.5 to 10.5
-#define DESCENT_CHECK_AMOUNT 2
-#define ALTITUDE_CHANGE 0.1
-#define PARACHUTE_DEPLOYMENT_HEIGHT 0.2
-#define LANDING_ALTITUDE 0.0f
 
 // STATE MACHINE
 static statemachine::e_rocket_state rocket_state;
@@ -63,6 +58,11 @@ int init_all()
     ground_base_pressure = get_bmp280_pressure();
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
+    
+    if (test_mode==true)
+    {
+        rocket_state = enter_state();
+    }
 
     write_to_sd_card(DATALOG, datalog_fmt_header);
 

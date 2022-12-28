@@ -21,9 +21,6 @@
  
 #include "pitches.h"
 #include <Arduino.h>
-/*void setup() {
- 
-}*/
 
 void buzzerOn() {
   // notes in the melody:
@@ -35,7 +32,3 @@ void buzzerOn() {
   tone(14, melody[1], duration);
   delay(500);
 }
- 
-/*void loop() {
-  buzzerOn();
-}*/
