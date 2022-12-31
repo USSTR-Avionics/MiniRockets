@@ -46,7 +46,7 @@ int init_all()
     {
     init_kx134();
     init_MS5611();
-    init_bmp280();
+    //init_bmp280();
     init_SD();
     init_fram();
     init_LED();
@@ -54,9 +54,9 @@ int init_all()
     // TODO:
     // init_bmi088();
     // init_RFM95_TX();
-
-    ground_base_pressure = get_bmp280_pressure();
-    ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
+    ms5611_ground_base_pressure = get_ms5611_press();
+    //ground_base_pressure = get_bmp280_pressure();
+    //ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
     
     if (test_mode==true)
@@ -94,10 +94,10 @@ int health_check()
     // BMP280
     float alt_thresh_low = -0.25; 
     float alt_thresh_high = 0.50;
-    float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-
+    //float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    float curr_alt_reading = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
     count = 0;
-    while (count < 10)
+   /* while (count < 10)
         {
         if (curr_alt_reading > alt_thresh_low && curr_alt_reading < alt_thresh_high)
             {
@@ -107,7 +107,7 @@ int health_check()
             {
             return EXIT_FAILURE;
             }
-        }
+        }*/
 
     write_to_sd_card(EVENTLOG, "health checks passed");
 
@@ -177,11 +177,12 @@ bool apogee_check()
     }
     else if (starting_time == 0)
     {
-    last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    //last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    last_alt = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
     starting_time = millis();
     }
 
-    else if ( (millis() - starting_time > 100) && (last_alt- get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) > ALTITUDE_CHANGE) )
+    else if ( (millis() - starting_time > 100) && (last_alt-  get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure) > ALTITUDE_CHANGE) )
     {
     starting_time = 0UL;
     descent_check++;
@@ -219,7 +220,7 @@ void ballistic_descent_mode()
     // ledON("YELLOW");
 
     // TODO: Add a backup deployment height
-    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
 
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
         {
@@ -234,7 +235,7 @@ void chute_descent_mode()
     // ledON("ORANGE");
          
     // TODO: check gyroscope stabilisation over time
-    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
     if (rocket_altitude<LANDING_ALTITUDE)
         {
         rocket_state = statemachine::e_rocket_state::land_safe;
@@ -322,7 +323,7 @@ int debug_data()
     data_string = data_string + String(kx134_accel_y) + ",";
     data_string = data_string + String(kx134_accel_z) + ",";
 
-    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
     data_string = data_string + String(rocket_altitude);
     
 

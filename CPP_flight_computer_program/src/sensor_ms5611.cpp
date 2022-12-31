@@ -12,7 +12,7 @@ bool init_MS5611()
     {
     // Initialize MS5611 sensor
     Serial.println("Initialize MS5611 Sensor");
-
+    
     while(!ms5611.begin())
     {
         Serial.println("Could not find a valid MS5611 sensor, check wiring!");
@@ -51,3 +51,8 @@ float get_ms5611_press()
     float press_data = ms5611.getPressure();
     return press_data;
     }
+
+double get_ms5611_altitude(double pressure, double seaLevelPressure)
+{
+    return (44330.0f * (1.0f - pow((double)pressure / (double)seaLevelPressure, 0.1902949f)));
+}
