@@ -2,7 +2,7 @@
 #define DESCENT_CHECK_AMOUNT 2  
 #define ALTITUDE_CHANGE 0.1
 #define PARACHUTE_DEPLOYMENT_HEIGHT 0.2
-#define LANDING_ALTITUDE -0.2f
+#define LANDING_ALTITUDE -0.8f
 
 int debug_mode = false;
 

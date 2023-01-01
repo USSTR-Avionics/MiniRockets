@@ -123,7 +123,17 @@ void ground_idle_mode()
 
     setLedGreen();
     // TODO:
-    // buzzerON(0); play state ok sound
+    if ( (starting_time == 0) )
+        {
+        starting_time = millis();
+        }
+
+    if ((millis() - starting_time > 500))
+        {
+        starting_time = 0UL;
+        buzzerOn();
+        }
+    
     kx134_accel_z = get_kx134_accel_z();
 
     if ( (starting_time == 0) && (kx134_accel_z) > LIFTOFF_THRESHOLD)
@@ -250,6 +260,16 @@ void land_safe_mode()
         // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
         // WRITE TO SD CARD
         write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
+    if ( (starting_time == 0) )
+        {
+        starting_time = millis();
+        }
+
+    if ((millis() - starting_time > 500))
+        {
+        starting_time = 0UL;
+        buzzerOn();
+        }
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
     }
@@ -366,7 +386,7 @@ void setup()
 
     Serial.println("setup()");
     write_to_sd_card(EVENTLOG, "setup exit");
-
+    buzzerOn();
     // wdt.begin(config);
     // wdt.feed();
     }
