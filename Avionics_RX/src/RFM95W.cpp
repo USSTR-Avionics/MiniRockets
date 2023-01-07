@@ -14,7 +14,7 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Re
     m_RST = Reset;
 }
 
-bool RFM95W::Send(const std::string &Data, const uint16_t &Time_Out_TX, const uint16_t &Time_Out_RX) const
+bool RFM95W::TCP_Send(const std::string &Data, const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX) const
 {
     // 'atoi()' used to convert a string to an integer value,
     // but function will not report conversion errors; consider using 'strtoul' instead
@@ -27,7 +27,6 @@ bool RFM95W::Send(const std::string &Data, const uint16_t &Time_Out_TX, const ui
 
     if(m_RF95->waitPacketSent(Time_Out_TX) == true)
     {
-        // TODO hand shake
         if (m_RF95->waitAvailableTimeout(Time_Out_RX) == true)
         {
             uint8_t Buffer[m_Max_message_length];
@@ -49,6 +48,11 @@ bool RFM95W::Send(const std::string &Data, const uint16_t &Time_Out_TX, const ui
     return false;
 }
 
+void RFM95W::UDP_Send(const std::string &Data) const
+{
+    m_RF95->send(reinterpret_cast<const uint8_t*>(Data.c_str()), sizeof(Data.c_str()));
+}
+
 std::tuple<bool,  const std::string> RFM95W::Receive()
 {
     uint8_t Buffer[m_Max_message_length];
@@ -58,7 +62,6 @@ std::tuple<bool,  const std::string> RFM95W::Receive()
 
     if(m_RF95->recv(Buffer, &Length) == true)
     {
-        // TODO perform handshake
         m_RF95->send(reinterpret_cast<const uint8_t*>(m_Handshake.c_str()), sizeof(m_Handshake.c_str()));
 
         // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
@@ -155,18 +158,23 @@ void RFM95W::Set_Preamble_Length(const uint8_t &Length)
 {
     m_RF95->setPreambleLength(Length);
 }
+/*
 
+*/
 /*
  * ========================================================================
  *                                 UDP
  * ========================================================================
- */
+ *//*
 
+
+*/
 /*
  * ========================================================================
  *                                 TX
  * ========================================================================
- */
+ *//*
+
 RFM95W_TX::RFM95W_TX(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &ResetPin, const Mode &Type)
 {
     m_RF95 = std::make_unique<RH_RF95>(Slave, Interrupt);
@@ -254,11 +262,13 @@ void RFM95W_TX::Set_Preamble_Length(const uint8_t &Length)
 {
     m_RF95->setPreambleLength(Length);
 }
+*/
 /*
  * ========================================================================
  *                                 RX
  * ========================================================================
- */
+ *//*
+
 
 RFM95W_RX::RFM95W_RX(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &ResetPin, const Mode &Type)
 {
@@ -374,5 +384,6 @@ void RFM95W_RX::Set_Preamble_Length(const uint8_t &Length)
 {
     m_RF95->setPreambleLength(Length);
 }
+*/
 
 

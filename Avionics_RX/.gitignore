@@ -2,5 +2,6 @@
 .idea
 CMakeListsPrivate.txt
 CMakeLists.txt
-cmake-build-*/ 
+cmake-build-*/
+.DS_Store
 .DS_Store

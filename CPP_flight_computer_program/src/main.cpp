@@ -326,8 +326,8 @@ void setup()
     Serial.println("test");
 
     RFM95W TX(10, 31, 32);
-    TX.Set_Frequency(911.1);
-    if(!TX.Send("Hello from the other side", 1000, 1000))
+    TX.Set_Frequency(914.1);
+    if(!TX.TCP_Send("Hello from the other side", 1000))
     {
         Serial.println("radio failed");
     }
