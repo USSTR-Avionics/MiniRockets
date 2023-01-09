@@ -45,8 +45,8 @@ float get_ms5611_press()
     int result = ms5611.read();
     if (result != MS5611_READ_OK)
         {
-        Serial.println("[MS5611] Error in read");
-        Serial.println(result);
+        //Serial.println("[MS5611] Error in read");
+        //Serial.println(result);
         }
     float press_data = ms5611.getPressure();
     return press_data;
