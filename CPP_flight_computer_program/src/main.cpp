@@ -48,18 +48,19 @@ int init_all()
     init_MS5611();
     //init_bmp280();
     init_SD();
-    init_fram();
+    // init_fram();
     init_LED();
 
     // TODO:
     // init_bmi088();
     // init_RFM95_TX();
+
     ms5611_ground_base_pressure = get_ms5611_press();
     //ground_base_pressure = get_bmp280_pressure();
     //ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine::e_rocket_state::unarmed;
     
-    if (test_mode==true)
+    if (test_mode == true)
     {
         rocket_state = enter_state(STATE_TO_ENTER);
     }
@@ -122,13 +123,14 @@ void ground_idle_mode()
         }
 
     setLedGreen();
+    
     // TODO:
-    if ( (starting_time == 0) )
+    if (starting_time == 0)
         {
         starting_time = millis();
         }
 
-    if ((millis() - starting_time > 500))
+    if (millis() - starting_time > 500)
         {
         starting_time = 0UL;
         buzzerOn();
@@ -136,12 +138,12 @@ void ground_idle_mode()
     
     kx134_accel_z = get_kx134_accel_z();
 
-    if ( (starting_time == 0) && (kx134_accel_z) > LIFTOFF_THRESHOLD)
+    if ((starting_time == 0) && (kx134_accel_z > LIFTOFF_THRESHOLD))
         {
         starting_time = millis();
         }
 
-    if (((millis() - starting_time) > 250) && (kx134_accel_z) > LIFTOFF_THRESHOLD)
+    if (((millis() - starting_time) > 250) && ((kx134_accel_z) > LIFTOFF_THRESHOLD))
         {
         starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::powered_flight;
@@ -165,12 +167,12 @@ void powered_flight_mode()
     */
     kx134_accel_z = get_kx134_accel_z();
 
-    if ( (starting_time == 0) && (kx134_accel_z) < LIFTOFF_THRESHOLD)
+    if ((starting_time == 0) && ((kx134_accel_z) < LIFTOFF_THRESHOLD))
         {
         starting_time = millis();
         }
 
-    if ((millis() - starting_time > 100) && (kx134_accel_z) < (LIFTOFF_THRESHOLD))
+    if ((millis() - starting_time > 100) && ((kx134_accel_z) < (LIFTOFF_THRESHOLD)))
         {
         starting_time = 0UL;
         rocket_state = statemachine::e_rocket_state::unpowered_flight;
@@ -180,27 +182,26 @@ void powered_flight_mode()
 
 bool apogee_check() 
     {
-
     if (descent_check > DESCENT_CHECK_AMOUNT)
-    {
+        {
         return true;
-    }
+        }
     else if (starting_time == 0)
-    {
-    //last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    last_alt = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
-    starting_time = millis();
-    }
+        {
+        //last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+        last_alt = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+        starting_time = millis();
+        }
 
-    else if ( (millis() - starting_time > 100) && (last_alt-  get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure) > ALTITUDE_CHANGE) )
-    {
-    starting_time = 0UL;
-    descent_check++;
-    }
+    else if ((millis() - starting_time > 100) && ((last_alt - (get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure))) > ALTITUDE_CHANGE))
+        {
+        starting_time = 0UL;
+        descent_check++;
+        }
     else if (millis() - starting_time > 5000)
-    {
-    starting_time = 0UL;
-    }
+        {
+        starting_time = 0UL;
+        }
 
     return false;
     }
@@ -255,17 +256,17 @@ void chute_descent_mode()
 
 void land_safe_mode()
     {
-        // STOP DATA COLLECTION
-        // CHECK IF SD CARD CAN STILL BE WRITTEN TO
-        // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
-        // WRITE TO SD CARD
-        write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
-    if ( (starting_time == 0) )
+    // STOP DATA COLLECTION
+    // CHECK IF SD CARD CAN STILL BE WRITTEN TO
+    // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
+    // WRITE TO SD CARD
+    write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
+    if (starting_time == 0)
         {
         starting_time = millis();
         }
 
-    if ((millis() - starting_time > 500))
+    if (millis() - starting_time > 500)
         {
         starting_time = 0UL;
         buzzerOn();
@@ -345,7 +346,6 @@ int debug_data()
 
     rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
     data_string = data_string + String(rocket_altitude);
-    
 
     write_to_sd_card(DATALOG, data_string.c_str());
 
@@ -387,6 +387,7 @@ void setup()
     Serial.println("setup()");
     write_to_sd_card(EVENTLOG, "setup exit");
     buzzerOn();
+
     // wdt.begin(config);
     // wdt.feed();
     }

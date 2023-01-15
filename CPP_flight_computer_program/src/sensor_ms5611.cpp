@@ -1,4 +1,7 @@
 #include <MS5611.h>
+#include <math.h>
+
+double pow(double, double);
  
 MS5611 ms5611;
 
@@ -45,6 +48,7 @@ float get_ms5611_press()
     int result = ms5611.read();
     if (result != MS5611_READ_OK)
         {
+        //! Shouldn't this return an invalid reading?
         //Serial.println("[MS5611] Error in read");
         //Serial.println(result);
         }
