@@ -277,38 +277,35 @@ void land_safe_mode()
 
 int select_flight_mode(statemachine::e_rocket_state &rs)
     {
-    // TODO: change to switch case
-    if (rs == statemachine::unarmed)
+    switch (rs)
         {
-        get_start_signal_from_ground_station(rs); // not armed until ground station tells it to!
-        }
-    else if (rs == statemachine::ground_idle)
-        {
-        ground_idle_mode();
-        }
-    else if (rs == statemachine::powered_flight)
-        {
-        powered_flight_mode();
-        }
-    else if (rs == statemachine::unpowered_flight)
-        {
-        unpowered_flight_mode();
-        }
-    else if (rs == statemachine::ballistic_descent)
-        {
-        ballistic_descent_mode();
-        }
-    else if (rs == statemachine::chute_descent)
-        {
-        chute_descent_mode();
-        }
-    else if (rs == statemachine::land_safe)
-        {
-        land_safe_mode();
-        }
-    else if (rs == statemachine::test)
-        {
-        test_mode_state();
+        case statemachine::unarmed:
+            get_start_signal_from_ground_station(rs); // not armed until ground station tells it to!
+            break;
+        case statemachine::ground_idle:
+            ground_idle_mode();
+            break;
+        case statemachine::powered_flight:
+            powered_flight_mode();
+            break;
+        case statemachine::unpowered_flight:
+            unpowered_flight_mode();
+            break;
+        case statemachine::ballistic_descent:
+            ballistic_descent_mode();
+            break;
+        case statemachine::chute_descent:
+            chute_descent_mode();
+            break;
+        case statemachine::land_safe:
+            land_safe_mode();
+            break;
+        case statemachine::test:
+            test_mode_state();
+            break;
+        default:
+            test_mode_state();
+            break;
         }
     return EXIT_FAILURE;
     }
