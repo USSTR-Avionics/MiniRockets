@@ -41,4 +41,4 @@ At the bottom click on the checkbox to build the codebase (this also links the r
 run `pio run -t compiledb` if you need the latest compilation_commands.json file for clangd DAP interface.
 
 
-**NOTE : You may use any toolchain you like as long as it maintains compatibility and interoperability with "master", using different tools from the team also means that the team can't help you debug or troubleshoot as quickly**
+>**NOTE : You may use any toolchain you like as long as it maintains compatibility and interoperability with "master", using different tools from the team also means that the team can't help you debug or troubleshoot as quickly!**
