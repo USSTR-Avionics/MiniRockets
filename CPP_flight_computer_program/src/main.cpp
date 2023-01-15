@@ -30,6 +30,9 @@
 // PROGRAMMER VARS | vars for the programmer
 unsigned long debug_time = 0UL;
 I2CScanner scanner;
+bool debug_mode = false;
+bool test_mode = false;
+
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
