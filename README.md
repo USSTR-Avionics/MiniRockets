@@ -1,4 +1,4 @@
-# USST Avionics Board
+# USST Avionics
 
 <center> <img src = https://i.imgur.com/jnRxNR3.png> </img> </center>
 
