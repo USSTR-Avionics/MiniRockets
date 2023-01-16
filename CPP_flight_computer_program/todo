@@ -12,6 +12,4 @@
     - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
     - resets too early
 
-[TODO] wrap debugs in ifndef and/or pragma once
-
 [HALTED] get variance for sensors

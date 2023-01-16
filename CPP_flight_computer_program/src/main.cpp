@@ -375,6 +375,10 @@ void setup()
 
     // wdt.begin(config);
     // wdt.feed();
+
+    // TODO: add a method to read previous state from FRAM and restore it
+    // int value_from_fram = read_from_fram(0x0);
+    // rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
     }
 
 void loop() 

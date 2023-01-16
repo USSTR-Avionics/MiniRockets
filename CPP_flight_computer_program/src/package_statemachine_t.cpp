@@ -1,11 +1,9 @@
 #include "statemachine_t.h"
-#include "sensor_led.h"
-#include "Arduino.h"
 
-statemachine_t::e_rocket_state enter_state(int state)
-{
-    switch(state) 
+statemachine_t::e_rocket_state set_state_for_statemachine(statemachine_t::e_rocket_state& rs, int state)
     {
+    switch(state) 
+        {
         case 0:
             return statemachine_t::e_rocket_state::unarmed;
             break;
@@ -26,11 +24,5 @@ statemachine_t::e_rocket_state enter_state(int state)
             return statemachine_t::e_rocket_state::test;
         default:
             return statemachine_t::e_rocket_state::unarmed;
+        }
     }
-
-}
-void test_mode_state()
-{
-
-    return ;
-}

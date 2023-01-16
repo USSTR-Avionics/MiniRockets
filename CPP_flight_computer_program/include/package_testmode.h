@@ -9,6 +9,7 @@
 // #undef ROCKET_DEBUGMODE
 
 
+// DEBUG MODE dependent code and definitions go here!
 #ifdef ROCKET_DEBUGMODE
     #warning "DEBUG MODE ENABLED"
     #define println(x) Serial.println(x)
@@ -16,7 +17,8 @@
 #else
     #define println(x)
     #define print(x)
-    #warning "DEBUG MODE DISABLED"
+    #error "ARE YOU SURE YOU WANT TO BUILD IN PRODUCTION MODE?"
+    #warning "DELETE THE ERRONEOUS LINE TO BUILD IN PRODUCTION MODE"
 #endif  // ROCKET_DEBUGMODE
 
 #include "statemachine_t.h"
