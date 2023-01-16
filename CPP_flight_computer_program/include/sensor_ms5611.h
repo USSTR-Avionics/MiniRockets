@@ -1,6 +1,8 @@
 #ifndef SENSOR_MS5611_H
 #define SENSOR_MS5611_H
 
+#include "default_variables.h"
+
 float ms5611_temp   = FLO_DEF;
 float ms5611_press  = FLO_DEF;
 float ms5611_ground_base_pressure = FLO_DEF;

@@ -1,6 +1,4 @@
-#include "default_variables.h"
-#include "rocket_profile.h"
-#include "user_variables.h"
+#include "package_testmode.h"
 
 #include "sensor_parachute.h"
 #include "sensor_buzzer.h"
@@ -13,12 +11,15 @@
 #include "sensor_fram.h"
 #include "sensor_led.h"
 
+#include "default_variables.h"
+#include "rocket_profile.h"
+#include "user_variables.h"
 #include "statemachine_t.h"
-#include "errorcodes.h"
-#include "watchdog.h"
-#include "testmode.h"
 
+//TODO: to be wrapped
+#include "watchdog.h"
 #include "I2CScanner.h"
+
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
@@ -64,10 +65,9 @@ int init_all()
     //ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine_t::e_rocket_state::unarmed;
     
-    if (test_mode == true)
-    {
+    #ifdef ROCKET_DEBUGMODE
         rocket_state = enter_state(STATE_TO_ENTER);
-    }
+    #endif
 
     write_to_sd_card(DATALOG, datalog_fmt_header);
 
@@ -76,7 +76,7 @@ int init_all()
 
 int health_check()
     {
-    Serial.println("health_check()");
+    println("health_check()");
 
     // KX134 checks
     float z_thresh_low = 9.0;
@@ -121,10 +121,7 @@ int health_check()
 
 void ground_idle_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] GROUND IDLE");
-        }
+    println("[ROCKET STATE] GROUND IDLE");
 
     setLedGreen();
     
@@ -156,10 +153,7 @@ void ground_idle_mode()
 
 void powered_flight_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] POWERED FLIGHT");
-        }
+    println("[ROCKET STATE] POWERED FLIGHT");
 
     setLedRed();
     // buzzerON(1);
@@ -212,10 +206,7 @@ bool apogee_check()
 
 void unpowered_flight_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] UNPOWERED FLIGHT");
-        }
+    println("[ROCKET STATE] UNPOWERED FLIGHT");
 
     setLedBlue();
 
@@ -227,10 +218,7 @@ void unpowered_flight_mode()
 
 void ballistic_descent_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] BALLISTIC DESCENT");
-        }
+    println("[ROCKET STATE] BALLISTIC DESCENT");
 
     // ledON("YELLOW");
 
@@ -316,13 +304,15 @@ int select_flight_mode(statemachine_t::e_rocket_state &rs)
 
 void watchdog_callback()
     {
-    Serial.println("watchdog_callback()");
+    println("watchdog_callback()");
     write_to_sd_card(EVENTLOG, "[MICROCONTROLLER] watchdog callback");
     loop();
     }
 
 int debug_data()
     {
+    #ifdef ROCKET_DEBUGMODE
+
     String data_string = ""; 
 
     if (debug_time == 0UL)
@@ -350,19 +340,15 @@ int debug_data()
 
     write_to_sd_card(DATALOG, data_string.c_str());
 
-    if (debug_mode == true) 
-        {
-        Serial.print("data_string: ");
-        }
-    Serial.println(data_string);
+    print("data_string: ");
+    println(data_string);
 
     scanner.Scan();
 
-    if (debug_mode == true) 
-        {
-        Serial.print("rocket state: ");
-        Serial.println(rocket_state);
-        }
+    print("rocket state: ");
+    println(rocket_state);
+
+    #endif
 
     return EXIT_SUCCESS;
     }
@@ -381,11 +367,11 @@ void setup()
 
     if (health_check() == EXIT_FAILURE)
         {
-        Serial.println("[FAILED] Health Check"); // also write to reserved fram space
+        println("[FAILED] Health Check"); // also write to reserved fram space
         exit(1); // this should also fail if init_all() fails;
         }
 
-    Serial.println("setup()");
+    println("setup()");
     write_to_sd_card(EVENTLOG, "setup exit");
     buzzerOn();
 

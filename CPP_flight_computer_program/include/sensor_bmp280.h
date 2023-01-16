@@ -1,6 +1,8 @@
 #ifndef SENSOR_BMP280_H
 #define SENSOR_BMP280_H
 
+#include "default_variables.h"
+
 float ground_base_pressure = FLO_DEF;
 float ground_base_altitude = FLO_DEF;
 float rocket_altitude   = 0.0;

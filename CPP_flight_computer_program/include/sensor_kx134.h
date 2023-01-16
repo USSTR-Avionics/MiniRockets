@@ -1,6 +1,8 @@
 #ifndef SENSOR_KX134_H
 #define SENSOR_KX134_H
 
+#include "default_variables.h"
+
 float kx134_accel_x = FLO_DEF;
 float kx134_accel_y = FLO_DEF;
 float kx134_accel_z = FLO_DEF;
