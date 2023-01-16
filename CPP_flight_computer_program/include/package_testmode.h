@@ -8,12 +8,15 @@
 #define ROCKET_DEBUGMODE 1
 // #undef ROCKET_DEBUGMODE
 
+
 #ifdef ROCKET_DEBUGMODE
+    #warning "DEBUG MODE ENABLED"
     #define println(x) Serial.println(x)
     #define print(x) Serial.print(x)
 #else
     #define println(x)
     #define print(x)
+    #warning "DEBUG MODE DISABLED"
 #endif  // ROCKET_DEBUGMODE
 
 #include "statemachine_t.h"

@@ -95,10 +95,10 @@ int health_check()
         }
 
     // BMP280
-    float alt_thresh_low = -0.25; 
-    float alt_thresh_high = 0.50;
+    // float alt_thresh_low = -0.25; 
+    // float alt_thresh_high = 0.50;
     //float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    float curr_alt_reading = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    // float curr_alt_reading = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
     count = 0;
    /* while (count < 10)
         {
