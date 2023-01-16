@@ -2,7 +2,8 @@
 
 <center> <img src = https://i.imgur.com/jnRxNR3.png> </img> </center>
 
-# Using VSCode and PlatformIO (recommended)
+# Setup
+Using VSCode and PlatformIO (recommended)
 
 ## Things you need to get started
 - [ ] VSCode  
@@ -42,3 +43,8 @@ run `pio run -t compiledb` if you need the latest compilation_commands.json file
 
 
 >**NOTE : You may use any toolchain you like as long as it maintains compatibility and interoperability with "master", using different tools from the team also means that the team can't help you debug or troubleshoot as quickly!**
+
+# Documentation
+
+Documentation is not expected for code, as long as variables, methods, and files are resonably named and follow the naming standards laid out in READMEs
+This is because we believe code is the best documentation as it never gets outdated, because if it gets outdated it doesn't compile anymore. Hence, will always remain up to date.

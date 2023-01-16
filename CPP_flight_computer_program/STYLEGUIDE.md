@@ -1,6 +1,6 @@
 ## programming language
 
-- For now we are sticking to core/ embedded C to maintain portability with any future microcontroller changes
+For now we are sticking to core/ embedded C to maintain portability with any future microcontroller changes
 
 ## naming things
 
