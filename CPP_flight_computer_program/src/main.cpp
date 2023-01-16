@@ -1,4 +1,5 @@
 #include "package_testmode.h"
+#include "package_watchdog.h"
 
 #include "sensor_parachute.h"
 #include "sensor_buzzer.h"
@@ -16,9 +17,7 @@
 #include "user_variables.h"
 #include "statemachine_t.h"
 
-//TODO: to be wrapped
-#include "watchdog.h"
-#include "I2CScanner.h"
+#include "debug_I2C_Scanner.h"
 
 #include <Arduino.h>
 #include <RH_RF95.h>
@@ -32,7 +31,6 @@
 
 // PROGRAMMER VARS | vars for the programmer
 unsigned long debug_time = 0UL;
-I2CScanner scanner; // breakout into a separate debug header + .cpp file 
 bool debug_mode = false;
 bool test_mode = false;
 
@@ -343,7 +341,7 @@ int debug_data()
     print("data_string: ");
     println(data_string);
 
-    scanner.Scan();
+    scan_and_print_I2C_devices();
 
     print("rocket state: ");
     println(rocket_state);
