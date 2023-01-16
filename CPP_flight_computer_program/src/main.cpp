@@ -1,22 +1,24 @@
 #include "default_variables.h"
-#include "parachuteDeploy.h"
 #include "rocket_profile.h"
+#include "user_variables.h"
+
+#include "sensor_parachute.h"
+#include "sensor_buzzer.h"
 #include "sensor_ms5611.h"
 #include "sensor_bmi088.h"
-#include "sensor_bmp280.h"
 #include "sensor_sdcard.h"
+#include "sensor_bmp280.h"
 #include "sensor_kx134.h"
 #include "sensor_radio.h"
-#include "sensor_buzzer.h"
-#include "statemachine.h"
-#include "memory_fram.h"
-#include "errorcodes.h"
+#include "sensor_fram.h"
 #include "sensor_led.h"
-#include "rusty_fram.h"
-#include "I2CScanner.h"
+
+#include "statemachine_t.h"
+#include "errorcodes.h"
 #include "watchdog.h"
 #include "testmode.h"
-#include "user_variables.h"
+
+#include "I2CScanner.h"
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
@@ -29,10 +31,9 @@
 
 // PROGRAMMER VARS | vars for the programmer
 unsigned long debug_time = 0UL;
-I2CScanner scanner;
+I2CScanner scanner; // breakout into a separate debug header + .cpp file 
 bool debug_mode = false;
 bool test_mode = false;
-
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
@@ -41,7 +42,7 @@ float last_alt = 0;
 
 
 // STATE MACHINE
-static statemachine::e_rocket_state rocket_state;
+static statemachine_t::e_rocket_state rocket_state;
 
 
 
@@ -61,7 +62,7 @@ int init_all()
     ms5611_ground_base_pressure = get_ms5611_press();
     //ground_base_pressure = get_bmp280_pressure();
     //ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
-    rocket_state = statemachine::e_rocket_state::unarmed;
+    rocket_state = statemachine_t::e_rocket_state::unarmed;
     
     if (test_mode == true)
     {
@@ -149,7 +150,7 @@ void ground_idle_mode()
     if (((millis() - starting_time) > 250) && ((kx134_accel_z) > LIFTOFF_THRESHOLD))
         {
         starting_time = 0UL;
-        rocket_state = statemachine::e_rocket_state::powered_flight;
+        rocket_state = statemachine_t::e_rocket_state::powered_flight;
         }
     }
 
@@ -178,7 +179,7 @@ void powered_flight_mode()
     if ((millis() - starting_time > 100) && ((kx134_accel_z) < (LIFTOFF_THRESHOLD)))
         {
         starting_time = 0UL;
-        rocket_state = statemachine::e_rocket_state::unpowered_flight;
+        rocket_state = statemachine_t::e_rocket_state::unpowered_flight;
         }
 
     }
@@ -220,7 +221,7 @@ void unpowered_flight_mode()
 
     if (apogee_check() == true)
         {
-        rocket_state = statemachine::e_rocket_state::ballistic_descent;
+        rocket_state = statemachine_t::e_rocket_state::ballistic_descent;
         }
     }
 
@@ -239,7 +240,7 @@ void ballistic_descent_mode()
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
         {
         deploy_parachute();
-        rocket_state = statemachine::e_rocket_state::chute_descent;
+        rocket_state = statemachine_t::e_rocket_state::chute_descent;
         }
     }
 
@@ -252,7 +253,7 @@ void chute_descent_mode()
     rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
     if (rocket_altitude<LANDING_ALTITUDE)
         {
-        rocket_state = statemachine::e_rocket_state::land_safe;
+        rocket_state = statemachine_t::e_rocket_state::land_safe;
         }
 
     }
@@ -278,32 +279,32 @@ void land_safe_mode()
         // ledON(somecolour);
     }
 
-int select_flight_mode(statemachine::e_rocket_state &rs)
+int select_flight_mode(statemachine_t::e_rocket_state &rs)
     {
     switch (rs)
         {
-        case statemachine::unarmed:
+        case statemachine_t::unarmed:
             get_start_signal_from_ground_station(rs); // not armed until ground station tells it to!
             break;
-        case statemachine::ground_idle:
+        case statemachine_t::ground_idle:
             ground_idle_mode();
             break;
-        case statemachine::powered_flight:
+        case statemachine_t::powered_flight:
             powered_flight_mode();
             break;
-        case statemachine::unpowered_flight:
+        case statemachine_t::unpowered_flight:
             unpowered_flight_mode();
             break;
-        case statemachine::ballistic_descent:
+        case statemachine_t::ballistic_descent:
             ballistic_descent_mode();
             break;
-        case statemachine::chute_descent:
+        case statemachine_t::chute_descent:
             chute_descent_mode();
             break;
-        case statemachine::land_safe:
+        case statemachine_t::land_safe:
             land_safe_mode();
             break;
-        case statemachine::test:
+        case statemachine_t::test:
             test_mode_state();
             break;
         default:

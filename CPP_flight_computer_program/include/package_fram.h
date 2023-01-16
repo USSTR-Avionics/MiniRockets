@@ -1,5 +1,5 @@
-#ifndef RUSTY_FRAM_H
-#define RUSTY_FRAM_H
+#ifndef PACKAGE_FRAM_H
+#define PACKAGE_FRAM_H
 
 #include <stdint.h>
 
@@ -12,4 +12,4 @@ extern "C" uint8_t rust_return_delay_test();
 extern "C" uint8_t* wrap_temperature_for_writing(float);
 extern "C" uint8_t* wrap_acceleration_for_writing(float);
 
-#endif // RUSTY_FRAM_H
+#endif // PACKAGE_FRAM_H

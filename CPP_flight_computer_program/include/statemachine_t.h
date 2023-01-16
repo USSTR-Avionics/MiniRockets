@@ -1,6 +1,7 @@
-#pragma once
+#ifndef STATEMACHINE_T_H
+#define STATEMACHINE_T_H
 
-namespace statemachine
+namespace statemachine_t
     {
     typedef enum state
         {
@@ -14,3 +15,5 @@ namespace statemachine
         test,
         } e_rocket_state;
     }
+
+#endif  // STATEMACHINE_T_H

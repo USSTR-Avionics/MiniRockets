@@ -1,3 +1,31 @@
+These are broad guidelines and NOT rules, break them if it doesn't make sense
+
+We classify headers into 4 types
+
+1. Package
+    A set of functions that serve a common function, eg: a statistics package
+    prefixed with a "package_"
+
+2. Debug
+    Functions associated with easy debugging, eg: I2C Scanner, these are only
+    activated or in use when a directive or variable is enabled, prefixed with
+    a "debug_"
+
+3. Sensor
+    Functions that serve as a wrapper/API for sensors, sensors include
+    peripherals like memory and sensors like acceleration. tldr; anything that
+    has a hardware component that the flight computer interacts with is a 
+    sensor, prefixed with a "sensor_"
+
+4. Organisational
+    Some headers are just for storing default variables or macros and fall
+    under this categories, need not be prefixed.
+
+NOTE: Other naming scheme maybe applied if it makes sense, for example, the 
+    header file containing the enum definition for the statemachine is called
+    statemachine_t.h as the _t suffix denotes type by convention.
+
+********************************************************************************
 
 This directory is intended for project header files.
 

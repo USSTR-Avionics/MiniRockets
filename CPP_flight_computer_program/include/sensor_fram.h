@@ -1,5 +1,5 @@
-#ifndef MEMORY_FRAM_H
-#define MEMORY_FRAM_H
+#ifndef SENSOR_FRAM_H
+#define SENSOR_FRAM_H
 
 #include "Adafruit_EEPROM_I2C.h"
 #include "Adafruit_FRAM_I2C.h"

@@ -1,5 +1,5 @@
 #include "Adafruit_FRAM_I2C.h"
-#include "rusty_fram.h"
+#include "package_fram.h"
 #include <Arduino.h>
 
 Adafruit_FRAM_I2C fram = Adafruit_FRAM_I2C();
