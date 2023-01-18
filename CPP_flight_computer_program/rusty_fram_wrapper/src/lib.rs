@@ -31,6 +31,12 @@ pub extern "C" fn rust_return_delay_test()  -> u8
     return 0;
     }
 
+#[no_mangle]
+pub extern "C" fn pass_and_return_array(a: u8, b: u8) -> Option<u8>
+    {
+    None
+    }
+
 #[repr(C)]
 struct StructTemperature
     {
