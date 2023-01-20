@@ -29,11 +29,6 @@
 
 
 
-// PROGRAMMER VARS | vars for the programmer
-unsigned long debug_time = 0UL;
-bool debug_mode = false;
-bool test_mode = false;
-
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
 int descent_check = 0;
@@ -123,7 +118,6 @@ void ground_idle_mode()
 
     setLedGreen();
     
-    // TODO:
     if (starting_time == 0)
         {
         starting_time = millis();
@@ -142,7 +136,7 @@ void ground_idle_mode()
         starting_time = millis();
         }
 
-    if (((millis() - starting_time) > 250) && ((kx134_accel_z) > LIFTOFF_THRESHOLD))
+    if (((millis() - starting_time) > 250) && (kx134_accel_z > LIFTOFF_THRESHOLD))
         {
         starting_time = 0UL;
         rocket_state = statemachine_t::e_rocket_state::powered_flight;

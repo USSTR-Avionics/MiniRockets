@@ -11,6 +11,7 @@
 
 // DEBUG MODE dependent code and definitions go here!
 #ifdef ROCKET_DEBUGMODE
+    unsigned long debug_time = 0UL;
     #warning "DEBUG MODE ENABLED"
     #define println(x) Serial.println(x)
     #define print(x) Serial.print(x)

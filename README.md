@@ -55,6 +55,18 @@ run `pio run -t compiledb` if you need the latest compilation_commands.json file
 Click on the :heavy_check_mark: on the bottom bar in VSCode
 
 
+# Contributing
+
+1. Make sure you have all the remote changes
+    `git pull`
+    `git fetch --all`
+    `git pull upstream`
+    `git fetch upstream --all`
+
+2. Squash commits into a single commit if it makes sense for your changes
+
+3. Open up a Pull Request with an appropriate title and explanantion of code changes
+
 
 # Documentation
 
@@ -62,7 +74,22 @@ Documentation is not expected for code, as long as variables, methods, and files
 This is because we believe code is the best documentation as it never gets outdated, because if it gets outdated it doesn't compile anymore. Hence, will always remain up to date.
 However, provide documentation wherever relevant
 
+Javadoc style of comments are strongly recommended, but only after that function has been stabilised. Don't write documentation while developing.
 
+```
+/**
+ * @brief      writes an u8 to the given FRAM address
+ * @param      what    The u8 to be written
+ * @param      where   The address where it is to be written
+ * @return     int     0 on success; 1 on failure
+*/
+
+int write_to_fram(uint8_t what, uint8_t where)
+    {
+    // a black box
+    }
+
+```
 
 # Coding Style Guidelines
 
