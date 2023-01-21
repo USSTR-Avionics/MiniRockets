@@ -1,6 +1,9 @@
 # USST Avionics
 
 [![PlatformIO CI master](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/building_test.yml/badge.svg?branch=master)](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/building_test.yml)
+![open issues](https://img.shields.io/github/issues-raw/USSTR-Avionics/Avionics_code)
+![open PRs](https://img.shields.io/github/issues-pr/USSTR-Avionics/Avionics_code/open)
+
 
 <center> <img src = https://i.imgur.com/jnRxNR3.png> </img> </center>
 
