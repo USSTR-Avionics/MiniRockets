@@ -1,5 +1,7 @@
 # USST Avionics
 
+![build](https://github.com/USSTR-Avionics/Avionics_code/blob/master/.github/workflows/building_test.yml/badge.svg)
+
 <center> <img src = https://i.imgur.com/jnRxNR3.png> </img> </center>
 
 

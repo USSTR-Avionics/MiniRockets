@@ -6,7 +6,7 @@
 // NOTE:
 // undefine ROCKET_DEBUG for production builds
 #define ROCKET_DEBUGMODE 1
-// #undef ROCKET_DEBUGMODE
+#undef ROCKET_DEBUGMODE
 
 
 // DEBUG MODE dependent code and definitions go here!
