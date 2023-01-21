@@ -23,7 +23,6 @@
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
 #include <stdlib.h>
-#include <string>
 #include <Wire.h>
 #include <SPI.h>
 
