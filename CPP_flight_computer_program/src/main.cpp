@@ -301,6 +301,12 @@ int debug_data()
     // TODO return something, or make this function void
     }
 
+// this can go anywhere
+double ExponentialMovingAverages(double Data, double PreviousData, float Weight)
+{
+    return Data * Weight + PreviousData * (1 - Weight);
+}
+
 // STANDARD ENTRY POINTS
 void setup() 
     {
