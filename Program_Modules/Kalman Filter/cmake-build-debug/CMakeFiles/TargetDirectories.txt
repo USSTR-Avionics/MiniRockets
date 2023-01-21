@@ -1,3 +1,0 @@
-C:/Users/dhaus/Desktop/Avionics-code/Flight Computer Programming/Kalman Filter/cmake-build-debug/CMakeFiles/Kalman_Filter.dir
-C:/Users/dhaus/Desktop/Avionics-code/Flight Computer Programming/Kalman Filter/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/dhaus/Desktop/Avionics-code/Flight Computer Programming/Kalman Filter/cmake-build-debug/CMakeFiles/rebuild_cache.dir
