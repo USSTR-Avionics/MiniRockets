@@ -19,8 +19,9 @@
 
 #include "debug_I2C_Scanner.h"
 
+#include "RFM95W.h"
+
 #include <Arduino.h>
-#include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
 #include <stdlib.h>
 #include <Wire.h>
@@ -37,7 +38,7 @@ float last_alt = 0;
 // STATE MACHINE
 static statemachine_t::e_rocket_state rocket_state;
 
-
+static RFM95W Radio(10, 31, 32);
 
 int init_all()
     {
@@ -47,6 +48,8 @@ int init_all()
     init_SD();
     // init_fram();
     init_LED();
+
+    Radio.Set_Frequency(914.1);
 
     // TODO:
     // init_bmi088();
@@ -362,6 +365,7 @@ void setup()
 
     init_all();
 
+
     if (health_check() == EXIT_FAILURE)
         {
         println("[FAILED] Health Check"); // also write to reserved fram space
@@ -378,17 +382,14 @@ void setup()
     // TODO: add a method to read previous state from FRAM and restore it
     // int value_from_fram = read_from_fram(0x0);
     // rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
-    RFM95W TX(10, 31, 32);
-    TX.Set_Frequency(914.1);
-    if(!TX.TCP_Send("Hello from the other side", 1000))
-    {
-        Serial.println("radio failed");
-    }
+
+
 
     }
 
 void loop() 
     {
+    Radio.UDP_Send("Hello from the other side");
     // wdt.feed();
     debug_data();
     select_flight_mode(rocket_state);
