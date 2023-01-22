@@ -3,9 +3,3 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
-
-.idea
-cmake-build-teensy41
-cmake-build-debug
-CMakeLists.txt
-CMakeListsPrivate.txt

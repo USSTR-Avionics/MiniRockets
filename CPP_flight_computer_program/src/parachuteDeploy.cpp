@@ -1,4 +1,0 @@
-void deploy_parachute()
-    {
-
-    }

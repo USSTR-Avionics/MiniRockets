@@ -2,30 +2,14 @@
     - BMI088 (don't have the sensor yet)
     - RadioHead (too lazy to do it now)
 
-[IN PROGRESS @frroossst] impl fram wrapper 
-
-[TODO] impl startup health checkups
-
-[IN PROGRESS @snowy-shadow]figure out platformIO tests, run tests before startup on debug
+[RESEARCH] data loss over radio transmission
 
 [TODO] change return to EXIT codes rather than bool
 
-[IN PROGRESS @djh293] add a wiring diagram for the microcontroller
+[TODO] add a wiring diagram for the microcontroller
  
-[TODO] ifndef
-    - check core c compatibility
-
-[TODO] conver state machine to enum instead of struct
-
 [TODO] configure the watchdog timer on the Teensy 4.1
     - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
+    - resets too early
 
-[TODO] convert strings to const char* as sometimes the code will throw compiler errors
-
-[TODO] wrap debugs in ifndef
-
-[TODO] impl health checks; impl exit on failure I2C
-
-[TODO] figure out SD card
-
-[TODO] 
+[HALTED] get variance for sensors

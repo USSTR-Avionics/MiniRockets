@@ -1,4 +1,7 @@
 #include <MS5611.h>
+#include <math.h>
+
+double pow(double, double);
  
 MS5611 ms5611;
 
@@ -12,7 +15,7 @@ bool init_MS5611()
     {
     // Initialize MS5611 sensor
     Serial.println("Initialize MS5611 Sensor");
-
+    
     while(!ms5611.begin())
     {
         Serial.println("Could not find a valid MS5611 sensor, check wiring!");
@@ -45,9 +48,15 @@ float get_ms5611_press()
     int result = ms5611.read();
     if (result != MS5611_READ_OK)
         {
-        Serial.println("[MS5611] Error in read");
-        Serial.println(result);
+        //! Shouldn't this return an invalid reading?
+        //Serial.println("[MS5611] Error in read");
+        //Serial.println(result);
         }
     float press_data = ms5611.getPressure();
     return press_data;
     }
+
+float get_ms5611_altitude(float pressure, float seaLevelPressure)
+{
+    return (44330.0f * (1.0f - (float)pow(pressure / seaLevelPressure, 0.1902949f)));
+}
