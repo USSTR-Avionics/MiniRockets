@@ -12,7 +12,6 @@ void setup()
     Serial.begin(9600); // arg doesn't need to be 9600 just true
     Wire.begin();
     Radio.Set_Frequency(914.1);
-
 }
 
 void loop()

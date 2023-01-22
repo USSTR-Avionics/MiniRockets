@@ -2,7 +2,7 @@
 
 RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type)
 {
-    m_RF95 = std::make_unique<RH_RF95>(Slave, Interrupt);
+    m_RF95 = new RH_RF95(Slave, Interrupt);
 
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
     m_RF95->init();
@@ -12,6 +12,11 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Re
     m_Max_message_length = m_RF95->maxMessageLength();
 
     m_RST = Reset;
+}
+
+RFM95W::~RFM95W()
+{
+    delete m_RF95;
 }
 
 bool RFM95W::TCP_Send(const std::string &Data, const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX) const
@@ -53,7 +58,7 @@ void RFM95W::UDP_Send(const std::string &Data) const
     m_RF95->send(reinterpret_cast<const uint8_t*>(Data.c_str()), sizeof(Data.c_str()));
 }
 
-std::tuple<bool,  const std::string> RFM95W::Receive()
+std::string RFM95W::Receive()
 {
     uint8_t Buffer[m_Max_message_length];
     uint8_t Length = sizeof(Buffer);
@@ -65,16 +70,16 @@ std::tuple<bool,  const std::string> RFM95W::Receive()
         m_RF95->send(reinterpret_cast<const uint8_t*>(m_Handshake.c_str()), sizeof(m_Handshake.c_str()));
 
         // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
-        return std::make_tuple(true, std::string{reinterpret_cast<const char*>(Buffer)});
+        return std::string{reinterpret_cast<const char*>(Buffer)};
     }
     else
     {
-        return std::make_tuple(false, "Failed to receive message");
+        return std::string{""};
     }
 }
 
 
-std::tuple<bool,  const std::string> RFM95W::Receive(const uint8_t &Time_Out)
+std::string RFM95W::Receive(const uint8_t &Time_Out)
 {
     uint8_t Buffer[m_Max_message_length];
     // isn't this just m_Max_Message_Length + 1
@@ -88,17 +93,17 @@ std::tuple<bool,  const std::string> RFM95W::Receive(const uint8_t &Time_Out)
             m_RF95->send(reinterpret_cast<const uint8_t*>(m_Handshake.c_str()), sizeof(m_Handshake.c_str()));
 
             // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
-            return std::make_tuple(true, std::string{reinterpret_cast<const char*>(Buffer)});
+            return std::string{reinterpret_cast<const char*>(Buffer)};
         }
         else
         {
-            return std::make_tuple(false, "Failed to receive message");
+            return std::string{""};
         }
     }
     else
     {
         // timed out
-        return std::make_tuple(false, "Timed out");
+        return std::string{"Timed out"};
     }
 
 }
