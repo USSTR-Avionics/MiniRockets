@@ -17,12 +17,8 @@ void setup()
 
 void loop()
 {
-    auto Message{Radio.Receive()};
-    if (std::get<0>(Message))
-    {
-        Serial.println("a");
-        Serial.println(std::get<1>(Message).c_str());
-    }
+    delay(1000);
+    Radio.UDP_Send("Hello from the other side");
 
     // write your code here
 }
