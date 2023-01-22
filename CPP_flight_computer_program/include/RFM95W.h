@@ -20,9 +20,7 @@ YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
             Bw125Cr48Sf4096,           //< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
         } ModemConfigChoice;
 */
-#include <memory>
 #include <string>
-#include <tuple>
 
 #include "RH_RF95.h"
 
@@ -42,10 +40,10 @@ public:
     bool TCP_Send(const std::string &Data, const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX = 500) const;
     void UDP_Send(const std::string &Data) const;
 
-    std::tuple<bool, const std::string> Receive();
+    std::string Receive();
 
     // Time_Out in milliseconds
-    std::tuple<bool, const std::string> Receive(const uint8_t &Time_Out);
+    std::string Receive(const uint8_t &Time_Out);
 
     // util
     uint16_t Max_Message_Length() const;
@@ -63,11 +61,12 @@ public:
     void Set_Preamble_Length(const uint8_t &Length);
     void Switch_Mode(const Mode &Type);
 
+    ~RFM95W();
     RFM95W() = delete;
     RFM95W(const RFM95W &RHS) = delete;
 
 private:
-    std::unique_ptr<RH_RF95> m_RF95;
+    RH_RF95 *m_RF95;
     uint8_t m_RST;
     uint16_t m_Max_message_length;
     const std::string m_Handshake{"Received"};
