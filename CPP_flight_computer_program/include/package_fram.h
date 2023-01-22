@@ -1,0 +1,15 @@
+#ifndef PACKAGE_FRAM_H
+#define PACKAGE_FRAM_H
+
+#include <stdint.h>
+
+// debug funcs
+extern "C" uint8_t get_u8_from_rust();
+extern "C" int32_t pass_and_return_through_ffi(int32_t);
+extern "C" uint8_t rust_return_delay_test();
+
+// actual funcs
+extern "C" uint8_t* wrap_temperature_for_writing(float);
+extern "C" uint8_t* wrap_acceleration_for_writing(float);
+
+#endif // PACKAGE_FRAM_H

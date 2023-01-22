@@ -1,116 +1,150 @@
-/* NOT USING THESE RIGHT NOW; JUST TESTING OUT A MVP*/
-//#include "kalmanFilter1dconst.h"
-//#include "BasicLinearAlgebra.h"
-//#include "movingAverage.h"
-//using namespace BLA;
-//#include "Filter.h"
-#include "default_variables.h"
-#include "parachuteDeploy.h"
+#include "package_testmode.h"
+#include "package_watchdog.h"
+
+#include "sensor_parachute.h"
+#include "sensor_buzzer.h"
 #include "sensor_ms5611.h"
 #include "sensor_bmi088.h"
-#include "sensor_bmp280.h"
 #include "sensor_sdcard.h"
+#include "sensor_bmp280.h"
 #include "sensor_kx134.h"
 #include "sensor_radio.h"
-#include "statemachine.h"
-#include "memory_fram.h"
-#include "errorcodes.h"
+#include "sensor_fram.h"
 #include "sensor_led.h"
-#include "rusty_fram.h"
-// #include "I2CScanner.h"
-#include "watchdog.h"
-#include "RFM95W.h"
+
+#include "default_variables.h"
+#include "rocket_profile.h"
+#include "user_variables.h"
+#include "statemachine_t.h"
+
+#include "debug_I2C_Scanner.h"
+
 #include <Arduino.h>
-#include <cstdint> // switch to machine independent types
-#include <cstdlib>
+#include <RH_RF95.h>
+#include <stdint.h> // switch to machine independent types
+#include <stdlib.h>
 #include <Wire.h>
 #include <SPI.h>
 
 
-// PROGRAMMER VARS | vars for the programmer
-unsigned long debug_time = 0;
-
-bool debug_mode = false; // remove these comparisons for production
-// I2CScanner scanner;
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
-
-// SENSOR VARS | vars handling sensor data
-float kx134_accel_x = FLO_DEF;
-float kx134_accel_y = FLO_DEF;
-float kx134_accel_z = FLO_DEF;
-float ms5611_temp   = FLO_DEF;
-float ms5611_press  = FLO_DEF;
-
-// STATE VARS | vars that are important for the state machine
-
-// LIMIT VARS | vars defining important limits and thresholds
-#define LIFTOFF_THRESHOLD 15.0f // confirm with propulsion, nominal is 8.5 to 10.5
-
+int descent_check = 0;
+float last_alt = 0;
 
 
 // STATE MACHINE
-static statemachine::e_rocket_state rocket_state;
+static statemachine_t::e_rocket_state rocket_state;
+
 
 
 int init_all()
     {
     init_kx134();
     init_MS5611();
-    init_bmp280();
+    //init_bmp280();
     init_SD();
-    init_fram();
+    // init_fram();
     init_LED();
 
     // TODO:
     // init_bmi088();
     // init_RFM95_TX();
 
-    ground_base_pressure = 1013.25; // get_bmp280_pressure();
-    ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
-    rocket_state = statemachine::e_rocket_state::unarmed;
+    ms5611_ground_base_pressure = get_ms5611_press();
+    //ground_base_pressure = get_bmp280_pressure();
+    //ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
+    rocket_state = statemachine_t::e_rocket_state::unarmed;
+    
+    #ifdef ROCKET_DEBUGMODE
+        rocket_state = enter_state(STATE_TO_ENTER);
+    #endif
+
+    write_to_sd_card(DATALOG, datalog_fmt_header);
 
     return EXIT_SUCCESS;
     }
 
 int health_check()
     {
-    // TODO: perform sensor checks
+    println("health_check()");
+
+    // KX134 checks
+    float z_thresh_low = 9.0;
+    float z_thresh_high = 11.0;
+    float curr_z_reading = get_kx134_accel_z();
+
+    int count = 0;
+    while (count < 10)
+        {
+        if (curr_z_reading < z_thresh_high && curr_z_reading > z_thresh_low)
+            {
+            count++;
+            }
+        else
+            {
+            return EXIT_FAILURE;
+            }
+        }
+
+    // BMP280
+    // float alt_thresh_low = -0.25; 
+    // float alt_thresh_high = 0.50;
+    //float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    // float curr_alt_reading = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    count = 0;
+   /* while (count < 10)
+        {
+        if (curr_alt_reading > alt_thresh_low && curr_alt_reading < alt_thresh_high)
+            {
+            count++;
+            }
+        else
+            {
+            return EXIT_FAILURE;
+            }
+        }*/
+
+    write_to_sd_card(EVENTLOG, "health checks passed");
+
     return EXIT_SUCCESS;
     }
 
 void ground_idle_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] GROUND IDLE");
-        }
+    println("[ROCKET STATE] GROUND IDLE");
 
     setLedGreen();
-    // TODO:
-    // buzzerON(0); play state ok sound
-
-    kx134_accel_z = get_kx134_accel_z();
+    
     if (starting_time == 0)
         {
         starting_time = millis();
         }
 
-    if (((millis() - starting_time) > 250) && (get_kx134_accel_z() - kx134_accel_z) > LIFTOFF_THRESHOLD)
+    if (millis() - starting_time > 500)
         {
         starting_time = 0UL;
-        rocket_state = statemachine::e_rocket_state::powered_flight;
+        buzzerOn();
+        }
+    
+    kx134_accel_z = get_kx134_accel_z();
+
+    if ((starting_time == 0) && (kx134_accel_z > LIFTOFF_THRESHOLD))
+        {
+        starting_time = millis();
+        }
+
+    if (((millis() - starting_time) > 250) && (kx134_accel_z > LIFTOFF_THRESHOLD))
+        {
+        starting_time = 0UL;
+        rocket_state = statemachine_t::e_rocket_state::powered_flight;
         }
     }
 
-
 void powered_flight_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] POWERED FLIGHT");
-        }
+    println("[ROCKET STATE] POWERED FLIGHT");
 
     setLedRed();
     // buzzerON(1);
@@ -120,61 +154,72 @@ void powered_flight_mode()
     /*
     powered to unpowered flight is typical to deceleration
     */
-
     kx134_accel_z = get_kx134_accel_z();
-    if (starting_time == 0)
+
+    if ((starting_time == 0) && ((kx134_accel_z) < LIFTOFF_THRESHOLD))
         {
         starting_time = millis();
         }
 
-    if ((millis() - starting_time > 250) &&(kx134_accel_z - get_kx134_accel_z()) > (LIFTOFF_THRESHOLD / 2))
+    if ((millis() - starting_time > 100) && ((kx134_accel_z) < (LIFTOFF_THRESHOLD)))
         {
         starting_time = 0UL;
-        rocket_state = statemachine::e_rocket_state::unpowered_flight;
+        rocket_state = statemachine_t::e_rocket_state::unpowered_flight;
         }
 
     }
 
 bool apogee_check() 
     {
-    // deleted decent_check var
-    // TODO: create an apogee buffer
-    return true;
+    if (descent_check > DESCENT_CHECK_AMOUNT)
+        {
+        return true;
+        }
+    else if (starting_time == 0)
+        {
+        //last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+        last_alt = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+        starting_time = millis();
+        }
+
+    else if ((millis() - starting_time > 100) && ((last_alt - (get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure))) > ALTITUDE_CHANGE))
+        {
+        starting_time = 0UL;
+        descent_check++;
+        }
+    else if (millis() - starting_time > 5000)
+        {
+        starting_time = 0UL;
+        }
+
+    return false;
     }
 
 void unpowered_flight_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] UNPOWERED FLIGHT");
-        }
+    println("[ROCKET STATE] UNPOWERED FLIGHT");
 
     setLedBlue();
 
     if (apogee_check() == true)
         {
-        rocket_state = statemachine::e_rocket_state::ballistic_descent;
+        rocket_state = statemachine_t::e_rocket_state::ballistic_descent;
         }
     }
 
 void ballistic_descent_mode()
     {
-    if (debug_mode == true) 
-        {
-        Serial.println("[ROCKET STATE] BALLISTIC DESCENT");
-        }
+    println("[ROCKET STATE] BALLISTIC DESCENT");
 
-    // TODO:
     // ledON("YELLOW");
-    // 1000 ft = 304.8 m
-    // Add a backup deployment height
-    
-    rocket_altitude = get_bmp280_altitude(ground_base_pressure) - ground_base_altitude; 
+
+    // TODO: Add a backup deployment height
+    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
 
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
         {
         deploy_parachute();
-        rocket_state = statemachine::e_rocket_state::chute_descent;
+        rocket_state = statemachine_t::e_rocket_state::chute_descent;
         }
     }
 
@@ -182,123 +227,121 @@ void chute_descent_mode()
     {
     // TODO:
     // ledON("ORANGE");
-
          
     // TODO: check gyroscope stabilisation over time
+    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    if (rocket_altitude<LANDING_ALTITUDE)
+        {
+        rocket_state = statemachine_t::e_rocket_state::land_safe;
+        }
 
-    rocket_state = statemachine::e_rocket_state::land_safe;
     }
 
 void land_safe_mode()
     {
-        // STOP DATA COLLECTION
-        // CHECK IF SD CARD CAN STILL BE WRITTEN TO
-        // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
-        // WRITE TO SD CARD
-        write_to_sd_card("[ROCKET] Landed");
+    // STOP DATA COLLECTION
+    // CHECK IF SD CARD CAN STILL BE WRITTEN TO
+    // IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
+    // WRITE TO SD CARD
+    write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
+    if (starting_time == 0)
+        {
+        starting_time = millis();
+        }
+
+    if (millis() - starting_time > 500)
+        {
+        starting_time = 0UL;
+        buzzerOn();
+        }
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
     }
 
-int select_flight_mode(statemachine::e_rocket_state &rs)
+int select_flight_mode(statemachine_t::e_rocket_state &rs)
     {
-    // TODO: change to switch case
-    if (rs == statemachine::unarmed)
+    switch (rs)
         {
-        get_start_signal_from_ground_station(rs); // not armed until ground station tells it to!
-        }
-    else if (rs == statemachine::ground_idle)
-        {
-        ground_idle_mode();
-        }
-    else if (rs == statemachine::powered_flight)
-        {
-        powered_flight_mode();
-        }
-    else if (rs == statemachine::unpowered_flight)
-        {
-        unpowered_flight_mode();
-        }
-    else if (rs == statemachine::ballistic_descent)
-        {
-        ballistic_descent_mode();
-        }
-    else if (rs == statemachine::chute_descent)
-        {
-        chute_descent_mode();
-        }
-    else if (rs == statemachine::land_safe)
-        {
-        land_safe_mode();
+        case statemachine_t::unarmed:
+            get_start_signal_from_ground_station(rs); // not armed until ground station tells it to!
+            break;
+        case statemachine_t::ground_idle:
+            ground_idle_mode();
+            break;
+        case statemachine_t::powered_flight:
+            powered_flight_mode();
+            break;
+        case statemachine_t::unpowered_flight:
+            unpowered_flight_mode();
+            break;
+        case statemachine_t::ballistic_descent:
+            ballistic_descent_mode();
+            break;
+        case statemachine_t::chute_descent:
+            chute_descent_mode();
+            break;
+        case statemachine_t::land_safe:
+            land_safe_mode();
+            break;
+        case statemachine_t::test:
+            test_mode_state();
+            break;
+        default:
+            test_mode_state();
+            break;
         }
     return EXIT_FAILURE;
     }
 
 void watchdog_callback()
     {
-    Serial.println("watchdog_callback()");
-    write_to_sd_card("[MICROCONTROLLER] watchdog callback");
+    println("watchdog_callback()");
+    write_to_sd_card(EVENTLOG, "[MICROCONTROLLER] watchdog callback");
     loop();
     }
 
 int debug_data()
     {
-    // debug true then add delay
+    #ifdef ROCKET_DEBUGMODE
+
+    String data_string = ""; 
+
     if (debug_time == 0UL)
         {
         debug_time = millis();
         }
-
-    if ((millis() - debug_time) < 500)
+ 
+    if ((millis() - debug_time) < 1000)
         {
         return EXIT_FAILURE;
         }
 
-    // Rust FFI lib
-    Serial.println("--- Rust lib ---");
+    data_string += String(millis()) + ",";
+    data_string += String(rocket_state) + ",";
 
-    // KX134
-    Serial.println("--- KX134 ---");
     kx134_accel_x = get_kx134_accel_x();
     kx134_accel_y = get_kx134_accel_y();
     kx134_accel_z = get_kx134_accel_z();
-    Serial.print("x: ");
-    Serial.println(kx134_accel_x);
-    Serial.print("y: ");
-    Serial.println(kx134_accel_y);
-    Serial.print("z: ");
-    Serial.println(kx134_accel_z);
+    data_string = data_string + String(kx134_accel_x) + ",";
+    data_string = data_string + String(kx134_accel_y) + ",";
+    data_string = data_string + String(kx134_accel_z) + ",";
 
-    // MS5611
-    Serial.println("--- MS5611 ---");
-    ms5611_temp = get_ms5611_temp();
-    ms5611_press = get_ms5611_press();
-    Serial.print("temperature: ");
-    Serial.println(ms5611_temp);
-    Serial.print("pressure: ");
-    Serial.println(ms5611_press);
+    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    data_string = data_string + String(rocket_altitude);
 
-    // BMP280
-    Serial.println("---BMP280---");
-    Serial.print("ground base pressure: ");
-    Serial.println(ground_base_pressure);
-    Serial.print("altitude: ");
-    Serial.println(get_bmp280_altitude(ground_base_pressure) - ground_base_altitude); 
+    write_to_sd_card(DATALOG, data_string.c_str());
 
-    // Rocket State enum
-    Serial.println("---Enum Rocket State---");
-    Serial.print("current enum state: ");
-    Serial.println(rocket_state);
-    if (rocket_state == statemachine::ground_idle){ Serial.println("if detected rocket state to be ground idle"); }
-    if (rocket_state == statemachine::powered_flight){ Serial.println("if detected rocket state to be powered flight"); }
-    if (rocket_state == statemachine::unpowered_flight){ Serial.println("if detected rocket state to be unpowered flight"); }
-    if (rocket_state == statemachine::ballistic_descent){ Serial.println("if detected rocket state to be ballistic decent"); }
-    if (rocket_state == statemachine::chute_descent){ Serial.println("if detected rocket state to be chute descent"); }
-    if (rocket_state == statemachine::land_safe){ Serial.println("if detected rocket state to be land safe"); exit(1);}
+    print("data_string: ");
+    println(data_string);
 
-    // scanner.Scan();
+    scan_and_print_I2C_devices();
 
-    // TODO return something, or make this function void
+    print("rocket state: ");
+    println(rocket_state);
+
+    #endif
+
+    return EXIT_SUCCESS;
     }
 
 // STANDARD ENTRY POINTS
@@ -307,39 +350,33 @@ void setup()
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
 
-    config.trigger = 2; /* in seconds, 0->128 */
-    config.timeout = 3; /* in seconds, 0->128 */
-    config.callback = watchdog_callback;
-    wdt.begin(config);
-
+    // config.trigger = 2; /* in seconds, 0->128 */
+    // config.timeout = 3; /* in seconds, 0->128 */
+    // config.callback = watchdog_callback;
+    
     init_all();
 
     if (health_check() == EXIT_FAILURE)
         {
-        Serial.println("[FAILED] Health Check"); // also write to reserved fram space
+        println("[FAILED] Health Check"); // also write to reserved fram space
         exit(1); // this should also fail if init_all() fails;
         }
 
-    Serial.println("setup()");
-    write_to_sd_card("setup exit");
+    println("setup()");
+    write_to_sd_card(EVENTLOG, "setup exit");
+    buzzerOn();
 
-    Serial.println("test");
+    // wdt.begin(config);
+    // wdt.feed();
 
-    RFM95W TX(10, 31, 32);
-    TX.Set_Frequency(911.1);
-    if(!TX.Send("Hello from the other side", 1000, 1000))
-    {
-        Serial.println("radio failed");
-    }
-
+    // TODO: add a method to read previous state from FRAM and restore it
+    // int value_from_fram = read_from_fram(0x0);
+    // rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
     }
 
 void loop() 
     {
-    // this function flashes an internal led
-    flashInternalLed(true);
-    wdt.feed();
-    debug_data(); // remove on prod;
+    // wdt.feed();
+    debug_data();
     select_flight_mode(rocket_state);
-    flashInternalLed(false);
     }

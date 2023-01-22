@@ -10,3 +10,5 @@
 - [ ] Commit and release package
 
 - [ ] Run unit tests and upload to OBC
+
+- [ ] Build code in production mode and upload to flight computer

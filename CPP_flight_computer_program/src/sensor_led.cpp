@@ -1,9 +1,9 @@
 #include <Arduino.h>
 
 #define BUILTIN_LED 13
-#define GREEN 5
-#define BLUE 4
-#define RED 3
+#define BLUE 38
+#define GREEN 39
+#define RED 40
 
 
 int init_LED()  

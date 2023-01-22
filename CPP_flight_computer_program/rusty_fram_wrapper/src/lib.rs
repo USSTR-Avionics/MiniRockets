@@ -2,8 +2,6 @@
 #![no_std]
 
 use core::ffi::{c_float};
-// use core::panic::PanicInfo;
-// use core::time::Duration;
 use panic_halt as _;
 
 /*
@@ -34,6 +32,27 @@ pub extern "C" fn rust_return_delay_test()  -> u8
     }
 
 #[no_mangle]
+pub extern "C" fn pass_and_return_array(a: u8, b: u8) -> Option<u8>
+    {
+    None
+    }
+
+#[repr(C)]
+struct StructTemperature
+    {
+    first: u8,
+    second: u8,
+    }
+
+impl StructTemperature
+    {
+    fn new(first: u8, second: u8) -> Self
+        {
+        StructTemperature { first, second }
+        }
+    }
+
+#[no_mangle]
 pub extern "C" fn wrap_temperature_for_writing(temp_reading: c_float) -> *const u8
     {
     let mut temp_whole: i32 = temp_reading as i32;
@@ -53,6 +72,7 @@ pub extern "C" fn wrap_temperature_for_writing(temp_reading: c_float) -> *const 
         }
 
     let temp_arr: [u8; 2] = [temp_whole as u8, temp_decimal as u8]; 
+    let temp_str: StructTemperature = StructTemperature::new(temp_whole as u8, temp_decimal as u8);
 
     return temp_arr.as_ptr();
     }
