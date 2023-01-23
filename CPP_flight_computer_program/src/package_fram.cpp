@@ -46,12 +46,3 @@ int write_acceleration_to_fram(float a)
 
     return EXIT_SUCCESS;
     }
-    
-
-int c_return_delay_test()
-    {
-    while (true)
-        {
-        }
-    return 0;
-    }
