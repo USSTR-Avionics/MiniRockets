@@ -1,5 +1,4 @@
 #include "Adafruit_FRAM_I2C.h"
-#include "package_fram.h"
 #include <Arduino.h>
 
 #define FRAM_I2C_ADDRESS 0x50
