@@ -1,6 +1,5 @@
 #include "statemachine_t.h"
 #include "sensor_led.h"
-#include "Arduino.h"
 
 statemachine_t::e_rocket_state enter_state(int state)
 {

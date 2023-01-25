@@ -1,5 +1,6 @@
 #include "package_testmode.h"
 #include "package_watchdog.h"
+#include "package_fram.h"
 
 #include "sensor_parachute.h"
 #include "sensor_buzzer.h"
@@ -9,7 +10,6 @@
 #include "sensor_bmp280.h"
 #include "sensor_kx134.h"
 #include "sensor_radio.h"
-#include "sensor_fram.h"
 #include "sensor_led.h"
 
 #include "default_variables.h"

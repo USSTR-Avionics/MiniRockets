@@ -1,6 +1,5 @@
-[HALTED] complete all sensor code
-    - BMI088 (don't have the sensor yet)
-    - RadioHead (too lazy to do it now)
+[IN PROGRESS] complete all sensor code
+    - RadioHead
 
 [RESEARCH] data loss over radio transmission
 
@@ -12,4 +11,4 @@
     - https://forum.pjrc.com/threads/66707-Teensy-4-1-deep-sleep-and-watchdog
     - resets too early
 
-[HALTED] get variance for sensors
+[TODO] fram write and read code

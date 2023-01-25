@@ -50,6 +50,8 @@
 
 [Teensy 4.1 Datasheet](https://www.pjrc.com/store/teensy41.html)  
 
+[Testing with the Teensy](https://www.youtube.com/watch?v=KPesyRp8qqo)
+
 [Timeouts in an event loop](https://www.youtube.com/watch?v=cCOL7MC4Pl0)  
 
 [UART, I2C, SPI communication](https://www.youtube.com/watch?v=IyGwvGzrqp8)  

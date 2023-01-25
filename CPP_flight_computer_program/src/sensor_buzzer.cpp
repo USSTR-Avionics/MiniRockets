@@ -1,24 +1,3 @@
-/*
- * Buzzer Module
- * NOTE: has a call to delay(500), THEREFORE ONLY USE THIS IN
- * groundIdle and landSafe states to not have delay issues
- * 
- * Inputs: 
- * - Positive
- * - Negative
- * 
- * Outputs:
- * - Buzzer Noise
- * 
- * Set Up Instructions:
- * 1. Connect positive to D8
- * 2. Connect negative to GND
- * 
- * Functions:
- * buzzerOn(): turns the buzzer on
- * 
- */
- 
 #include "pitches.h"
 #include <Arduino.h>
 

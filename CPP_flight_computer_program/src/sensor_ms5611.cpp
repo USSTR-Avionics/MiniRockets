@@ -57,6 +57,6 @@ float get_ms5611_press()
     }
 
 float get_ms5611_altitude(float pressure, float seaLevelPressure)
-{
+    {
     return (44330.0f * (1.0f - (float)pow(pressure / seaLevelPressure, 0.1902949f)));
-}
+    }
