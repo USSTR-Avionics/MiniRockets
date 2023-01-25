@@ -6,6 +6,11 @@
 #define WRITE_OFFSET 0x10
 int fram_cursor = 0x10;
 
+void dump_fram_to_serial()
+    {
+    // TODO: build csv string and dump to USB serial
+    }
+
 int write_temperature_to_fram(float temp)
     {
     // TODO: test and work
@@ -31,6 +36,16 @@ int write_temperature_to_fram(float temp)
     return EXIT_SUCCESS;
     }
 
+float read_temperature_from_fram(int where)
+    {
+    // TODO:
+    }
+
+  /**
+* @brief Writes the accelerometer data to the FRAM.
+* @param accel The accelerometer data to write to the FRAM.
+* @return EXIT_SUCCESS if the write succeeded, EXIT_FAILURE otherwise.
+*/
 int write_acceleration_to_fram(float accel)
     {
     // TODO: test and work
@@ -44,4 +59,9 @@ int write_acceleration_to_fram(float accel)
     fram_cursor += 1;
 
     return EXIT_SUCCESS;
+    }
+
+float read_acceleration_from_fram(int where)
+    {
+    // TODO:
     }
