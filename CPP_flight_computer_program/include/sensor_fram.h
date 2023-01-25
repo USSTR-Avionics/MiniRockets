@@ -3,7 +3,6 @@
 
 // actual funcs
 int init_fram();
-int write_temperature_to_fram(float);
-int write_acceleration_to_fram(float);
+int write_to_fram(int, int);
 
-#endif // MEMORY_FRAM_H
+#endif // SENSOR_FRAM_H
