@@ -13,11 +13,7 @@
 #ifdef ROCKET_DEBUGMODE
     unsigned long debug_time = 0UL;
     #warning "DEBUG MODE ENABLED"
-    #define println(x) Serial.println(x)
-    #define print(x) Serial.print(x)
 #else
-    #define println(x)
-    #define print(x)
     #error "ARE YOU SURE YOU WANT TO BUILD IN PRODUCTION MODE?"
     #warning "DELETE THE ERRONEOUS LINE TO BUILD IN PRODUCTION MODE"
 #endif  // ROCKET_DEBUGMODE

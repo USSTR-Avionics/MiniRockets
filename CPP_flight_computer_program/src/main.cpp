@@ -18,6 +18,7 @@
 #include "statemachine_t.h"
 
 #include "debug_I2C_Scanner.h"
+#include "debug_macros.h"
 
 #include <Arduino.h>
 #include <RH_RF95.h>
