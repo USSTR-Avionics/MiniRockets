@@ -7,6 +7,8 @@
 #ifndef RHHardwareSPI_h
 #define RHHardwareSPI_h
 
+#pragma GCC system_header
+
 #include <RHGenericSPI.h>
 
 /////////////////////////////////////////////////////////////////////

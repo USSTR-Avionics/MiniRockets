@@ -6,6 +6,8 @@
 
 #include <RHHardwareSPI.h>
 
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+
 // Declare a single default instance of the hardware SPI interface class
 RHHardwareSPI hardware_spi;
 

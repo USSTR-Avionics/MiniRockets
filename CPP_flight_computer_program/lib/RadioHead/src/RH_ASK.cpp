@@ -6,7 +6,8 @@
 #include <RH_ASK.h>
 #include <RHCRC.h>
 
-#pragma GCC system_header
+#pragma GCC diagnostic ignored "-Wreorder"
+#pragma GCC diagnostic ignored "-Wunused-variable"
 
 #if (RH_PLATFORM == RH_PLATFORM_STM32) // Maple etc
 HardwareTimer timer(MAPLE_TIMER);

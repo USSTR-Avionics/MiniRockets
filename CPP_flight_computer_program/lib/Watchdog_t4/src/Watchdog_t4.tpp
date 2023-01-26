@@ -1,6 +1,8 @@
 #include <Watchdog_t4.h>
 #include "Arduino.h"
 
+#pragma GCC system_header
+
 #define WDOGb_WCR(b)		(*(volatile uint16_t*)(b))
 #define WDOGb_WSR(b)		(*(volatile uint16_t*)(b+0x2))
 #define WDOGb_WRSR(b)		(*(volatile uint16_t*)(b+0x4))
