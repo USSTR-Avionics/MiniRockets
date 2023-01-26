@@ -284,10 +284,11 @@ int select_flight_mode(statemachine_t::e_rocket_state &rs)
             land_safe_mode();
             break;
         case statemachine_t::test:
-            test_mode_state();
+            // TODO: test_mode_state();
             break;
         default:
-            test_mode_state();
+            // TODO: test_mode_state();
+            // test_mode_state();
             break;
         }
     return EXIT_FAILURE;
