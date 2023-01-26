@@ -6,6 +6,8 @@
 #include <RH_ASK.h>
 #include <RHCRC.h>
 
+#pragma GCC system_header
+
 #if (RH_PLATFORM == RH_PLATFORM_STM32) // Maple etc
 HardwareTimer timer(MAPLE_TIMER);
 
