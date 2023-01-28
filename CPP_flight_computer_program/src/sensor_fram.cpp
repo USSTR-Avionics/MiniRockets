@@ -1,5 +1,6 @@
 #include "Adafruit_FRAM_I2C.h"
 #include <Arduino.h>
+#include <stdint.h>
 
 #define FRAM_I2C_ADDRESS 0x50
 
@@ -30,7 +31,7 @@ int write_to_fram(int what, int where)
  * @param    where   the address to read from
  * @return   the data read from FRAM
 */
-int read_from_fram(int where)
+uint8_t read_from_fram(int where)
     {
     return fram.read(where);
     }

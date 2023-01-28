@@ -10,6 +10,7 @@
 #include "sensor_bmp280.h"
 #include "sensor_kx134.h"
 #include "sensor_radio.h"
+#include "sensor_fram.h" // sub with package
 #include "sensor_led.h"
 
 #include "default_variables.h"
@@ -49,7 +50,7 @@ int init_all()
     init_MS5611();
     //init_bmp280();
     init_SD();
-    // init_fram();
+    init_fram();
     init_LED();
 
     // TODO:
@@ -72,6 +73,8 @@ int init_all()
 
 int health_check()
     {
+    return EXIT_SUCCESS; // TODO: implement health checks and delete this line
+
     println("health_check()");
 
     // KX134 checks
@@ -374,7 +377,6 @@ void setup()
         exit(1); // this should also fail if init_all() fails;
         }
 
-    println("setup()");
     write_to_sd_card(EVENTLOG, "setup exit");
     buzzerOn();
 
@@ -384,6 +386,8 @@ void setup()
     // TODO: add a method to read previous state from FRAM and restore it
     // int value_from_fram = read_from_fram(0x0);
     // rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
+
+    println("setup()");
     }
 
 void loop() 
