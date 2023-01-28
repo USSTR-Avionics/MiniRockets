@@ -1,30 +1,24 @@
 #include "Servo.h"
 #include <Arduino.h>
+#include "sensor_servo.h"
 
-Servo my_servo;  // Create a Servo object
+Servo servo_obj;     // Create a Servo object
+int servo_pin = SERVO_PIN;  //Pin to which the servo is connected
+int position = SERVO_START_POSITION;
 
-bool deploy_parachute = true;  // State of the system
-int servo_pin = 9;             //Pin to which the servo is connected
-int position = 0;
+void init_servo()
+	{
+    servo_obj.attach(servo_pin);  
+    servo_obj.write(position);    
+	}
 
-//int val;  //  Varibale to read value from the sensor
-
-void init_servo() {
-
-  my_servo.attach(servo_pin);  // Attaches the servo connected at servo_pin to the my_sevo object
-  my_servo.write(0);    //initializzes servo. Probably unnecessary if servo installed correctly?
-}
-
-void servo_180() {
-
-  //  TURN SERVO 180 DEGREES WHEN SENSOR IS ACTIVATED
-  if (deploy_parachute == true) {
-    //for (position = 0; position <= 180; position++) { // goes from 0 to 180 
-    for(position = 180; position >=0; position--) { // goes from 180 to 0
-    
-      my_servo.write(position);
-      delay(5);
-    }
-    while (1);  //Stops servo
-  }
-}
+void servo_turn()
+	//  TURN SERVO FROM 0 TO 180 DEGREES
+	{
+    for (position = 0; position <= 180; position++)
+   		{    
+      	servo_obj.write(position);
+      	delay(1);
+    	}
+    exit(0);  //Stops servo
+	}
