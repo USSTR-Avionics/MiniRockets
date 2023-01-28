@@ -4,7 +4,7 @@
 #include "RFM95W.h"
 
 
-RFM95W Radio(13, 32, 30);
+static RFM95W Radio(13, 32, 30);
 
 
 void setup()
@@ -18,6 +18,7 @@ void loop()
 {
     delay(1000);
     Radio.UDP_Send("Hello from the other side");
+    Serial.println("loop");
 
     // write your code here
 }
