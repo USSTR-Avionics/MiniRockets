@@ -14,8 +14,23 @@ int init_fram()
     return EXIT_SUCCESS;
     }
 
+/*
+ * @brief    direct lib API wrapper for writing to FRAM
+ * @param    what    the data to write
+ * @param    where   the address to write to
+*/
 int write_to_fram(int what, int where)
     {
     fram.write(where, what);
     return EXIT_SUCCESS;
+    }
+
+/*
+ * @brief    direct lib API wrapper for reading from FRAM
+ * @param    where   the address to read from
+ * @return   the data read from FRAM
+*/
+int read_from_fram(int where)
+    {
+    return fram.read(where);
     }

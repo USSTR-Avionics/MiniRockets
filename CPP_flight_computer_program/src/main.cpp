@@ -20,6 +20,8 @@
 #include "debug_I2C_Scanner.h"
 #include "debug_macros.h"
 
+#include "test_main.h"
+
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <stdint.h> // switch to machine independent types
@@ -31,6 +33,7 @@
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
+unsigned long debug_time = 0UL;
 int descent_check = 0;
 float last_alt = 0;
 
@@ -351,6 +354,13 @@ void setup()
     {
     Serial.begin(9600); // arg doesnt need to be 9600 just true
     Wire.begin();
+
+    #if (TESTMODE == 1)
+        #warning "TESTMODE ENABLED"
+        #warning "only tests will be run, no rocket code"
+        println("[TESTMODE] testing Teensy 4.1");
+        test_main();
+    #endif // TESTMODE
 
     // config.trigger = 2; /* in seconds, 0->128 */
     // config.timeout = 3; /* in seconds, 0->128 */

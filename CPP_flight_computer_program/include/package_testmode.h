@@ -11,7 +11,6 @@
 
 // DEBUG MODE dependent code and definitions go here!
 #ifdef ROCKET_DEBUGMODE
-    unsigned long debug_time = 0UL;
     #warning "DEBUG MODE ENABLED"
 #else
     #error "ARE YOU SURE YOU WANT TO BUILD IN PRODUCTION MODE?"
