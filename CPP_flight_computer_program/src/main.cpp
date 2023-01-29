@@ -4,13 +4,12 @@
 
 #include "sensor_parachute.h"
 #include "sensor_buzzer.h"
-#include "sensor_ms5611.h"
 #include "sensor_bmi088.h"
 #include "sensor_sdcard.h"
 #include "sensor_bmp280.h"
 #include "sensor_kx134.h"
 #include "sensor_radio.h"
-#include "sensor_fram.h" // sub with package
+#include "sensor_fram.h" // TODO: sub with package
 #include "sensor_led.h"
 
 #include "default_variables.h"
@@ -49,25 +48,24 @@ int init_all()
     init_kx134();
     init_bmp280();
 
-    init_SD();
-    init_fram();
+    // init_SD();
+    // init_fram();
 
-    init_LED();
+    // init_LED();
 
     // TODO:
     // init_bmi088();
     // init_RFM95_TX();
 
-    ms5611_ground_base_pressure = get_ms5611_press();
-    //ground_base_pressure = get_bmp280_pressure();
-    //ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
+    ground_base_pressure = get_bmp280_pressure();
+    ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine_t::e_rocket_state::unarmed;
     
     #ifdef ROCKET_DEBUGMODE
-        rocket_state = enter_state(STATE_TO_ENTER);
+        rocket_state = enter_state(GROUND_IDLE_STATE);
     #endif
 
-    write_to_sd_card(DATALOG, datalog_fmt_header);
+    // write_to_sd_card(DATALOG, datalog_fmt_header);
 
     return EXIT_SUCCESS;
     }
@@ -180,7 +178,7 @@ void powered_flight_mode()
     // TODO: add to apogee buffer
 
     /*
-    powered to unpowered flight is typical to deceleration
+    powered to unpowered flight is typical of deceleration
     */
     kx134_accel_z = get_kx134_accel_z();
 
@@ -205,12 +203,11 @@ bool apogee_check()
         }
     else if (starting_time == 0)
         {
-        //last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-        last_alt = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+        last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
         starting_time = millis();
         }
 
-    else if ((millis() - starting_time > 100) && ((last_alt - (get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure))) > ALTITUDE_CHANGE))
+    else if ((millis() - starting_time > 100) && ((last_alt - (get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude))) > ALTITUDE_CHANGE))
         {
         starting_time = 0UL;
         descent_check++;
@@ -242,7 +239,7 @@ void ballistic_descent_mode()
     // ledON("YELLOW");
 
     // TODO: Add a backup deployment height
-    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
     if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
         {
@@ -257,7 +254,8 @@ void chute_descent_mode()
     // ledON("ORANGE");
          
     // TODO: check gyroscope stabilisation over time
-    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+
     if (rocket_altitude<LANDING_ALTITUDE)
         {
         rocket_state = statemachine_t::e_rocket_state::land_safe;
@@ -355,15 +353,15 @@ int debug_data()
     data_string = data_string + String(kx134_accel_y) + ",";
     data_string = data_string + String(kx134_accel_z) + ",";
 
-    rocket_altitude = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
     data_string = data_string + String(rocket_altitude);
 
-    write_to_sd_card(DATALOG, data_string.c_str());
+    // write_to_sd_card(DATALOG, data_string.c_str());
 
     print("data_string: ");
     println(data_string);
 
-    scan_and_print_I2C_devices();
+    // scan_and_print_I2C_devices();
 
     print("rocket state: ");
     println(rocket_state);
@@ -415,6 +413,7 @@ void setup()
 void loop() 
     {
     // wdt.feed();
+    println(get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude));
     debug_data();
     select_flight_mode(rocket_state);
     }
