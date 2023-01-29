@@ -1,8 +1,8 @@
 #include <MS5611.h>
 #include <math.h>
 
-double pow(double, double);
- 
+
+
 MS5611 ms5611;
 
 void checkSettings()

@@ -1,48 +1,46 @@
 #include <Arduino.h>
+#include "sensor_pins.h"
 
-#define BUILTIN_LED 13
-#define BLUE 38
-#define GREEN 39
-#define RED 40
+#define BUILTIN_LED 13 // this does not really change unless microcontroller changes
 
 
 int init_LED()  
     {
     pinMode(BUILTIN_LED, OUTPUT);
-    pinMode(GREEN, OUTPUT);
-    pinMode(BLUE, OUTPUT);
-    pinMode(RED, OUTPUT);
+    pinMode(LED_GREEN, OUTPUT);
+    pinMode(LED_RED, OUTPUT);
+    pinMode(LED_BLUE, OUTPUT);
     return EXIT_SUCCESS;
     }
 
 void setLedGreen()
     {
-    digitalWrite(GREEN, HIGH);
-    digitalWrite(RED, LOW);
-    digitalWrite(BLUE, LOW);
+    digitalWrite(LED_GREEN, HIGH);
+    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_BLUE, LOW);
     }
 
 void setLedRed()
     {
-    digitalWrite(RED, HIGH);
-    digitalWrite(GREEN, LOW);
-    digitalWrite(BLUE, LOW);
+    digitalWrite(LED_RED, HIGH);
+    digitalWrite(LED_GREEN, LOW);
+    digitalWrite(LED_BLUE, LOW);
     }
 
 void setLedBlue()
     {
-    digitalWrite(BLUE, HIGH);
-    digitalWrite(RED, LOW);
-    digitalWrite(GREEN, LOW);
+    digitalWrite(LED_BLUE, HIGH);
+    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_GREEN, LOW);
     }
 
 void flashSOS()
     {
     while (true)
         {
-        digitalWrite(BLUE, HIGH);
+        digitalWrite(LED_BLUE, HIGH);
         delay(500);
-        digitalWrite(BLUE, LOW);
+        digitalWrite(LED_BLUE, LOW);
         }
     }
 

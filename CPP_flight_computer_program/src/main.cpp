@@ -47,10 +47,11 @@ static statemachine_t::e_rocket_state rocket_state;
 int init_all()
     {
     init_kx134();
-    init_MS5611();
-    //init_bmp280();
+    init_bmp280();
+
     init_SD();
     init_fram();
+
     init_LED();
 
     // TODO:
@@ -95,13 +96,13 @@ int health_check()
             }
         }
 
-    // BMP280
-    // float alt_thresh_low = -0.25; 
-    // float alt_thresh_high = 0.50;
-    //float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    // float curr_alt_reading = get_ms5611_altitude(get_ms5611_press(), ms5611_ground_base_pressure);
+    // BMP280 checks
+    float alt_thresh_low = -0.25; 
+    float alt_thresh_high = 0.50;
+    float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+
     count = 0;
-   /* while (count < 10)
+    while (count < 10)
         {
         if (curr_alt_reading > alt_thresh_low && curr_alt_reading < alt_thresh_high)
             {
@@ -111,7 +112,27 @@ int health_check()
             {
             return EXIT_FAILURE;
             }
-        }*/
+        }
+
+    // FRAM checks
+    count = 0;
+
+    uint8_t test_byte_write = 128;
+
+    while (count < 10)
+        {
+        write_to_fram(test_byte_write, 0);
+        uint8_t test_byte_read = read_from_fram(0);
+
+        if (test_byte_read == test_byte_write)
+            {
+            count++;
+            }
+        else
+            {
+            return EXIT_FAILURE;
+            }
+        }
 
     write_to_sd_card(EVENTLOG, "health checks passed");
 
@@ -132,7 +153,7 @@ void ground_idle_mode()
     if (millis() - starting_time > 500)
         {
         starting_time = 0UL;
-        buzzerOn();
+        buzzer_on();
         }
     
     kx134_accel_z = get_kx134_accel_z();
@@ -259,7 +280,7 @@ void land_safe_mode()
     if (millis() - starting_time > 500)
         {
         starting_time = 0UL;
-        buzzerOn();
+        buzzer_on();
         }
         // TODO: call on func to read, unzip and write date to SD card
         // ledON(somecolour);
@@ -378,7 +399,8 @@ void setup()
         }
 
     write_to_sd_card(EVENTLOG, "setup exit");
-    buzzerOn();
+
+    buzzer_on();
 
     // wdt.begin(config);
     // wdt.feed();
