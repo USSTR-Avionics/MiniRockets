@@ -22,9 +22,9 @@ int init_bmp280()
     return EXIT_SUCCESS;
     }
 
-float get_bmp280_altitude(float ground_base_pressure)
+float get_bmp280_altitude(float ground_base_pressure_param)
     {
-    return bmp.readAltitude(ground_base_pressure);
+    return bmp.readAltitude(ground_base_pressure_param);
     }
 
 float get_bmp280_pressure()
@@ -32,17 +32,17 @@ float get_bmp280_pressure()
     return bmp.readPressure();
     }
 
-float get_bmp280_relative_altitude(float ground_base_pressure, float ground_base_altitude)
+float get_bmp280_relative_altitude(float ground_base_pressure_param, float ground_base_altitude_param)
     {
-    return get_bmp280_altitude(ground_base_pressure) - ground_base_altitude;
+    return get_bmp280_altitude(ground_base_pressure_param) - ground_base_altitude_param;
     }
 
 float radians_to_degrees(float r)
     {
-    return r * (180 / M_PI);
+    return r * (float)(180 / M_PI);
     }
 
 float degrees_to_radians(float d)
     {
-    return d * (M_PI / 180);
+    return d * (float)(M_PI / 180);
     }
