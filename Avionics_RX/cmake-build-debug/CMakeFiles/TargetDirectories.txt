@@ -1,0 +1,5 @@
+/Users/kuang/Developer/Projects/untitled/cmake-build-debug/CMakeFiles/Production.dir
+/Users/kuang/Developer/Projects/untitled/cmake-build-debug/CMakeFiles/Debug.dir
+/Users/kuang/Developer/Projects/untitled/cmake-build-debug/CMakeFiles/Z_DUMMY_TARGET.dir
+/Users/kuang/Developer/Projects/untitled/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kuang/Developer/Projects/untitled/cmake-build-debug/CMakeFiles/rebuild_cache.dir
