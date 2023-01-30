@@ -1,4 +1,5 @@
 #include "Adafruit_BMP280.h"
+#include "sensor_bmp280.h"
 
 
 Adafruit_BMP280 bmp; // use I2C interface

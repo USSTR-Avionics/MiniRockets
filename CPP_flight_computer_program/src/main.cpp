@@ -12,7 +12,6 @@
 #include "sensor_fram.h" // TODO: sub with package
 #include "sensor_led.h"
 
-#include "default_variables.h"
 #include "rocket_profile.h"
 #include "user_variables.h"
 #include "statemachine_t.h"
@@ -41,6 +40,15 @@ float last_alt = 0;
 // STATE MACHINE
 static statemachine_t::e_rocket_state rocket_state;
 
+// GLOBAL VARS
+float ground_base_pressure = 0.0f;
+float ground_base_altitude = 0.0f;
+float rocket_altitude      = 0.0f;
+
+float kx134_accel_x        = 0.0f;
+float kx134_accel_y        = 0.0f;
+float kx134_accel_z        = 0.0f;
+
 
 
 int init_all()
@@ -57,6 +65,7 @@ int init_all()
     // init_bmi088();
     // init_RFM95_TX();
 
+    // Setting global variables
     ground_base_pressure = get_bmp280_pressure();
     ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
     rocket_state = statemachine_t::e_rocket_state::unarmed;

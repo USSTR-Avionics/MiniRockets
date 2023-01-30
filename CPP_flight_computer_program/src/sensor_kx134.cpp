@@ -1,5 +1,4 @@
 #include "SparkFun_Qwiic_KX13X.h"
-#include "default_variables.h"
 
 QwiicKX134 kxAccel; 
 outputData accel_data;
@@ -48,7 +47,7 @@ bool confirm_acceleration_z()
     uint8_t count = 0;
     uint8_t deceleration_count = 5;
     float last_acceleration_reading = 1000;
-    float current_acceleration_reading = FLO_DEF;
+    float current_acceleration_reading = 0.0f;
     while (count < 5)  
         {
         current_acceleration_reading = get_kx134_accel_z();
