@@ -387,7 +387,7 @@ void setup()
     // config.trigger = 2; /* in seconds, 0->128 */
     // config.timeout = 3; /* in seconds, 0->128 */
     // config.callback = watchdog_callback;
-    
+
     init_all();
 
     if (health_check() == EXIT_FAILURE)
@@ -396,7 +396,7 @@ void setup()
         exit(1); // this should also fail if init_all() fails;
         }
 
-    write_to_sd_card(EVENTLOG, "setup exit");
+    // write_to_sd_card(EVENTLOG, "setup exit"); 
 
     buzzer_on();
 
@@ -407,13 +407,12 @@ void setup()
     // int value_from_fram = read_from_fram(0x0);
     // rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
 
-    println("setup()");
+    println("setup() exit");
     }
 
 void loop() 
     {
-    // wdt.feed();
-    println(get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude));
     debug_data();
+    // wdt.feed();
     select_flight_mode(rocket_state);
     }
