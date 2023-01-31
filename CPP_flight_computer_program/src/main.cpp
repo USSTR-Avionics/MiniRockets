@@ -231,18 +231,26 @@ bool apogee_check()
     //     }
 
     // TODO: use an array to store the last 10 altitudes and check if they are all decreasing
+    // 1. check if we are in the unpowered flight state
+    // 2. if we are, then check if the altitude is decreasing
+    // 3. read with a delay and possibly an ema on that
+    // 4. if the altitude is decreasing, then we have hit apogee
+    // 5. actual apogee is retroavtively calculated from the fram data
+
+    // if (get_current_state_for_statemachine(rocket_state) != UNPOWERED_FLIGHT_STATE)
+    //     {
+    //     return false; // can only check apogee if we are in the unpowered flight state
+    //     }
+
     uint8_t apogee_buffer_cursor = 0;
 
-    if (get_current_state_for_statemachine(rocket_state) != UNPOWERED_FLIGHT_STATE)
-        {
-        return false; // can only check apogee if we are in the unpowered flight state
-        }
-
     // buffer gets refilled on every function call
+    // buffer is filled with a delay of 100ms between each altitude reading
     if (apogee_buffer_cursor == 0)
         {
         for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
             {
+            delay(100);
             apogee_buffer[i] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
             }
         }
@@ -251,6 +259,14 @@ bool apogee_check()
     // or if the altitude is monotonically decreasing since
 
     bool local_apogee = false;
+
+    println("printing buffer");
+    for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
+        {
+        print(apogee_buffer[i]);
+        print(" ");
+        }
+    println("done printing buffer");
 
     // check decreasing altitude
     for (int i = 0; i < APOGEE_BUFFER_SIZE - 1; i++)
@@ -267,16 +283,16 @@ bool apogee_check()
         }
 
     // confirm apogee
-    if (abs(apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_CONFIRMATION_THRESHOLD)
-        {
-        local_apogee = false;
-        }
+    // if (abs(apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_CONFIRMATION_THRESHOLD)
+    //     {
+    //     local_apogee = false;
+    //     }
 
     // set rocket apogee
-    if (local_apogee == true)
-        {
-        rocket_apogee = apogee_buffer[0];
-        }
+    // if (local_apogee == true)
+    //     {
+    //     rocket_apogee = apogee_buffer[0];
+    //     }
 
     return local_apogee;
     }
@@ -475,6 +491,7 @@ void setup()
 void loop() 
     {
     println(apogee_check());
+    delay(500);
     // debug_data();
     // wdt.feed();
     // select_flight_mode(rocket_state);
