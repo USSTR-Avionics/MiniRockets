@@ -13,7 +13,6 @@
 #include "sensor_led.h"
 
 #include "rocket_profile.h"
-#include "user_variables.h"
 #include "statemachine_t.h"
 
 #include "debug_I2C_Scanner.h"
