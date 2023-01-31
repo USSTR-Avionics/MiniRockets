@@ -62,11 +62,11 @@ Click on the :heavy_check_mark: on the bottom bar in VSCode
 
 # Contributing
 
-1. Make sure you have all the remote changes
-    `git pull`
-    `git fetch --all`
-    `git pull upstream`
-    `git fetch upstream --all`
+1. Make sure you have all the remote changes  
+    `git pull`  
+    `git fetch --all`  
+    `git pull upstream`  
+    `git fetch upstream --all`  
 
 2. Squash commits into a single commit if it makes sense for your changes
 
