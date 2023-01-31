@@ -49,9 +49,10 @@ float kx134_accel_x        = 0.0f;
 float kx134_accel_y        = 0.0f;
 float kx134_accel_z        = 0.0f;
 
+float rocket_apogee        = 0.0f;
+
 #define APOGEE_BUFFER_SIZE     10
 float apogee_buffer[APOGEE_BUFFER_SIZE];
-uint8_t apogee_buffer_cursor = 0;
 
 
 
@@ -229,15 +230,15 @@ bool apogee_check()
     //     starting_time = 0UL;
     //     }
 
-    // ! incomplete
     // TODO: use an array to store the last 10 altitudes and check if they are all decreasing
+    uint8_t apogee_buffer_cursor = 0;
 
     if (get_current_state_for_statemachine(rocket_state) != UNPOWERED_FLIGHT_STATE)
         {
         return false; // can only check apogee if we are in the unpowered flight state
         }
 
-    // populate array for the first time if it is empty
+    // buffer gets refilled on every function call
     if (apogee_buffer_cursor == 0)
         {
         for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
@@ -264,15 +265,20 @@ bool apogee_check()
             break;
             }
         }
-    
-    if (local_apogee == false)
+
+    // confirm apogee
+    if (abs(apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_CONFIRMATION_THRESHOLD)
         {
-        apogee_buffer_cursor = 0;
-        return false;
+        local_apogee = false;
         }
 
-    return true;
+    // set rocket apogee
+    if (local_apogee == true)
+        {
+        rocket_apogee = apogee_buffer[0];
+        }
 
+    return local_apogee;
     }
 
 void unpowered_flight_mode()
