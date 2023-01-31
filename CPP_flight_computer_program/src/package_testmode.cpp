@@ -13,16 +13,22 @@ statemachine_t::e_rocket_state enter_state(int state)
             break;
         case 2:
             return statemachine_t::e_rocket_state::powered_flight;
+            break;
         case 3:
             return statemachine_t::e_rocket_state::unpowered_flight;
+            break;
         case 4:
             return statemachine_t::e_rocket_state::ballistic_descent;
+            break;
         case 5:
             return statemachine_t::e_rocket_state::chute_descent;
+            break;
         case 6:
             return statemachine_t::e_rocket_state::land_safe;
+            break;
         case 7:
             return statemachine_t::e_rocket_state::test;
+            break;
         default:
             return statemachine_t::e_rocket_state::unarmed;
         }

@@ -340,6 +340,7 @@ int debug_data()
     {
     #ifdef ROCKET_DEBUGMODE
 
+    String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
     String data_string = ""; 
 
     if (debug_time == 0UL)
@@ -347,7 +348,7 @@ int debug_data()
         debug_time = millis();
         }
  
-    if ((millis() - debug_time) < 1000)
+    if ((millis() - debug_time) < DEBUG_INTERVAL)
         {
         return EXIT_FAILURE;
         }
@@ -367,13 +368,13 @@ int debug_data()
 
     // write_to_sd_card(DATALOG, data_string.c_str());
 
+    println(data_string_fmt);
     print("data_string: ");
     println(data_string);
 
-    // scan_and_print_I2C_devices();
+    scan_and_print_I2C_devices();
 
-    print("rocket state: ");
-    println(rocket_state);
+    debug_time = 0UL;
 
     #endif
 

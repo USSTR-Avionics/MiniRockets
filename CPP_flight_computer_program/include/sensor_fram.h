@@ -3,7 +3,7 @@
 
 // actual funcs
 int init_fram();
-int write_to_fram(int, int);
-int read_from_fram(int);
+int write_to_fram(int, int); // this should not be exposed
+int read_from_fram(int);     // this should not be exposed
 
 #endif // SENSOR_FRAM_H

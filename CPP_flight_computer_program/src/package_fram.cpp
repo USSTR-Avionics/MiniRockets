@@ -39,6 +39,13 @@ int write_temperature_to_fram(float temp)
 float read_temperature_from_fram(int where)
     {
     // TODO:
+    int whole = read_from_fram(where);
+    where++; // read the next byte
+    int decimal = read_from_fram(where);
+
+    float temperature = ((float)whole - 101.0f) + ((float)decimal / 100.0f);
+
+    return temperature;
     }
 
   /**
@@ -49,6 +56,7 @@ float read_temperature_from_fram(int where)
 int write_acceleration_to_fram(float accel)
     {
     // TODO: test and work
+    // handle negative accelation values
     uint8_t whole_part = (uint8_t)accel;
     uint8_t decimal_part = (uint8_t)((accel - whole_part) * 1000);
     whole_part += 101;
@@ -64,4 +72,6 @@ int write_acceleration_to_fram(float accel)
 float read_acceleration_from_fram(int where)
     {
     // TODO:
+    where = 0;
+    return 0.0f;
     }

@@ -7,6 +7,9 @@
 #ifdef ROCKET_DEBUGMODE
     #define println(x) Serial.println(x)
     #define print(x) Serial.print(x)
+
+    #define DEBUG_INTERVAL           100
+
 #else
     #define println(x)
     #define print(x)
