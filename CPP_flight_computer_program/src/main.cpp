@@ -31,10 +31,10 @@
 
 
 // PROGRAM VARS | vars generally required for the program
-unsigned long starting_time = 0UL;
-unsigned long debug_time = 0UL;
-int descent_check = 0;
-float last_alt = 0;
+unsigned long starting_time   = 0UL;
+unsigned long debug_time      = 0UL;
+int descent_check             = 0;
+float last_alt                = 0;
 
 
 // STATE MACHINE
@@ -48,6 +48,10 @@ float rocket_altitude      = 0.0f;
 float kx134_accel_x        = 0.0f;
 float kx134_accel_y        = 0.0f;
 float kx134_accel_z        = 0.0f;
+
+#define APOGEE_BUFFER_SIZE     10
+float apogee_buffer[APOGEE_BUFFER_SIZE];
+uint8_t apogee_buffer_cursor = 0;
 
 
 
@@ -225,6 +229,7 @@ bool apogee_check()
     //     starting_time = 0UL;
     //     }
 
+    // ! incomplete
     // TODO: use an array to store the last 10 altitudes and check if they are all decreasing
 
     if (get_current_state_for_statemachine(rocket_state) != UNPOWERED_FLIGHT_STATE)
@@ -232,12 +237,41 @@ bool apogee_check()
         return false; // can only check apogee if we are in the unpowered flight state
         }
 
-#define BUFFER_SIZE 10
-float apogee_buffer[BUFFER_SIZE];
-    
+    // populate array for the first time if it is empty
+    if (apogee_buffer_cursor == 0)
+        {
+        for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
+            {
+            apogee_buffer[i] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+            }
+        }
 
     // Apogee can be said to have hit if a max altitude is reached and the altitude is decreasing
     // or if the altitude is monotonically decreasing since
+
+    bool local_apogee = false;
+
+    // check decreasing altitude
+    for (int i = 0; i < APOGEE_BUFFER_SIZE - 1; i++)
+        {
+        if (apogee_buffer[i] > apogee_buffer[i + 1])
+            {
+            local_apogee = true;
+            }
+        else
+            {
+            local_apogee = false;
+            break;
+            }
+        }
+    
+    if (local_apogee == false)
+        {
+        apogee_buffer_cursor = 0;
+        return false;
+        }
+
+    return true;
 
     }
 
