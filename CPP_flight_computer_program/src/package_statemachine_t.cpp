@@ -1,6 +1,6 @@
 #include "statemachine_t.h"
 
-statemachine_t::e_rocket_state set_state_for_statemachine(statemachine_t::e_rocket_state& rs, int state)
+statemachine_t::e_rocket_state set_current_state_for_statemachine(statemachine_t::e_rocket_state& rs, int state)
     {
     switch(state) 
         {
@@ -33,4 +33,9 @@ statemachine_t::e_rocket_state set_state_for_statemachine(statemachine_t::e_rock
             rs = statemachine_t::e_rocket_state::unarmed;
             return statemachine_t::e_rocket_state::unarmed;
         }
+    }
+
+int get_current_state_for_statemachine(statemachine_t::e_rocket_state& rs)
+    {
+    return rs;
     }

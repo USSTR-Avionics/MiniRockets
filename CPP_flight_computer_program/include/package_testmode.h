@@ -19,6 +19,4 @@
 
 #include "statemachine_t.h"
 
-statemachine_t::e_rocket_state enter_state(int state);
-
 #endif // PACKAGE_TESTMODE_H

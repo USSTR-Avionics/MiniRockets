@@ -7,7 +7,7 @@
 #define _FLIGHT_TIME_MINUTES                3
 
 // rocket params
-#define ROCKET_HEIGHT 1 // in metres
+#define ROCKET_HEIGHT                       1 // in metres
 
 #if TESTPROFILE == 1
     #define LIFTOFF_THRESHOLD               2.0f  // in ms^-2

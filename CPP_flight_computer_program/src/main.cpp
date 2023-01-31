@@ -1,3 +1,4 @@
+#include "package_statemachine_t.h"
 #include "package_testmode.h"
 #include "package_watchdog.h"
 #include "package_fram.h"
@@ -70,7 +71,7 @@ int init_all()
     rocket_state = statemachine_t::e_rocket_state::unarmed;
     
     #ifdef ROCKET_DEBUGMODE
-        rocket_state = enter_state(GROUND_IDLE_STATE);
+        rocket_state = set_current_state_for_statemachine(rocket_state, GROUND_IDLE_STATE);
     #endif
 
     // write_to_sd_card(DATALOG, datalog_fmt_header);
@@ -181,7 +182,6 @@ void powered_flight_mode()
     println("[ROCKET STATE] POWERED FLIGHT");
 
     setLedRed();
-    // buzzerON(1);
 
     // TODO: add to apogee buffer
 
@@ -205,27 +205,40 @@ void powered_flight_mode()
 
 bool apogee_check() 
     {
-    if (descent_check > DESCENT_CHECK_AMOUNT)
+    // if (descent_check > DESCENT_CHECK_AMOUNT)
+    //     {
+    //     return true;
+    //     }
+    // else if (starting_time == 0)
+    //     {
+    //     last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    //     starting_time = millis();
+    //     }
+
+    // else if ((millis() - starting_time > 100) && ((last_alt - (get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude))) > ALTITUDE_CHANGE))
+    //     {
+    //     starting_time = 0UL;
+    //     descent_check++;
+    //     }
+    // else if (millis() - starting_time > 5000)
+    //     {
+    //     starting_time = 0UL;
+    //     }
+
+    // TODO: use an array to store the last 10 altitudes and check if they are all decreasing
+
+    if (get_current_state_for_statemachine(rocket_state) != UNPOWERED_FLIGHT_STATE)
         {
-        return true;
-        }
-    else if (starting_time == 0)
-        {
-        last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-        starting_time = millis();
+        return false; // can only check apogee if we are in the unpowered flight state
         }
 
-    else if ((millis() - starting_time > 100) && ((last_alt - (get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude))) > ALTITUDE_CHANGE))
-        {
-        starting_time = 0UL;
-        descent_check++;
-        }
-    else if (millis() - starting_time > 5000)
-        {
-        starting_time = 0UL;
-        }
+#define BUFFER_SIZE 10
+float apogee_buffer[BUFFER_SIZE];
+    
 
-    return false;
+    // Apogee can be said to have hit if a max altitude is reached and the altitude is decreasing
+    // or if the altitude is monotonically decreasing since
+
     }
 
 void unpowered_flight_mode()
@@ -264,7 +277,7 @@ void chute_descent_mode()
     // TODO: check gyroscope stabilisation over time
     rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
-    if (rocket_altitude<LANDING_ALTITUDE)
+    if (rocket_altitude < LANDING_ALTITUDE)
         {
         rocket_state = statemachine_t::e_rocket_state::land_safe;
         }
@@ -421,7 +434,8 @@ void setup()
 
 void loop() 
     {
-    debug_data();
+    println(apogee_check());
+    // debug_data();
     // wdt.feed();
-    select_flight_mode(rocket_state);
+    // select_flight_mode(rocket_state);
     }

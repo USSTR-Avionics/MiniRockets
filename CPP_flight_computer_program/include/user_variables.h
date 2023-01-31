@@ -1,4 +1,0 @@
-#ifndef USER_VARIABLES_H
-#define USER_VARIABLES_H
-
-#endif // USER_VARIABLES_H
