@@ -1,9 +1,14 @@
 #ifndef SENSOR_BMP280_H
 #define SENSOR_BMP280_H
 
+#define APOGEE_BUFFER_SIZE        10
+#define APOGEE_READING_INTERVAL   100
+
 extern float ground_base_pressure;
 extern float ground_base_altitude;
 extern float rocket_altitude;
+extern float apogee_buffer[APOGEE_BUFFER_SIZE];
+
 
 int init_bmp280();
 float get_bmp280_pressure();

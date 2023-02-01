@@ -52,9 +52,6 @@ float kx134_accel_z        = 0.0f;
 
 float rocket_apogee        = 0.0f;
 
-#define APOGEE_BUFFER_SIZE     10
-float apogee_buffer[APOGEE_BUFFER_SIZE];
-
 
 
 int init_all()
@@ -189,11 +186,7 @@ void powered_flight_mode()
 
     setLedRed();
 
-    // TODO: add to apogee buffer
-
-    /*
-    powered to unpowered flight is typical of deceleration
-    */
+    // powered to unpowered flight is typical of deceleration
     kx134_accel_z = get_kx134_accel_z();
 
     if ((starting_time == 0) && ((kx134_accel_z) < LIFTOFF_THRESHOLD))
@@ -209,93 +202,71 @@ void powered_flight_mode()
 
     }
 
+/*
+ * @note - this function will take a little over second to run
+*/
 bool apogee_check() 
     {
-    // if (descent_check > DESCENT_CHECK_AMOUNT)
-    //     {
-    //     return true;
-    //     }
-    // else if (starting_time == 0)
-    //     {
-    //     last_alt = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    //     starting_time = millis();
-    //     }
+    // fill buffer with ema value readings then impl every x ms
 
-    // else if ((millis() - starting_time > 100) && ((last_alt - (get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude))) > ALTITUDE_CHANGE))
-    //     {
-    //     starting_time = 0UL;
-    //     descent_check++;
-    //     }
-    // else if (millis() - starting_time > 5000)
-    //     {
-    //     starting_time = 0UL;
-    //     }
-
-    // TODO: use an array to store the last 10 altitudes and check if they are all decreasing
-    // 1. check if we are in the unpowered flight state
-    // 2. if we are, then check if the altitude is decreasing
-    // 3. read with a delay and possibly an ema on that
-    // 4. if the altitude is decreasing, then we have hit apogee
-    // 5. actual apogee is retroavtively calculated from the fram data
-
-    // if (get_current_state_for_statemachine(rocket_state) != UNPOWERED_FLIGHT_STATE)
-    //     {
-    //     return false; // can only check apogee if we are in the unpowered flight state
-    //     }
-
+    starting_time = millis();
     uint8_t apogee_buffer_cursor = 0;
 
-    // buffer gets refilled on every function call
-    // buffer is filled with a delay of 100ms between each altitude reading
-    if (apogee_buffer_cursor == 0)
+    while (true)
         {
-        for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
+        if (millis() - starting_time > 100)
             {
-            delay(100);
-            apogee_buffer[i] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+            if (apogee_buffer_cursor == 0)
+                {
+                apogee_buffer[apogee_buffer_cursor] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+                }
+            else
+                {
+                float altitude_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+                float ema_adjusted = get_exponential_moving_average(altitude_reading, apogee_buffer[apogee_buffer_cursor - 1], STRONG_EMA_SMOOTHING);
+                apogee_buffer[apogee_buffer_cursor] = ema_adjusted;
+                }
+
+            // increment apogee buffer cursor
+            apogee_buffer_cursor++;
+            // reset local timer
+            starting_time = millis();
             }
-        }
 
-    // Apogee can be said to have hit if a max altitude is reached and the altitude is decreasing
-    // or if the altitude is monotonically decreasing since
-
-    bool local_apogee = false;
-
-    println("printing buffer");
-    for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
-        {
-        print(apogee_buffer[i]);
-        print(" ");
-        }
-    println("done printing buffer");
-
-    // check decreasing altitude
-    for (int i = 0; i < APOGEE_BUFFER_SIZE - 1; i++)
-        {
-        if (apogee_buffer[i] > apogee_buffer[i + 1])
+        if (apogee_buffer_cursor >= APOGEE_BUFFER_SIZE)
             {
-            local_apogee = true;
-            }
-        else
-            {
-            local_apogee = false;
             break;
             }
         }
 
-    // confirm apogee
-    // if (abs(apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_CONFIRMATION_THRESHOLD)
+    // for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
     //     {
-    //     local_apogee = false;
+    //     if (millis() - starting_time > 100)
+    //         {
+    //         if (i == 0)
+    //             {
+    //             apogee_buffer[i] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    //             }
+    //         else
+    //             {
+    //             float altitude_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+    //             float ema_adjusted = get_exponential_moving_average(altitude_reading, apogee_buffer[i - 1], STRONG_EMA_SMOOTHING);
+    //             apogee_buffer[i] = ema_adjusted;
+    //             }
+    //         }
     //     }
 
-    // set rocket apogee
-    // if (local_apogee == true)
-    //     {
-    //     rocket_apogee = apogee_buffer[0];
-    //     }
+    // check if monotonically non increasing
 
-    return local_apogee;
+    for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
+        {
+        if (apogee_buffer[i] < apogee_buffer[i + 1])
+            {
+            return false;
+            }
+        }
+    return true;
+
     }
 
 void unpowered_flight_mode()
