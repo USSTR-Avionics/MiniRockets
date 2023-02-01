@@ -27,8 +27,8 @@ statemachine_t::e_rocket_state set_current_state_for_statemachine(statemachine_t
             rs = statemachine_t::e_rocket_state::land_safe;
             return statemachine_t::e_rocket_state::land_safe;
         case 7:
-            rs = statemachine_t::e_rocket_state::test;
-            return statemachine_t::e_rocket_state::test;
+            rs = statemachine_t::e_rocket_state::test_state;
+            return statemachine_t::e_rocket_state::test_state;
         default:
             rs = statemachine_t::e_rocket_state::unarmed;
             return statemachine_t::e_rocket_state::unarmed;

@@ -205,7 +205,7 @@ void powered_flight_mode()
 /*
  * @note - this function will take a little over second to run
 */
-bool apogee_check() 
+int apogee_check() 
     {
     // fill buffer with ema value readings then impl every x ms
     starting_time = millis();
@@ -214,17 +214,17 @@ bool apogee_check()
 
     while (true)
         {
-        if (millis() - starting_time > 100)
+        if (millis() - starting_time > APOGEE_READING_INTERVAL)
             {
             if (apogee_buffer_cursor == 0)
                 {
-                apogee_buffer[apogee_buffer_cursor] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+                apogee_buffer[apogee_buffer_cursor] = ceilf(get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) * 100) / 100; // rounding up to 2 decimal places
                 }
             else
                 {
                 float altitude_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-                float ema_adjusted = get_exponential_moving_average(altitude_reading, apogee_buffer[apogee_buffer_cursor - 1], STRONG_EMA_SMOOTHING);
-                apogee_buffer[apogee_buffer_cursor] = ema_adjusted;
+                float ema_adjusted = get_exponential_moving_average(altitude_reading, apogee_buffer[apogee_buffer_cursor - 1], MODERATE_EMA_SMOOTHING);
+                apogee_buffer[apogee_buffer_cursor] = ceilf(ema_adjusted * 100) / 100; // rounding up to 2 decimal places
                 }
 
             // increment apogee buffer cursor
@@ -239,15 +239,28 @@ bool apogee_check()
             }
         }
 
+    // print buffer
+    for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
+        {
+        print(apogee_buffer[i]);
+        print(", ");
+        }
+    println("");
+
     // check if monotonically non increasing
     for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
         {
-        if (apogee_buffer[i] < apogee_buffer[i + 1])
+        if (apogee_buffer[i] < apogee_buffer[i + 1]) // add threshold
             {
-            return false;
+            println("apogee check failed");
+            print(apogee_buffer[i]);
+            print(", ");    
+            print(apogee_buffer[i + 1]);
+            return EXIT_FAILURE;
             }
         }
-    return true;
+    println("apogee check succeeded");
+    return EXIT_SUCCESS;
     }
 
 void unpowered_flight_mode()
@@ -260,6 +273,33 @@ void unpowered_flight_mode()
         {
         rocket_state = statemachine_t::e_rocket_state::ballistic_descent;
         }
+    }
+
+void soft_recovery_mode()
+    {
+    println("[ROCKET STATE] SOFT RECOVERY");
+
+    while (true)
+        {
+        wdt.feed(); // feeding the watchdog to avoid a reset
+        int apogee_check_result = apogee_check();
+        if (apogee_check_result == EXIT_SUCCESS)
+            {
+            println("apogee detected!");
+            while (true)
+                {
+                wdt.feed(); // feeding the watchdog to avoid a reset
+                if (get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) < PARACHUTE_DEPLOYMENT_HEIGHT)
+                    {
+                    deploy_parachute();
+                    rocket_state = statemachine_t::e_rocket_state::chute_descent;
+                    break;
+                    }
+                }
+            break;
+            }
+        }
+    loop(); // restart the loop
     }
 
 void ballistic_descent_mode()
@@ -339,12 +379,14 @@ int select_flight_mode(statemachine_t::e_rocket_state &rs)
         case statemachine_t::land_safe:
             land_safe_mode();
             break;
-        case statemachine_t::test:
+        case statemachine_t::soft_recovery:
+            soft_recovery_mode();
+            break;
+        case statemachine_t::test_state:
             // TODO: test_mode_state();
             break;
         default:
-            // TODO: test_mode_state();
-            // test_mode_state();
+            soft_recovery_mode();
             break;
         }
     return EXIT_FAILURE;
@@ -355,6 +397,7 @@ void watchdog_callback()
     wdt.feed();
     println("watchdog_callback()");
     // write_to_sd_card(EVENTLOG, "[MICROCONTROLLER] watchdog callback");
+    rocket_state = statemachine_t::e_rocket_state::soft_recovery;
     loop();
     }
 
@@ -443,7 +486,8 @@ void setup()
 
 void loop() 
     {
-    debug_data();
+    // debug_data();
     wdt.feed();
-    select_flight_mode(rocket_state);
+    // select_flight_mode(rocket_state);
+    println(apogee_check());
     }
