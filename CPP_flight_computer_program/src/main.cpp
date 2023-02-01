@@ -208,9 +208,9 @@ void powered_flight_mode()
 bool apogee_check() 
     {
     // fill buffer with ema value readings then impl every x ms
-
     starting_time = millis();
     uint8_t apogee_buffer_cursor = 0;
+    float apogee_buffer[APOGEE_BUFFER_SIZE];
 
     while (true)
         {
@@ -239,25 +239,7 @@ bool apogee_check()
             }
         }
 
-    // for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
-    //     {
-    //     if (millis() - starting_time > 100)
-    //         {
-    //         if (i == 0)
-    //             {
-    //             apogee_buffer[i] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    //             }
-    //         else
-    //             {
-    //             float altitude_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-    //             float ema_adjusted = get_exponential_moving_average(altitude_reading, apogee_buffer[i - 1], STRONG_EMA_SMOOTHING);
-    //             apogee_buffer[i] = ema_adjusted;
-    //             }
-    //         }
-    //     }
-
     // check if monotonically non increasing
-
     for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
         {
         if (apogee_buffer[i] < apogee_buffer[i + 1])
@@ -266,7 +248,6 @@ bool apogee_check()
             }
         }
     return true;
-
     }
 
 void unpowered_flight_mode()

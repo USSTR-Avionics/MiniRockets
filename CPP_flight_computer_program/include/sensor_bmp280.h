@@ -7,7 +7,6 @@
 extern float ground_base_pressure;
 extern float ground_base_altitude;
 extern float rocket_altitude;
-extern float apogee_buffer[APOGEE_BUFFER_SIZE];
 
 
 int init_bmp280();
