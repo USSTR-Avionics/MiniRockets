@@ -1,4 +1,5 @@
 #include "package_statemachine_t.h"
+#include "package_statistics.h"
 #include "package_testmode.h"
 #include "package_watchdog.h"
 #include "package_fram.h"
@@ -399,8 +400,9 @@ int select_flight_mode(statemachine_t::e_rocket_state &rs)
 
 void watchdog_callback()
     {
+    wdt.feed();
     println("watchdog_callback()");
-    write_to_sd_card(EVENTLOG, "[MICROCONTROLLER] watchdog callback");
+    // write_to_sd_card(EVENTLOG, "[MICROCONTROLLER] watchdog callback");
     loop();
     }
 
@@ -462,10 +464,6 @@ void setup()
         test_main();
     #endif // TESTMODE
 
-    // config.trigger = 2; /* in seconds, 0->128 */
-    // config.timeout = 3; /* in seconds, 0->128 */
-    // config.callback = watchdog_callback;
-
     init_all();
 
     if (health_check() == EXIT_FAILURE)
@@ -478,8 +476,11 @@ void setup()
 
     buzzer_on();
 
-    // wdt.begin(config);
-    // wdt.feed();
+    config.trigger = 2; /* in seconds, 0->128 */
+    config.timeout = 4; /* in seconds, 0->128 */
+    config.callback = watchdog_callback;
+    wdt.begin(config);
+    wdt.feed();
 
     // TODO: add a method to read previous state from FRAM and restore it
     // int value_from_fram = read_from_fram(0x0);
@@ -490,9 +491,7 @@ void setup()
 
 void loop() 
     {
-    println(apogee_check());
-    delay(500);
-    // debug_data();
-    // wdt.feed();
-    // select_flight_mode(rocket_state);
+    debug_data();
+    wdt.feed();
+    select_flight_mode(rocket_state);
     }

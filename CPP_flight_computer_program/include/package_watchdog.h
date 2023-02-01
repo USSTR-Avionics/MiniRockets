@@ -6,4 +6,6 @@
 WDT_T4<WDT2> wdt;
 WDT_timings_t config;
 
+void watchdog_callback();
+
 #endif // PACKAGE_WATCHDOG_H
