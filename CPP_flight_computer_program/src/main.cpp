@@ -446,7 +446,7 @@ int debug_data()
 
     debug_time = 0UL;
 
-    #endif
+    #endif // ROCKET_DEBUGMODE
 
     return EXIT_SUCCESS;
     }
@@ -476,8 +476,8 @@ void setup()
 
     buzzer_on();
 
-    config.trigger = 2; /* in seconds, 0->128 */
-    config.timeout = 4; /* in seconds, 0->128 */
+    config.trigger = WATCHDOG_TRIGGER;
+    config.timeout = WATCHDOG_TIMEOUT;
     config.callback = watchdog_callback;
     wdt.begin(config);
     wdt.feed();
