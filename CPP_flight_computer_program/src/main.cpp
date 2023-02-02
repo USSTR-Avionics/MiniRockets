@@ -1,8 +1,8 @@
-#include "package_fram.h"
 #include "package_statemachine_t.h"
 #include "package_statistics.h"
 #include "package_testmode.h"
 #include "package_watchdog.h"
+#include "package_fram.h"
 
 #include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
@@ -24,10 +24,10 @@
 
 #include <Arduino.h>
 #include <RH_RF95.h>
-#include <SPI.h>
+#include <cstdlib>
+#include <cstdint> // switch to machine independent types
 #include <Wire.h>
-#include <stdint.h> // switch to machine independent types
-#include <stdlib.h>
+#include <SPI.h>
 
 
 
@@ -238,28 +238,35 @@ int apogee_check()
 			}
 		}
 
+    float init_ema = apogee_buffer[0];
 	// print buffer
 	for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
 		{
+        if (i != 0)
+            {
+            init_ema = get_exponential_moving_average(apogee_buffer[i], init_ema, MODERATE_EMA_SMOOTHING);
+            }
 		print(apogee_buffer[i]);
 		print(", ");
 		}
-	println("");
+    print("| EMA: ");
+    println(init_ema);
 
-	// check if monotonically non increasing
-	for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
-		{
-		if (apogee_buffer[i] < apogee_buffer[i + 1]) // add threshold
-			{
-			println("apogee check failed");
-			print(apogee_buffer[i]);
-			print(", ");
-			print(apogee_buffer[i + 1]);
-			return EXIT_FAILURE;
-			}
-		}
-	println("apogee check succeeded");
-	return EXIT_SUCCESS;
+    //  && init_ema <= apogee_buffer[APOGEE_BUFFER_SIZE - 1]
+    print("condition 1: ");
+    println(init_ema < apogee_buffer[0]);
+    print("condition 2: ");
+    println(init_ema > 0.0f);
+    print("condition 3: ");
+    println((apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > 0.10f);
+    if (init_ema < apogee_buffer[0] && init_ema > 0.0f && (apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > 0.10f)
+        {
+        return EXIT_SUCCESS;
+        }
+    else
+        {
+        return EXIT_FAILURE;
+        }
 	}
 
 void unpowered_flight_mode()
@@ -487,5 +494,15 @@ void loop()
 	// debug_data();
 	wdt.feed();
 	// select_flight_mode(rocket_state);
-	println(apogee_check());
+    if (apogee_check() == EXIT_SUCCESS)
+        {
+        println("[SUCCESS] Apogee Check");
+        flashInternalLed(true);
+        }
+    else
+        {
+        println("[FAILED] Apogee Check");
+        flashInternalLed(false);
+        }
+    println("");
 	}

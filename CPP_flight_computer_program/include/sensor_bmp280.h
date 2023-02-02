@@ -2,7 +2,7 @@
 #define SENSOR_BMP280_H
 
 #define APOGEE_BUFFER_SIZE      10
-#define APOGEE_READING_INTERVAL 100
+#define APOGEE_READING_INTERVAL 75
 
 extern float ground_base_pressure;
 extern float ground_base_altitude;
