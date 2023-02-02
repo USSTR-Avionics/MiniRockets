@@ -8,6 +8,8 @@
 #define LED_GREEN  39
 #define LED_RED    40
 
+// Buzzer pins
+#define BUZZER_PIN 8
 
 
 #endif // SENSOR_PINS_H_

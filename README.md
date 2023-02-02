@@ -5,9 +5,7 @@
 ![open PRs](https://img.shields.io/github/issues-pr/USSTR-Avionics/Avionics_code/open)
 [![test-clang-format-lint](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/clang-format-check.yml/badge.svg)](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/clang-format-check.yml)
 ![](https://badgen.net/badge/teensy_kill_count/2/red)
-
-
-<center> <img src = https://i.imgur.com/jnRxNR3.png> </img> </center>
+---
 
 # Setup
 Using VSCode and PlatformIO (recommended)
@@ -17,7 +15,6 @@ Using VSCode and PlatformIO (recommended)
 - [ ] VSCode  
 - [ ] platformIO extension  
 - [ ] install git bash for your platform  
-- [ ] install [Rust](https://www.rust-lang.org/tools/install) for your platform  
 
 
 ## Next Steps
@@ -31,7 +28,7 @@ Using VSCode and PlatformIO (recommended)
     `git remote add upstream https://github.com/USSTR-Avionics/Avionics-code.git`  
 
     [troubleshooting] if you get an error saying https protocol not supported, simply erase the https:// from the pasted url and rewrite it in, there is a 
-    hiddend character that gets pasted in on Windows.  
+    hidden character that gets pasted (sneaky!) on Windows.  
 
 2. Navigate to Extensions on VSCode and install "PlatoformIO IDE"  
     [note] restarting VSCode may be required and an internet connection is required!  
@@ -39,23 +36,15 @@ Using VSCode and PlatformIO (recommended)
 3. Select the "PIO Home" tab in VSCode > "Import Existing Project" > Navigate to the directory where the codebase was cloned >   
     open "CPP_flight_computer_code" > Scroll down to reveal the "Import Project" > Select board as "Teensy 4.1"  
 
+4. At the bottom click on the checkbox to build the codebase
 
->**NOTE : You may use any toolchain you like as long as it maintains compatibility and interoperability with "master", using different tools from the team also means that the team can't help you debug or troubleshoot as quickly!**
-
-### Optional steps (not needed for now)
-
-Navigate to the root of rusty_fram_wrapper and run the terminal command  
-    `make`  
-
-At the bottom click on the checkbox to build the codebase (this also links the rust lib)
-
-run `pio run -t compiledb` if you need the latest compilation_commands.json file for clangd DAP interface.
+run `pio run -t compiledb` if you need the latest compilation_commands.json file for DAP interface(s).
 
 
 ## BUILDING
 
 ### Using the terminal
-`pio build` while in the directory where platform.ini is located
+`pio run` while in the directory where platform.ini is located
 
 ### Using VSCode and PlatoformIO
 Click on the :heavy_check_mark: on the bottom bar in VSCode
@@ -66,12 +55,12 @@ Click on the :heavy_check_mark: on the bottom bar in VSCode
 1. Make sure you have all the remote changes  
     `git pull`  
     `git fetch --all`  
-    `git pull upstream`  
-    `git fetch upstream --all`  
+    `git pull upstream master`   
+    `git pull upstream dev`  
+    `git fetch upstream master`  
+    `git fetch upstream dev`  
 
-2. Squash commits into a single commit if it makes sense for your changes
-
-3. Open up a Pull Request with an appropriate title and explanantion of code changes
+2. Open up a Pull Request with an appropriate title and explanantion of code changes
 
 
 # Documentation
@@ -148,6 +137,8 @@ We classify headers into 4 types
 
 They should be named similar to their respective header files that expose the API function calls
 
+Should also adhere to the header file(s) naming convention
+
 
 ## Indentation
 
@@ -187,3 +178,10 @@ They should be named similar to their respective header files that expose the AP
 ```
 
 - try to make them into switch case statements wherever convinient
+
+## Miscellaneous 
+
+- keep main.cpp under 500 lines
+
+---
+<p align="center"> <img src = https://i.imgur.com/jnRxNR3.png> </img> </p>

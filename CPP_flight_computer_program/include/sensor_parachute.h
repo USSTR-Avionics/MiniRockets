@@ -1,4 +1,4 @@
-#ifndef SENSOR_PARACHUTE_H  
+#ifndef SENSOR_PARACHUTE_H
 #define SENSOR_PARACHUTE_H
 
 void deploy_parachute();

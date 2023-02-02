@@ -3,6 +3,6 @@
 I2CScanner scanner;
 
 void scan_and_print_I2C_devices()
-    {
-    scanner.Scan();
-    }
+	{
+	scanner.Scan();
+	}
