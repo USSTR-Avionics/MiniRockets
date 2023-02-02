@@ -1,8 +1,8 @@
 #if (TESTMODE == 1)
 
-#include "unity.h"
-#include "debug_macros.h"
-#include "sensor_fram.h"
+	#include "debug_macros.h"
+	#include "sensor_fram.h"
+	#include "unity.h"
 
 
 void test_fram_read_write()
