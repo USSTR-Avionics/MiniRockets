@@ -1,8 +1,8 @@
+#include "package_fram.h"
 #include "package_statemachine_t.h"
 #include "package_statistics.h"
 #include "package_testmode.h"
 #include "package_watchdog.h"
-#include "package_fram.h"
 
 #include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
@@ -24,10 +24,10 @@
 
 #include <Arduino.h>
 #include <RH_RF95.h>
-#include <cstdlib>
-#include <cstdint> // switch to machine independent types
-#include <Wire.h>
 #include <SPI.h>
+#include <Wire.h>
+#include <cstdint> // switch to machine independent types
+#include <cstdlib>
 
 
 
@@ -206,7 +206,7 @@ void powered_flight_mode()
  */
 int apogee_check()
 	{
-    // fill buffer with altitude readings taken every APOGEE_READING_INTERVAL milliseconds
+	// fill buffer with altitude readings taken every APOGEE_READING_INTERVAL milliseconds
 	starting_time                = millis();
 	uint8_t apogee_buffer_cursor = 0;
 	float apogee_buffer[APOGEE_BUFFER_SIZE];
@@ -239,24 +239,24 @@ int apogee_check()
 		}
 
 	// calculate exponential moving average of apogee buffer
-    float apogee_buffer_ema = apogee_buffer[0];
+	float apogee_buffer_ema = apogee_buffer[0];
 	for (int i = 1; i < APOGEE_BUFFER_SIZE; i++)
 		{
-        apogee_buffer_ema = get_exponential_moving_average(apogee_buffer[i], apogee_buffer_ema, MODERATE_EMA_SMOOTHING);
+		apogee_buffer_ema = get_exponential_moving_average(apogee_buffer[i], apogee_buffer_ema, MODERATE_EMA_SMOOTHING);
 		}
 
-    bool ema_lessthan_oldestreading = apogee_buffer_ema < apogee_buffer[0];
-    bool ema_greaterthan_zero       = apogee_buffer_ema > ZERO_FLOAT;
-    bool ema_greaterthan_threshold  = (apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_DIFFERENCE_THRESHOLD;
+	bool ema_lessthan_oldestreading = apogee_buffer_ema < apogee_buffer[0];
+	bool ema_greaterthan_zero       = apogee_buffer_ema > ZERO_FLOAT;
+	bool ema_greaterthan_threshold  = (apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_DIFFERENCE_THRESHOLD;
 
-    if (ema_lessthan_oldestreading && ema_greaterthan_zero && ema_greaterthan_threshold)
-        {
-        return EXIT_SUCCESS;
-        }
-    else
-        {
-        return EXIT_FAILURE;
-        }
+	if (ema_lessthan_oldestreading && ema_greaterthan_zero && ema_greaterthan_threshold)
+		{
+		return EXIT_SUCCESS;
+		}
+	else
+		{
+		return EXIT_FAILURE;
+		}
 	}
 
 void unpowered_flight_mode()
