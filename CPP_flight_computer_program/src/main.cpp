@@ -26,8 +26,8 @@
 #include <RH_RF95.h>
 #include <SPI.h>
 #include <Wire.h>
-#include <stdint.h> // switch to machine independent types
-#include <stdlib.h>
+#include <cstdint> // switch to machine independent types
+#include <cstdlib>
 
 
 
@@ -202,11 +202,11 @@ void powered_flight_mode()
 	}
 
 /*
- * @note - this function will take a little over second to run
+ * @note - this function will take a little under a second to run
  */
 int apogee_check()
 	{
-	// fill buffer with ema value readings then impl every x ms
+	// fill buffer with altitude readings taken every APOGEE_READING_INTERVAL milliseconds
 	starting_time                = millis();
 	uint8_t apogee_buffer_cursor = 0;
 	float apogee_buffer[APOGEE_BUFFER_SIZE];
@@ -238,28 +238,25 @@ int apogee_check()
 			}
 		}
 
-	// print buffer
-	for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
+	// calculate exponential moving average of apogee buffer
+	float apogee_buffer_ema = apogee_buffer[0];
+	for (int i = 1; i < APOGEE_BUFFER_SIZE; i++)
 		{
-		print(apogee_buffer[i]);
-		print(", ");
+		apogee_buffer_ema = get_exponential_moving_average(apogee_buffer[i], apogee_buffer_ema, MODERATE_EMA_SMOOTHING);
 		}
-	println("");
 
-	// check if monotonically non increasing
-	for (int i = 0; i < APOGEE_BUFFER_SIZE; i++)
+	bool ema_lessthan_oldestreading = apogee_buffer_ema < apogee_buffer[0];
+	bool ema_greaterthan_zero       = apogee_buffer_ema > ZERO_FLOAT;
+	bool ema_greaterthan_threshold  = (apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_DIFFERENCE_THRESHOLD;
+
+	if (ema_lessthan_oldestreading && ema_greaterthan_zero && ema_greaterthan_threshold)
 		{
-		if (apogee_buffer[i] < apogee_buffer[i + 1]) // add threshold
-			{
-			println("apogee check failed");
-			print(apogee_buffer[i]);
-			print(", ");
-			print(apogee_buffer[i + 1]);
-			return EXIT_FAILURE;
-			}
+		return EXIT_SUCCESS;
 		}
-	println("apogee check succeeded");
-	return EXIT_SUCCESS;
+	else
+		{
+		return EXIT_FAILURE;
+		}
 	}
 
 void unpowered_flight_mode()
@@ -486,6 +483,5 @@ void loop()
 	{
 	// debug_data();
 	wdt.feed();
-	// select_flight_mode(rocket_state);
-	println(apogee_check());
+	select_flight_mode(rocket_state);
 	}
