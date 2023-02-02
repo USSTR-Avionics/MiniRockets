@@ -1,4 +1,4 @@
-name: Run clang-format Linter
+name: test-clang-format-lint
 
 on: [push, pull_request]
 
@@ -7,14 +7,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: DoozyX/clang-format-lint-action@v0.14
       with:
-        source: './CPP_flight_computer_program'
-        exclude: './CPP_flight_computer_program/lib'
-        extensions: 'h,cpp,c'
+        source: './CPP_flight_computer_program/src'
+        extensions: 'h,cpp'
         clangFormatVersion: 15
-        inplace: True
-    - uses: EndBug/add-and-commit@v4
-      with:
-          default_author: github_actions
