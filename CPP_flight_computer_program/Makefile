@@ -12,8 +12,12 @@ help:
 	@echo "    Verify the configuration file for clang-tidy."
 	@echo "make format"
 	@echo "    Format all source files in-place."
+	@echo "make check"
+	@echo "    Check that all source files are formatted correctly."
 	@echo "make preview"
 	@echo "    Preview the changes that would be made by make format."
+	@echo "make build"
+	@echo "    Build the project."
 
 tidy:
 	clang-tidy-15 --config-file=.clang-tidy src/* include/*
@@ -24,5 +28,11 @@ verify:
 format:
 	clang-format-15 -i -style=file ./src/* ./include/*
 
+check:
+	clang-format-15 --dry-run --Werror ./src/* ./include/*
+
 preview:
-	clang-format15 -style=file ./src/* ./include/*
+	clang-format-15 -style=file ./src/* ./include/*
+
+build:
+	pio run
