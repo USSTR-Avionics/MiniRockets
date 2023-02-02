@@ -6,9 +6,9 @@ Checks:
     cppcoreguidelines-*,
     llvm-header-guard,
     llvm-include-order,
-    readability-*,
-    misc-no-recursion,
-    modernize-deprecated-headers,
-    modernize-loop-conver,
-    performance-*'
+    misc-*,
+    modernize-*,
+    performance-*,
+    portability-*,
+    readability-*'
 ---
