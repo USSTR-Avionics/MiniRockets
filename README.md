@@ -88,6 +88,7 @@ int write_to_fram(uint8_t what, uint8_t where)
 
 # Coding Style Guidelines
 
+> NOTE: most of the linting is handled by clang-format-15
 
 ## Naming things
 
@@ -138,50 +139,6 @@ We classify headers into 4 types
 They should be named similar to their respective header files that expose the API function calls
 
 Should also adhere to the header file(s) naming convention
-
-
-## Indentation
-
-- we will use the Whitesmiths style of indents, [reasoning](http://www.activeclickweb.com/whitesmiths/index.html)  
-
-- in line tab indents, that means you indent after a command block like in Python and then continue in line  
-
-```
-    if (condition == true)
-        {
-        foobar();
-        }
-```
-
-- use tabs to indent, 1 tab = 4 spaces  
-
-
-## Print statements
-
-- all print statements are macros that are defined or undefined based on what mode the project is compiling into
-
-- every debug print statement should have a tag indicating what it is in reference to   
-    Example  
-        [ROCKET STATE] => indicates the statement is for debugging rocket state  
-        [KX134] => indicates debugging for the respective sensor  
-
-
-## if-else statements
-
-- make them explicit
-
-```
-    if (0){}            // bad
-    if (true){}         // bad
-    if (state){}        // bad
-    if (state == false) // good
-```
-
-- try to make them into switch case statements wherever convinient
-
-## Miscellaneous 
-
-- keep main.cpp under 500 lines
 
 ---
 <p align="center"> <img src = https://i.imgur.com/jnRxNR3.png> </img> </p>
