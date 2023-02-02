@@ -12,4 +12,4 @@ jobs:
       with:
         source: './CPP_flight_computer_program/src'
         extensions: 'h,cpp'
-        clangFormatVersion: 15
+        clangFormatVersion: 15.0.2
