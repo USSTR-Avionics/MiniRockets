@@ -316,7 +316,7 @@ void ballistic_descent_mode()
 
 void chute_descent_mode()
 	{
-    println("[ROCKET STATE] CHUTE DESCENT");
+	println("[ROCKET STATE] CHUTE DESCENT");
 	// TODO:
 	// ledON("ORANGE");
 
@@ -331,7 +331,7 @@ void chute_descent_mode()
 
 void land_safe_mode()
 	{
-    println("[ROCKET STATE] LAND SAFE");
+	println("[ROCKET STATE] LAND SAFE");
 	// STOP DATA COLLECTION
 	// CHECK IF SD CARD CAN STILL BE WRITTEN TO
 	// IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
