@@ -144,7 +144,7 @@ int health_check()
 			}
 		}
 
-	write_to_sd_card(EVENTLOG, "health checks passed");
+	// write_to_sd_card(EVENTLOG, "health checks passed");
 
 	return EXIT_SUCCESS;
 	}
@@ -265,7 +265,7 @@ void unpowered_flight_mode()
 
 	setLedBlue();
 
-	if (apogee_check() == true)
+	if (apogee_check() == EXIT_SUCCESS)
 		{
 		rocket_state = statemachine_t::e_rocket_state::ballistic_descent;
 		}
@@ -316,6 +316,7 @@ void ballistic_descent_mode()
 
 void chute_descent_mode()
 	{
+    println("[ROCKET STATE] CHUTE DESCENT");
 	// TODO:
 	// ledON("ORANGE");
 
@@ -330,11 +331,12 @@ void chute_descent_mode()
 
 void land_safe_mode()
 	{
+    println("[ROCKET STATE] LAND SAFE");
 	// STOP DATA COLLECTION
 	// CHECK IF SD CARD CAN STILL BE WRITTEN TO
 	// IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
 	// WRITE TO SD CARD
-	write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
+	// write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
 	if (starting_time == 0)
 		{
 		starting_time = millis();
@@ -481,7 +483,7 @@ void setup()
 
 void loop()
 	{
-	// debug_data();
+	debug_data();
 	wdt.feed();
 	select_flight_mode(rocket_state);
 	}
