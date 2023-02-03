@@ -29,7 +29,7 @@ jobs:
         linecount=$(wc -l $mainpath | tr -dc '0-9')
         if [ $linecount -gt $mainsrclinecount ]; then exit 1; fi
         echo "line limits for ./src/*"
-        for i in srcpath
+        for i in $srcpath
         do 
             linecount=$(wc -l $i | grep -o '^[^ ]*')
             if [ $linecount -gt $srcfilelinelimit ]
@@ -44,7 +44,7 @@ jobs:
             fi
         done
         echo "line limits for ./include/*"
-        for i in includepath
+        for i in $includepath
         do 
             linecount=$(wc -l $i | grep -o '^[^ ]*')
             if [ $linecount -gt $headerfilelinelimit ]
