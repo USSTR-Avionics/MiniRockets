@@ -20,8 +20,41 @@ jobs:
     - name: clang fmt lint shell
       run: |
         echo "line limit for main.cpp"
+        mainsrclinecount=500
         linecount=$(wc -l src/main.cpp | tr -dc '0-9')
-        if [ $linecount -gt 500 ]; then exit 1; fi
+        if [ $linecount -gt $mainsrclinecount ]; then exit 1; fi
+        echo "line limits for ./src/*"
+        srcfilelinelimit=200
+        for i in ./src/*.cpp
+        do 
+            linecount=$(wc -l $i | grep -o '^[^ ]*')
+            if [ $linecount -gt $srcfilelinelimit ]
+            then 
+                if grep -q "/main.cpp" <<< $i
+                then 
+                    continue
+                else
+                    echo "$i: $linecount line(s)"
+                    exit 1
+                fi
+            fi
+        done
+        echo "line limits for ./include/*"
+        headerfilelinelimit=100
+        for i in ./include/*.h
+        do 
+            linecount=$(wc -l $i | grep -o '^[^ ]*')
+            if [ $linecount -gt $headerfilelinelimit ]
+            then 
+                if grep -q "/main.cpp" <<< $i
+                then 
+                    continue
+                else
+                    echo "$i: $linecount line(s)"
+                    exit 1
+                fi
+            fi
+        done
         echo "installing clang format"
         sudo apt-get update
         sudo apt-get install clang-format

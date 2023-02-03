@@ -68,7 +68,7 @@ int init_all()
 	// init_bmi088();
 	// init_RFM95_TX();
 
-    // init_I2C_scanner();
+	// init_I2C_scanner();
 
 	// Setting global variables
 	ground_base_pressure = get_bmp280_pressure();
@@ -318,7 +318,7 @@ void ballistic_descent_mode()
 
 void chute_descent_mode()
 	{
-    println("[ROCKET STATE] CHUTE DESCENT");
+	println("[ROCKET STATE] CHUTE DESCENT");
 	// TODO:
 	// ledON("ORANGE");
 
@@ -333,7 +333,7 @@ void chute_descent_mode()
 
 void land_safe_mode()
 	{
-    println("[ROCKET STATE] LAND SAFE");
+	println("[ROCKET STATE] LAND SAFE");
 	// STOP DATA COLLECTION
 	// CHECK IF SD CARD CAN STILL BE WRITTEN TO
 	// IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
@@ -486,6 +486,6 @@ void setup()
 void loop()
 	{
 	debug_data();
-    wdt.feed();
+	wdt.feed();
 	select_flight_mode(rocket_state);
 	}
