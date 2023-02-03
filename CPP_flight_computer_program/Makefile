@@ -16,6 +16,10 @@ help:
 	@echo "    Check that all source files are formatted correctly."
 	@echo "make preview"
 	@echo "    Preview the changes that would be made by make format."
+	@echo "make clean"
+	@echo "    Clean the project dependencies."
+	@echo "make upload"
+	@echo "    Upload the project to the device."
 	@echo "make build"
 	@echo "    Build the project."
 
@@ -34,5 +38,12 @@ check:
 preview:
 	clang-format-15 -style=file ./src/* ./include/*
 
+clean:
+	pio run -t clean
+
+upload:
+	pio run -t upload
+
 build:
 	pio run
+

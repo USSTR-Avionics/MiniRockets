@@ -4,12 +4,13 @@
 
 #define FRAM_I2C_ADDRESS 0x50
 
-Adafruit_FRAM_I2C fram = Adafruit_FRAM_I2C();
+Adafruit_FRAM_I2C fram; 
 
 
 int init_fram()
 	{
 	Serial.println("init_fram()");
+    fram = Adafruit_FRAM_I2C();
 	fram.begin(FRAM_I2C_ADDRESS);
 
 	return EXIT_SUCCESS;
@@ -20,10 +21,13 @@ int init_fram()
  * @param    what    the data to write
  * @param    where   the address to write to
  */
-int write_to_fram(int what, int where)
+int write_to_fram(uint16_t what, uint8_t where)
 	{
-	fram.write(where, what);
-	return EXIT_SUCCESS;
+    if (fram.write(where, what))
+        {
+	    return EXIT_SUCCESS;
+        }
+    return EXIT_FAILURE;
 	}
 
 /*

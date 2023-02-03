@@ -60,13 +60,15 @@ int init_all()
 	init_bmp280();
 
 	// init_SD();
-	// init_fram();
+	init_fram();
 
 	// init_LED();
 
 	// TODO:
 	// init_bmi088();
 	// init_RFM95_TX();
+
+    // init_I2C_scanner();
 
 	// Setting global variables
 	ground_base_pressure = get_bmp280_pressure();
@@ -434,7 +436,7 @@ int debug_data()
 	print("data_string: ");
 	println(data_string);
 
-	scan_and_print_I2C_devices();
+	// scan_and_print_I2C_devices();
 
 	debug_time = 0UL;
 
@@ -484,6 +486,6 @@ void setup()
 void loop()
 	{
 	debug_data();
-	wdt.feed();
+    wdt.feed();
 	select_flight_mode(rocket_state);
 	}
