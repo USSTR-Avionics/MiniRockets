@@ -19,18 +19,22 @@ jobs:
     - uses: actions/checkout@v3
     - name: clang fmt lint shell
       run: |
-        echo "line limit for main.cpp"
+        srcpath="./CPP_flight_computer_program/src/*"
+        includepath="./CPP_flight_computer_program/include/*"
+        mainpath="./CPP_flight_computer_program/src/main.cpp"
+        srcfilelinelimit=200
         mainsrclinecount=500
-        linecount=$(wc -l src/main.cpp | tr -dc '0-9')
+        headerfilelinelimit=100
+        echo "line limit for main.cpp"
+        linecount=$(wc -l $mainpath | tr -dc '0-9')
         if [ $linecount -gt $mainsrclinecount ]; then exit 1; fi
         echo "line limits for ./src/*"
-        srcfilelinelimit=200
-        for i in ./src/*.cpp
+        for i in srcpath
         do 
             linecount=$(wc -l $i | grep -o '^[^ ]*')
             if [ $linecount -gt $srcfilelinelimit ]
             then 
-                if grep -q "/main.cpp" <<< $i
+                if grep -q $mainpath <<< $i
                 then 
                     continue
                 else
@@ -40,19 +44,13 @@ jobs:
             fi
         done
         echo "line limits for ./include/*"
-        headerfilelinelimit=100
-        for i in ./include/*.h
+        for i in includepath
         do 
             linecount=$(wc -l $i | grep -o '^[^ ]*')
             if [ $linecount -gt $headerfilelinelimit ]
             then 
-                if grep -q "/main.cpp" <<< $i
-                then 
-                    continue
-                else
-                    echo "$i: $linecount line(s)"
-                    exit 1
-                fi
+              echo "$i: $linecount line(s)"
+              exit 1
             fi
         done
         echo "installing clang format"
