@@ -5,7 +5,7 @@
 		{
 			"compiler" : 
 			{
-				"id" : "AppleClang",
+				"id" : "GNU",
 				"implicit" : 
 				{
 					"includeDirectories" : [],
@@ -13,8 +13,8 @@
 					"linkFrameworkDirectories" : [],
 					"linkLibraries" : []
 				},
-				"path" : "/Users/kuang/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
-				"version" : "14.0.0.14000029"
+				"path" : "C:/Users/TDKua/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc.exe",
+				"version" : "11.2.0"
 			},
 			"language" : "C",
 			"sourceFileExtensions" : 
@@ -26,7 +26,7 @@
 		{
 			"compiler" : 
 			{
-				"id" : "AppleClang",
+				"id" : "GNU",
 				"implicit" : 
 				{
 					"includeDirectories" : [],
@@ -34,8 +34,8 @@
 					"linkFrameworkDirectories" : [],
 					"linkLibraries" : []
 				},
-				"path" : "/Users/kuang/.platformio/packages/toolchain-atmelavr/bin/avr-g++",
-				"version" : "14.0.0.14000029"
+				"path" : "C:/Users/TDKua/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-g++.exe",
+				"version" : "11.2.0"
 			},
 			"language" : "CXX",
 			"sourceFileExtensions" : 

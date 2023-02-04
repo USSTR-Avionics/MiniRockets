@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Avionics_RX"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Production">
+				<Option working_dir="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 Production"/>
+					<CompileFile command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Debug">
+				<Option working_dir="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 Debug"/>
+					<CompileFile command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Z_DUMMY_TARGET">
+				<Option output="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Z_DUMMY_TARGET" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 Z_DUMMY_TARGET"/>
+					<CompileFile command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Z_DUMMY_TARGET/fast">
+				<Option output="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Z_DUMMY_TARGET" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../include"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed"/>
+					<Add directory="D:/Applications/CLion/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/11.2.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 Z_DUMMY_TARGET/fast"/>
+					<CompileFile command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/Applications/CLion/bin/mingw/bin/mingw32-make.exe -f &quot;D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/HardwareSerial.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/HardwareSerial.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/RasPi.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/RasPi.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/atomic.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/simulator.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/HardwareSPI.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/HardwareSPI.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/HardwareSerial.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/HardwareSerial.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/wirish.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/wirish.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/ask/ask_receiver/ask_receiver.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/ask/ask_reliable_datagram_client/ask_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/ask/ask_reliable_datagram_server/ask_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/ask/ask_transmitter/ask_transmitter.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/cc110/cc110_client/cc110_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/cc110/cc110_server/cc110_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/mrf89/mrf89_client/mrf89_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/mrf89/mrf89_server/mrf89_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf24/nrf24_client/nrf24_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf24/nrf24_reliable_datagram_client/nrf24_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf24/nrf24_reliable_datagram_server/nrf24_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf24/nrf24_server/nrf24_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf51/nrf51_audio_rx/nrf51_audio_rx.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf51/nrf51_audio_tx/nrf51_audio.pdf">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf51/nrf51_audio_tx/nrf51_audio_tx.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf51/nrf51_client/nrf51_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf51/nrf51_reliable_datagram_client/nrf51_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf51/nrf51_reliable_datagram_server/nrf51_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf51/nrf51_server/nrf51_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf905/nrf905_client/nrf905_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf905/nrf905_reliable_datagram_client/nrf905_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf905/nrf905_reliable_datagram_server/nrf905_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/nrf905/nrf905_server/nrf905_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/raspi/RasPiRH.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_client/rf22_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_mesh_client/rf22_mesh_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_mesh_server1/rf22_mesh_server1.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_mesh_server2/rf22_mesh_server2.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_mesh_server3/rf22_mesh_server3.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_reliable_datagram_client/rf22_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_reliable_datagram_server/rf22_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_router_client/rf22_router_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_router_server1/rf22_router_server1.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_router_server2/rf22_router_server2.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_router_server3/rf22_router_server3.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_router_test/rf22_router_test.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf22/rf22_server/rf22_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf24/rf24_client/rf24_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf24/rf24_reliable_datagram_client/rf24_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf24/rf24_reliable_datagram_server/rf24_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf24/rf24_server/rf24_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf69/rf69_client/rf69_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf69/rf69_reliable_datagram_client/rf69_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf69/rf69_reliable_datagram_server/rf69_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf69/rf69_server/rf69_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf95/rf95_client/rf95_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf95/rf95_reliable_datagram_client/rf95_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf95/rf95_reliable_datagram_server/rf95_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/rf95/rf95_server/rf95_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/serial/serial_reliable_datagram_client/serial_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/serial/serial_reliable_datagram_server/serial_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/simulator/simulator_reliable_datagram_client/simulator_reliable_datagram_client.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/simulator/simulator_reliable_datagram_server/simulator_reliable_datagram_server.pde">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/project.cfg">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHCRC.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHCRC.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHDatagram.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHDatagram.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHGenericDriver.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHGenericDriver.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHGenericSPI.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHGenericSPI.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHHardwareSPI.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHHardwareSPI.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHMesh.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHMesh.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHNRFSPIDriver.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHNRFSPIDriver.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHReliableDatagram.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHReliableDatagram.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHRouter.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHRouter.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHSPIDriver.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHSPIDriver.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHSoftwareSPI.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHSoftwareSPI.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RHTcpProtocol.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_ASK.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_ASK.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_CC110.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_CC110.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_MRF89.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_MRF89.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_NRF24.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_NRF24.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_NRF51.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_NRF51.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_NRF905.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_NRF905.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF22.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF22.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF24.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF24.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF69.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF69.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF95.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_RF95.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_Serial.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_Serial.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_TCP.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RH_TCP.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/RadioHead.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/src/radio_config_Si4460.h">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/tools/chain.conf">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/tools/etherSimulator.pl">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/tools/simMain.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/src/RFM95W.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/src/main.cpp">
+			<Option target="Z_DUMMY_TARGET"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/CMakeListsPrivate.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

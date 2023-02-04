@@ -1,28 +1,28 @@
 The target system is: Generic -  - 
-The host system is: Darwin - 21.6.0 - arm64
+The host system is: Windows - 10.0.19045 - AMD64
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
-Compiler: /Library/Developer/CommandLineTools/usr/bin/cc 
+Compiler: D:/Applications/CLion/bin/mingw/bin/gcc.exe 
 Build flags: 
-Id flags: -c 
+Id flags:  
 
 The output was:
 0
 
 
-Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.exe"
 
-The C compiler identification is AppleClang, found in "/Users/kuang/Developer/Projects/untitled/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdC/CMakeCCompilerId.o"
+The C compiler identification is GNU, found in "D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdC/a.exe"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
-Compiler: /Library/Developer/CommandLineTools/usr/bin/CC 
+Compiler: D:/Applications/CLion/bin/mingw/bin/g++.exe 
 Build flags: 
-Id flags: -c 
+Id flags:  
 
 The output was:
 0
 
 
-Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
 
-The CXX compiler identification is AppleClang, found in "/Users/kuang/Developer/Projects/untitled/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdCXX/CMakeCXXCompilerId.o"
+The CXX compiler identification is GNU, found in "D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/CMakeFiles/3.23.2/CompilerIdCXX/a.exe"
 

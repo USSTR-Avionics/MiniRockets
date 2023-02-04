@@ -1,6 +1,6 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S /Users/kuang/Developer/Projects/untitled -B /Users/kuang/Developer/Projects/untitled/cmake-build-debug
--- The C compiler identification is AppleClang 14.0.0.14000029
--- The CXX compiler identification is AppleClang 14.0.0.14000029
+D:\Applications\CLion\bin\cmake\win\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S D:\ktz\Programming\Club\USST\Avionics\Avionics-code\Avionics_RX -B D:\ktz\Programming\Club\USST\Avionics\Avionics-code\Avionics_RX\cmake-build-debug
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - failed
 -- Detecting C compile features
@@ -11,4 +11,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: /Users/kuang/Developer/Projects/untitled/cmake-build-debug
+-- Build files have been written to: D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug
