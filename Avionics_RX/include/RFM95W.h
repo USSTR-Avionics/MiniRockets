@@ -24,10 +24,9 @@ YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
 
 #include <string>
 #include <memory>
-#include <tuple>
 
 
-class RFM95W : public RH_RF95
+class RFM95W
 {
 public:
     enum class Mode
@@ -38,6 +37,7 @@ public:
     };
 
     RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type = Mode::IDLE);
+
 
     // core
     bool TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX = 500) const;

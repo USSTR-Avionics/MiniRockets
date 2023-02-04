@@ -1,7 +1,7 @@
 // RHNRFSPIDriver.cpp
 //
 // Copyright (C) 2014 Mike McCauley
-// $Id: RHNRFSPIDriver.cpp,v 1.3 2015/12/16 04:55:33 mikem Exp $
+// $Id: RHNRFSPIDriver.cpp,v 1.6 2020/08/04 09:02:14 mikem Exp $
 
 #include <RHNRFSPIDriver.h>
 
@@ -30,23 +30,35 @@ bool RHNRFSPIDriver::init()
 // Low level commands for interfacing with the device
 uint8_t RHNRFSPIDriver::spiCommand(uint8_t command)
 {
-    uint8_t status;
+    uint8_t status = 0;
     ATOMIC_BLOCK_START;
+#if (RH_PLATFORM == RH_PLATFORM_MONGOOSE_OS)
+    status = _spi.transfer(command);
+#else
+    _spi.beginTransaction();
     digitalWrite(_slaveSelectPin, LOW);
     status = _spi.transfer(command);
     digitalWrite(_slaveSelectPin, HIGH);
+    _spi.endTransaction();
+#endif
     ATOMIC_BLOCK_END;
     return status;
 }
 
 uint8_t RHNRFSPIDriver::spiRead(uint8_t reg)
 {
-    uint8_t val;
+    uint8_t val = 0;
     ATOMIC_BLOCK_START;
+#if (RH_PLATFORM == RH_PLATFORM_MONGOOSE_OS)
+    val = _spi.transfer2B(reg, 0); // Send the address, discard the status, The written value is ignored, reg value is read
+#else
+    _spi.beginTransaction();
     digitalWrite(_slaveSelectPin, LOW);
     _spi.transfer(reg); // Send the address, discard the status
     val = _spi.transfer(0); // The written value is ignored, reg value is read
     digitalWrite(_slaveSelectPin, HIGH);
+    _spi.endTransaction();
+#endif
     ATOMIC_BLOCK_END;
     return val;
 }
@@ -55,6 +67,10 @@ uint8_t RHNRFSPIDriver::spiWrite(uint8_t reg, uint8_t val)
 {
     uint8_t status = 0;
     ATOMIC_BLOCK_START;
+#if (RH_PLATFORM == RH_PLATFORM_MONGOOSE_OS)
+    status = _spi.transfer2B(reg, val);
+#else
+    _spi.beginTransaction();
     digitalWrite(_slaveSelectPin, LOW);
     status = _spi.transfer(reg); // Send the address
     _spi.transfer(val); // New value follows
@@ -65,6 +81,8 @@ uint8_t RHNRFSPIDriver::spiWrite(uint8_t reg, uint8_t val)
 delayMicroseconds(5);
 #endif
     digitalWrite(_slaveSelectPin, HIGH);
+    _spi.endTransaction();
+#endif
     ATOMIC_BLOCK_END;
     return status;
 }
@@ -73,11 +91,17 @@ uint8_t RHNRFSPIDriver::spiBurstRead(uint8_t reg, uint8_t* dest, uint8_t len)
 {
     uint8_t status = 0;
     ATOMIC_BLOCK_START;
+#if (RH_PLATFORM == RH_PLATFORM_MONGOOSE_OS)
+    status = _spi.spiBurstRead(reg, dest, len);
+#else
+    _spi.beginTransaction();
     digitalWrite(_slaveSelectPin, LOW);
     status = _spi.transfer(reg); // Send the start address
     while (len--)
 	*dest++ = _spi.transfer(0);
     digitalWrite(_slaveSelectPin, HIGH);
+    _spi.endTransaction();
+#endif
     ATOMIC_BLOCK_END;
     return status;
 }
@@ -86,11 +110,17 @@ uint8_t RHNRFSPIDriver::spiBurstWrite(uint8_t reg, const uint8_t* src, uint8_t l
 {
     uint8_t status = 0;
     ATOMIC_BLOCK_START;
+#if (RH_PLATFORM == RH_PLATFORM_MONGOOSE_OS)
+    status = _spi.spiBurstWrite(reg, src, len);
+#else
+    _spi.beginTransaction();
     digitalWrite(_slaveSelectPin, LOW);
     status = _spi.transfer(reg); // Send the start address
     while (len--)
 	_spi.transfer(*src++);
     digitalWrite(_slaveSelectPin, HIGH);
+    _spi.endTransaction();
+#endif
     ATOMIC_BLOCK_END;
     return status;
 }
@@ -100,4 +130,8 @@ void RHNRFSPIDriver::setSlaveSelectPin(uint8_t slaveSelectPin)
     _slaveSelectPin = slaveSelectPin;
 }
 
+void RHNRFSPIDriver::spiUsingInterrupt(uint8_t interruptNumber)
+{
+    _spi.usingInterrupt(interruptNumber);
+}
 

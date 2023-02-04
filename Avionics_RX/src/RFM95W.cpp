@@ -1,23 +1,23 @@
 #include "RFM95W.h"
 
-
-RH_RF95 a(1, 2);
-
-
 RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type)
 {
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
     m_RF95 = std::make_unique<RH_RF95>(Slave, Interrupt);
 
+    if(m_RF95 == nullptr)
+    {
+        Serial.println("no memory");
+    }
+
     m_RF95->init();
 
     Switch_Mode(Type);
 
-    m_Max_message_length = m_RF95.maxMessageLength();
+    m_Max_message_length = m_RF95->maxMessageLength();
 
     m_RST = Reset;
 };
-
 
 bool RFM95W::TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX) const
 {
@@ -55,7 +55,7 @@ bool RFM95W::TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint
 
 void RFM95W::UDP_Send(const char Data[]) const
 {
-    m_RF95.send(reinterpret_cast<const uint8_t*>(Data.c_str()), sizeof(Data.c_str()));
+    m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data));
 }
 
 std::string RFM95W::Receive()
@@ -70,11 +70,11 @@ std::string RFM95W::Receive()
         m_RF95->send(reinterpret_cast<const uint8_t*>(m_Handshake.c_str()), sizeof(m_Handshake.c_str()));
 
         // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
-        return std::string{reinterpret_cast<const char*>(Buffer)};
+        return reinterpret_cast<const char*>(Buffer);
     }
     else
     {
-        return std::string{""};
+        return "";
     }
 }
 
@@ -93,11 +93,11 @@ std::string RFM95W::Receive(const uint8_t &Time_Out)
             m_RF95->send(reinterpret_cast<const uint8_t*>(m_Handshake.c_str()), sizeof(m_Handshake.c_str()));
 
             // this type cast is very funky, functionally the exact same as (const char*) var, but dangerous regardless
-            return std::string{reinterpret_cast<const char*>(Buffer)};
+            return reinterpret_cast<const char*>(Buffer);
         }
         else
         {
-            return std::string{""};
+            return "";
         }
     }
     else

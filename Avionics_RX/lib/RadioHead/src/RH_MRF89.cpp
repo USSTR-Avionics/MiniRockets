@@ -1,7 +1,7 @@
 // RH_MRF89.cpp
 //
 // Copyright (C) 2015 Mike McCauley
-// $Id: RH_MRF89.cpp,v 1.7 2015/12/31 04:23:12 mikem Exp $
+// $Id: RH_MRF89.cpp,v 1.10 2019/09/02 05:21:52 mikem Exp $
 
 #include <RH_MRF89.h>
 #define BAND_915
@@ -67,6 +67,9 @@ bool RH_MRF89::init()
     interruptNumber = _interruptPin;
 #endif
 
+    // Tell the low level SPI interface we will use SPI within this interrupt
+    spiUsingInterrupt(interruptNumber);
+
     // Make sure we are not in some unexpected mode from a previous run    
     setOpMode(RH_MRF89_CMOD_STANDBY); 
 
@@ -114,8 +117,9 @@ bool RH_MRF89::init()
     // frequency bands 902-915 or 915-928
     // VCOT 60mV
     // OOK max 28kbps
-    // Based on 70622C.pdf, section 3.12: 
-    spiWriteRegister(RH_MRF89_REG_00_GCONREG, RH_MRF89_CMOD_STANDBY | RH_MRF89_FBS_950_960 | RH_MRF89_VCOT_60MV);
+    // Based on 70622C.pdf, section 3.12:
+
+    spiWriteRegister(RH_MRF89_REG_00_GCONREG, RH_MRF89_CMOD_STANDBY | RH_MRF89_FBS_902_915 | RH_MRF89_VCOT_60MV);
     spiWriteRegister(RH_MRF89_REG_01_DMODREG, RH_MRF89_MODSEL_FSK | RH_MRF89_OPMODE_PACKET); // FSK, Packet mode, LNA 0dB
     spiWriteRegister(RH_MRF89_REG_02_FDEVREG, 0); // Set by setModemConfig
     spiWriteRegister(RH_MRF89_REG_03_BRSREG,  0); // Set by setModemConfig
@@ -159,7 +163,8 @@ bool RH_MRF89::init()
     uint8_t syncwords[] = { 0x69, 0x81, 0x7e, 0x96 }; // Same as RH_MRF89XA
     setSyncWords(syncwords, sizeof(syncwords));
     setTxPower(RH_MRF89_TXOPVAL_1DBM);
-    if (!setFrequency(915.4))
+    // try first MRF89XAM9A then MRF89XAM8A
+    if (!setFrequency(915.4) && !setFrequency(865.0))
 	return false;
     // Some slow, reliable default speed and modulation
     if (!setModemConfig(FSK_Rb20Fd40))
@@ -235,17 +240,17 @@ void RH_MRF89::handleInterrupt()
 // These are low level functions that call the interrupt handler for the correct
 // instance of RH_MRF89.
 // 3 interrupts allows us to have 3 different devices
-void RH_MRF89::isr0()
+void RH_INTERRUPT_ATTR RH_MRF89::isr0()
 {
     if (_deviceForInterrupt[0])
 	_deviceForInterrupt[0]->handleInterrupt();
 }
-void RH_MRF89::isr1()
+void RH_INTERRUPT_ATTR RH_MRF89::isr1()
 {
     if (_deviceForInterrupt[1])
 	_deviceForInterrupt[1]->handleInterrupt();
 }
-void RH_MRF89::isr2()
+void RH_INTERRUPT_ATTR RH_MRF89::isr2()
 {
     if (_deviceForInterrupt[2])
 	_deviceForInterrupt[2]->handleInterrupt();
@@ -286,10 +291,12 @@ uint8_t RH_MRF89::spiWriteData(const uint8_t* data, uint8_t len)
 
     uint8_t status = 0;
     ATOMIC_BLOCK_START;
+    _spi.beginTransaction();
     digitalWrite(_slaveSelectPin, LOW);
     while (len--)
 	_spi.transfer(*data++);
     digitalWrite(_slaveSelectPin, HIGH);
+    _spi.endTransaction();
     ATOMIC_BLOCK_END;
     return status;
 
@@ -464,24 +471,28 @@ bool RH_MRF89::setFrequency(float centre)
     uint8_t FBS;
     if (centre >= 902.0 && centre < 915.0)
     {
+	// The MRF89XAM9A does support this frequency band
 	FBS = RH_MRF89_FBS_902_915;
     }
     else if (centre >= 915.0 && centre <= 928.0)
     {
+	// The MRF89XAM9A does support this frequency band
 	FBS = RH_MRF89_FBS_915_928;
     }
     else if (centre >= 950.0 && centre <= 960.0)
     {
 	// Not all modules support this frequency band:
 	// The MRF98XAM9A does not
-	FBS = RH_MRF89_FBS_950_960;
+        // The MRF89XA does support this frequency band
+        FBS = RH_MRF89_FBS_950_960_or_863_870;
     }
-//    else if (centre >= 863.0 && centre <= 870.0)
-//    {
-//	// Not all modules support this frequency band:
-//	// The MRF98XAM9A does not
-//	FBS = RH_MRF89_FBS_950_960; // Yes same as above
-//    }
+    else if (centre >= 863.0 && centre <= 870.0)
+    {
+	// Not all modules support this frequency band:
+	// The MRF98XAM9A does not
+        // The MRF89XAM8A does support this frequency band
+        FBS = RH_MRF89_FBS_950_960_or_863_870;
+    }
     else
     {
 	// Cant do this freq
