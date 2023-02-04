@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include "RFM95W.h"
 #include <RH_RF95.h>
+#include "Radio.cpp"
 
 static RFM95W Radio(13, 32, 30);
 
