@@ -22,9 +22,9 @@ YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
 */
 #include <string>
 
-#include "RH_RF95.h"
+#include <RH_RF95.h>
 
-class RFM95W
+class RFM95W_v1
 {
 public:
     enum class Mode
