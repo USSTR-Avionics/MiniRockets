@@ -1,5 +1,0 @@
-D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/CMakeFiles/Production.dir
-D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/CMakeFiles/Debug.dir
-D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/CMakeFiles/Z_DUMMY_TARGET.dir
-D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/ktz/Programming/Club/USST/Avionics/Avionics-code/Avionics_RX/cmake-build-debug/CMakeFiles/rebuild_cache.dir
