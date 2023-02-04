@@ -1,0 +1,416 @@
+## This file contains all the build statements describing the
+# compilation DAG.
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# 
+# Which is the root file.
+# =============================================================================
+
+# =============================================================================
+# Project: Avionics_RX
+# Configurations: uno
+# =============================================================================
+
+#############################################
+# Minimal version of Ninja required by this file
+
+ninja_required_version = 1.5
+
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = uno
+# =============================================================================
+# Include auxiliary files.
+
+
+#############################################
+# Include rules file.
+
+include CMakeFiles/rules.ninja
+
+# =============================================================================
+
+#############################################
+# Logical path to working directory; prefix for absolute paths.
+
+cmake_ninja_workdir = /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno/
+
+#############################################
+# Utility command for Production
+
+build Production: phony CMakeFiles/Production
+
+
+#############################################
+# Utility command for Debug
+
+build Debug: phony CMakeFiles/Debug
+
+# =============================================================================
+# Object build statements for EXECUTABLE target Z_DUMMY_TARGET
+
+
+#############################################
+# Order-only phony target for Z_DUMMY_TARGET
+
+build cmake_object_order_depends_target_Z_DUMMY_TARGET: phony || CMakeFiles/Z_DUMMY_TARGET.dir
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHCRC.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHCRC.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHCRC.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHDatagram.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHDatagram.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHDatagram.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHGenericDriver.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHGenericDriver.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHGenericDriver.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHGenericSPI.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHGenericSPI.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHGenericSPI.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHHardwareSPI.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHHardwareSPI.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHHardwareSPI.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHMesh.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHMesh.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHMesh.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHNRFSPIDriver.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHNRFSPIDriver.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHNRFSPIDriver.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHReliableDatagram.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHReliableDatagram.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHReliableDatagram.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHRouter.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHRouter.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHRouter.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHSPIDriver.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHSPIDriver.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHSPIDriver.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHSoftwareSPI.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHSoftwareSPI.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHSoftwareSPI.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_ASK.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_ASK.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_ASK.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_CC110.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_CC110.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_CC110.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_MRF89.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_MRF89.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_MRF89.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF24.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_NRF24.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF24.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF51.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_NRF51.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF51.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF905.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_NRF905.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF905.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF22.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_RF22.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF22.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF24.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_RF24.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF24.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF69.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_RF69.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF69.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF95.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_RF95.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF95.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_Serial.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_Serial.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_Serial.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_TCP.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RH_TCP.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_TCP.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil/HardwareSerial.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/HardwareSerial.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil/HardwareSerial.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil/RasPi.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/RHutil/RasPi.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil/RasPi.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/HardwareSPI.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/HardwareSPI.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/HardwareSPI.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/HardwareSerial.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/HardwareSerial.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/HardwareSerial.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/wirish.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/STM32ArduinoCompat/wirish.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/wirish.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/examples/raspi/RasPiRH.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/examples/raspi/RasPiRH.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/examples/raspi/RasPiRH.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/examples/raspi
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/tools/simMain.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/lib/RadioHead/tools/simMain.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/tools/simMain.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/tools
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/src/RFM95W.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/src/RFM95W.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/src/RFM95W.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+build CMakeFiles/Z_DUMMY_TARGET.dir/src/main.cpp.obj: CXX_COMPILER__Z_DUMMY_TARGET_uno /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/src/main.cpp || cmake_object_order_depends_target_Z_DUMMY_TARGET
+  DEP_FILE = CMakeFiles/Z_DUMMY_TARGET.dir/src/main.cpp.obj.d
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  OBJECT_FILE_DIR = CMakeFiles/Z_DUMMY_TARGET.dir/src
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Z_DUMMY_TARGET
+
+
+#############################################
+# Link the executable Z_DUMMY_TARGET
+
+build Z_DUMMY_TARGET: CXX_EXECUTABLE_LINKER__Z_DUMMY_TARGET_uno CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHCRC.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHDatagram.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHGenericDriver.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHGenericSPI.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHHardwareSPI.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHMesh.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHNRFSPIDriver.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHReliableDatagram.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHRouter.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHSPIDriver.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHSoftwareSPI.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_ASK.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_CC110.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_MRF89.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF24.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF51.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_NRF905.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF22.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF24.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF69.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_RF95.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_Serial.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RH_TCP.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil/HardwareSerial.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/RHutil/RasPi.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/HardwareSPI.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/HardwareSerial.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/STM32ArduinoCompat/wirish.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/examples/raspi/RasPiRH.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/lib/RadioHead/tools/simMain.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/src/RFM95W.cpp.obj CMakeFiles/Z_DUMMY_TARGET.dir/src/main.cpp.obj
+  FLAGS = -fno-exceptions -felide-constructors -fno-rtti -std=gnu++14 -Wno-error=narrowing -fpermissive -fno-threadsafe-statics -Wall -ffunction-sections -fdata-sections -mthumb -mcpu=cortex-m7 -nostdlib -fsingle-precision-constant -mfloat-abi=hard -mfpu=fpv5-d16 -O2
+  OBJECT_DIR = CMakeFiles/Z_DUMMY_TARGET.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = CMakeFiles/Z_DUMMY_TARGET.dir/
+  TARGET_FILE = Z_DUMMY_TARGET
+  TARGET_PDB = Z_DUMMY_TARGET.pdb
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX -B/Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build rebuild_cache: phony CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Custom command for CMakeFiles/Production
+
+build CMakeFiles/Production | ${cmake_ninja_workdir}CMakeFiles/Production: CUSTOM_COMMAND
+  COMMAND = cd /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX && platformio -c clion run -euno
+
+
+#############################################
+# Custom command for CMakeFiles/Debug
+
+build CMakeFiles/Debug | ${cmake_ninja_workdir}CMakeFiles/Debug: CUSTOM_COMMAND
+  COMMAND = cd /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX && platformio -c clion debug -euno
+
+# =============================================================================
+# Target aliases.
+
+# =============================================================================
+# Folder targets.
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno
+
+build all: phony Production Debug Z_DUMMY_TARGET
+
+# =============================================================================
+# Built-in targets
+
+
+#############################################
+# Re-run CMake if any of its inputs changed.
+
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../CMakeListsPrivate.txt /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompiler.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompilerABI.c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompiler.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompilerABI.cpp /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCompilerIdDetection.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompileFeatures.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompilerABI.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompilerId.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFindBinUtils.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeParseImplicitIncludeInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeParseImplicitLinkInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeParseLibraryArchitecture.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystem.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeTestCCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeTestCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeTestCompilerCommon.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/ADSP-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Borland-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Cray-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GHS-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/HP-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IAR-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Intel-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/LCC-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/MSVC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/PGI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/PathScale-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SCO-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/TI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Watcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XL-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/FeatureTesting.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Generic.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake
+  pool = console
+
+
+#############################################
+# A missing CMake input file is not an error.
+
+build ../CMakeLists.txt ../CMakeListsPrivate.txt /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompiler.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCCompilerABI.c /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompiler.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXCompilerABI.cpp /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCompilerIdDetection.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompileFeatures.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompilerABI.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineCompilerId.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeDetermineSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeFindBinUtils.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeParseImplicitIncludeInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeParseImplicitLinkInfo.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeParseLibraryArchitecture.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystem.cmake.in /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeTestCCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeTestCXXCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeTestCompilerCommon.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/ADSP-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Borland-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Cray-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GHS-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/HP-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IAR-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Intel-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/LCC-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/MSVC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/PGI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/PathScale-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SCO-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/TI-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Watcom-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XL-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Internal/FeatureTesting.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Generic.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake: phony
+
+
+#############################################
+# Clean all the built files.
+
+build clean: CLEAN
+
+
+#############################################
+# Print all primary targets available.
+
+build help: HELP
+
+
+#############################################
+# Make the all target the default.
+
+default all
