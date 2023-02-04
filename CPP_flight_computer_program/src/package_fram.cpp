@@ -3,7 +3,6 @@
 #include <stdint.h>
 
 #define ERR_READING  0
-#define WRITE_OFFSET 0x10
 int fram_cursor = 0x10;
 
 void dump_fram_to_serial()
@@ -41,7 +40,7 @@ float read_temperature_from_fram(int where)
 	// TODO:
 	int whole = read_from_fram(where);
 	where++; // read the next byte
-	int decimal       = read_from_fram(where);
+	int decimal = read_from_fram(where);
 
 	float temperature = ((float)whole - 101.0f) + ((float)decimal / 100.0f);
 
