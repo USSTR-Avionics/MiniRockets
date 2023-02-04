@@ -20,11 +20,14 @@ YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
             Bw125Cr48Sf4096,           //< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
         } ModemConfigChoice;
 */
-#include <string>
-
 #include <RH_RF95.h>
 
-class RFM95W_v1
+#include <string>
+#include <memory>
+#include <tuple>
+
+
+class RFM95W : public RH_RF95
 {
 public:
     enum class Mode
@@ -37,8 +40,9 @@ public:
     RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type = Mode::IDLE);
 
     // core
-    bool TCP_Send(const std::string &Data, const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX = 500) const;
-    void UDP_Send(const std::string &Data) const;
+    bool TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX = 500) const;
+    void UDP_Send(const char Data[]) const;
+
 
     std::string Receive();
 
@@ -61,12 +65,11 @@ public:
     void Set_Preamble_Length(const uint8_t &Length);
     void Switch_Mode(const Mode &Type);
 
-    ~RFM95W();
     RFM95W() = delete;
     RFM95W(const RFM95W &RHS) = delete;
 
 private:
-    RH_RF95 *m_RF95;
+    std::unique_ptr<RH_RF95> m_RF95;
     uint8_t m_RST;
     uint16_t m_Max_message_length;
     const std::string m_Handshake{"Received"};

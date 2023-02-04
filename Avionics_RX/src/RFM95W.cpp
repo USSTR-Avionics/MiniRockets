@@ -1,25 +1,25 @@
 #include "RFM95W.h"
 
+
+RH_RF95 a(1, 2);
+
+
 RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type)
 {
-    m_RF95 = new RH_RF95(Slave, Interrupt);
-
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
+    m_RF95 = std::make_unique<RH_RF95>(Slave, Interrupt);
+
     m_RF95->init();
 
     Switch_Mode(Type);
 
-    m_Max_message_length = m_RF95->maxMessageLength();
+    m_Max_message_length = m_RF95.maxMessageLength();
 
     m_RST = Reset;
-}
+};
 
-RFM95W::~RFM95W()
-{
-    delete m_RF95;
-}
 
-bool RFM95W::TCP_Send(const std::string &Data, const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX) const
+bool RFM95W::TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX) const
 {
     // 'atoi()' used to convert a string to an integer value,
     // but function will not report conversion errors; consider using 'strtoul' instead
@@ -28,7 +28,7 @@ bool RFM95W::TCP_Send(const std::string &Data, const uint16_t &Time_Out_RX, cons
     // returns false if message too long
 
     // need to double check to make sure sizeof(*Data) does not return sizeof(Data_ptr)
-    m_RF95->send(reinterpret_cast<const uint8_t*>(Data.c_str()), sizeof(Data.c_str()));
+    m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data));
 
     if(m_RF95->waitPacketSent(Time_Out_TX) == true)
     {
@@ -53,9 +53,9 @@ bool RFM95W::TCP_Send(const std::string &Data, const uint16_t &Time_Out_RX, cons
     return false;
 }
 
-void RFM95W::UDP_Send(const std::string &Data) const
+void RFM95W::UDP_Send(const char Data[]) const
 {
-    m_RF95->send(reinterpret_cast<const uint8_t*>(Data.c_str()), sizeof(Data.c_str()));
+    m_RF95.send(reinterpret_cast<const uint8_t*>(Data.c_str()), sizeof(Data.c_str()));
 }
 
 std::string RFM95W::Receive()
