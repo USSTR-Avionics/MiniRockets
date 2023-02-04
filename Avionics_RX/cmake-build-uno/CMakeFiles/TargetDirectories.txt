@@ -1,5 +1,0 @@
-/Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno/CMakeFiles/Production.dir
-/Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno/CMakeFiles/Debug.dir
-/Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno/CMakeFiles/Z_DUMMY_TARGET.dir
-/Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno/CMakeFiles/edit_cache.dir
-/Users/kuang/School/Club/USST/Rocketry/Avionics/Avionics-code/Avionics_RX/cmake-build-uno/CMakeFiles/rebuild_cache.dir
