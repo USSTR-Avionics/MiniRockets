@@ -62,6 +62,9 @@ Click on the :heavy_check_mark: on the bottom bar in VSCode
 
 2. Open up a Pull Request with an appropriate title and explanantion of code changes
 
+> "Your git commits should tell us WHY and not WHAT, the code tells us what was changed you should
+tell us why it was changed"
+
 
 # Documentation
 

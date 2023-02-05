@@ -47,6 +47,3 @@ upload:
 build:
 	pio run
 
-hook:
-	git config core.hooksPath /.githooks
-	chmod +x ../.githooks
