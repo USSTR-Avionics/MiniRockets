@@ -48,5 +48,5 @@ build:
 	pio run
 
 hook:
-	git config core.hooksPath ../.githooks
+	git config core.hooksPath /.githooks
 	chmod +x ../.githooks
