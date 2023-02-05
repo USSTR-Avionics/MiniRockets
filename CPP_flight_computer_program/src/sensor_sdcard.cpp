@@ -1,16 +1,14 @@
+#include "sensor_sdcard.h"
 #include "SD.h"
 
 const int chipSelect = BUILTIN_SDCARD;
 
-#define DATALOG  0
-#define EVENTLOG 1
+const File myFile;
+const Sd2Card card;
+const SdVolume volume;
+const SdFile root;
 
-File myFile;
-Sd2Card card;
-SdVolume volume;
-SdFile root;
-
-int init_SD()
+auto init_SD() -> int
 	{
 	Serial.println("init_SD()");
 
@@ -25,15 +23,15 @@ int init_SD()
 	return EXIT_SUCCESS;
 	}
 
-int write_to_sd_card(int f, const char* str)
+auto write_to_sd_card(int event_type, const char* str) -> int
 	{
-	File dataFile = NULL;
+	File dataFile = nullptr;
 
-	if (f == DATALOG)
+	if (event_type == DATALOG)
 		{
 		dataFile = SD.open("datalog.txt", FILE_WRITE);
 		}
-	else if (f == EVENTLOG)
+	else if (event_type == EVENTLOG)
 		{
 		dataFile = SD.open("eventlog.txt", FILE_WRITE);
 		}
