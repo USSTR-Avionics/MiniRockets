@@ -485,10 +485,9 @@ void setup()
 
 void loop()
 	{
-	write_temperature_to_fram(-12.34);
-	// debug_data();
+	// write_temperature_to_fram(12.34);
+	debug_data();
 	wdt.feed();
-	// select_flight_mode(rocket_state);
-	int place = 0x10;
-	println(read_temperature_from_fram(0x10));
+	select_flight_mode(rocket_state);
+	// println(read_temperature_from_fram(0x10));
 	}

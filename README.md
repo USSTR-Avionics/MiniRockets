@@ -3,7 +3,7 @@
 [![PlatformIO CI master](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/building_test.yml/badge.svg?branch=master)](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/building_test.yml)
 [![test-clang-format-lint](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/clang-format-check.yml/badge.svg)](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/clang-format-check.yml)
 ![open issues](https://img.shields.io/github/issues-raw/USSTR-Avionics/Avionics_code)
-![open PRs](https://img.shields.io/github/issues-pr/USSTR-Avionics/Avionics_code/open)
+![](https://img.shields.io/github/issues-pr-raw/USSTR-Avionics/Avionics_code)
 ![](https://badgen.net/badge/teensy_kill_count/2/red)
 ---
 
