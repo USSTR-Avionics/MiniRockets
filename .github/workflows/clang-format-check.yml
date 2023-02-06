@@ -17,6 +17,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        persist-credentials: false
     - name: clang fmt lint shell
       run: |
         srcpath="./CPP_flight_computer_program/src/*"
