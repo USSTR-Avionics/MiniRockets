@@ -1,4 +1,4 @@
-name: test-clang-format-lint
+name: clang-format-lint
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        persist-credentials: false
+        token: ${{ secrets.KEY }}
     - name: clang fmt lint shell
       run: |
         srcpath="./CPP_flight_computer_program/src/*"
