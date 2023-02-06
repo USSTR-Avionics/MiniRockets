@@ -24,7 +24,7 @@ help:
 	@echo "    Build the project."
 
 tidy:
-	clang-tidy-15 --config-file=.clang-tidy src/* include/*
+	clang-tidy-15 --config-file=.clang-tidy src/*.cpp include/*.h
 
 verify:
 	clang-tidy-15 --config-file=.clang-tidy --verify-config
