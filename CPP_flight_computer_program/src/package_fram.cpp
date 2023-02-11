@@ -1,8 +1,8 @@
+#include "debug_macros.h"
 #include "sensor_fram.h"
 #include <Arduino.h>
-#include <stdint.h>
-#include "debug_macros.h"
 #include <cstdint>
+#include <stdint.h>
 
 #define ERR_READING 0
 int fram_cursor         = 0x10;
@@ -53,7 +53,7 @@ auto read_temperature_from_fram(int where) -> float
 	// TODO:
 	uint8_t whole = read_from_fram(where);
 	where++; // read the next byte
-	uint8_t decimal       = read_from_fram(where);
+	uint8_t decimal   = read_from_fram(where);
 	float temperature = ((float)whole - 128.0f) + ((float)decimal / 100.0f);
 
 	return temperature;
@@ -68,7 +68,7 @@ auto write_acceleration_to_fram(float accel) -> int
 	{
 	// TODO: test and work
 	// handle negative accelation values
-  
+
 	float upper_bound = 127.0f;
 	float lower_bound = -128.0f;
 
