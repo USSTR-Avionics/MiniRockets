@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #define ERR_READING 0
-int fram_cursor = 0x10;
+int fram_cursor         = 0x10;
 
 const float upper_bound = 100.0F;
 const float lower_bound = -100.0F;
@@ -70,7 +70,7 @@ auto write_acceleration_to_fram(float accel) -> int
 	}
 
 auto read_acceleration_from_fram(int where) -> float
-    {
+	{
 	// TODO:
 	where = 0;
 	return 0.0F;

@@ -2,7 +2,7 @@
 
 	#include "debug_macros.h"
 	#include "sensor_fram.h"
-    #include "package_fram.h"
+	#include "package_fram.h"
 	#include "unity.h"
 
 
@@ -12,25 +12,25 @@ void setup_test_sensor_fram()
 	}
 
 void teardown_test_sensor_fram()
-    {
-    // TODO: restore fram to original state
-    }
+	{
+	// TODO: restore fram to original state
+	}
 
 void test_sensor_fram()
-    {
-    setup_test_sensor_fram();
+	{
+	setup_test_sensor_fram();
 
-    // TODO: write test for fram
+	// TODO: write test for fram
 
-    teardown_test_sensor_fram();
-    }
+	teardown_test_sensor_fram();
+	}
 
 int test_main()
 	{
 	println("[TESTMODE] tests starting");
-    println("testing fram...");
-    test_sensor_fram();
-    println("testing fram...done");
+	println("testing fram...");
+	test_sensor_fram();
+	println("testing fram...done");
 	println("[TESTMODE] tests completed");
 	exit(1);
 	}
