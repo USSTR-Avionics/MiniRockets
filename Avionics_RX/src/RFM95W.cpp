@@ -1,6 +1,6 @@
 #include "RFM95W.h"
 
-RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type)
+RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type)
 {
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
     m_RF95 = std::make_unique<RH_RF95>(Slave, Interrupt);
@@ -10,14 +10,16 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Re
         Serial.println("no memory");
     }
 
-    m_RF95->init();
-
     Switch_Mode(Type);
 
     m_Max_message_length = m_RF95->maxMessageLength();
-
-    m_RST = Reset;
 };
+
+void RFM95W::Init() const
+{
+    m_RF95->init();
+
+}
 
 bool RFM95W::TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX) const
 {

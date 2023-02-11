@@ -36,10 +36,10 @@ public:
         IDLE
     };
 
-    RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type = Mode::IDLE);
-
+    RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type = Mode::IDLE);
 
     // core
+    void Init() const;
     bool TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX = 500) const;
     void UDP_Send(const char Data[]) const;
 
@@ -70,7 +70,6 @@ public:
 
 private:
     std::unique_ptr<RH_RF95> m_RF95;
-    uint8_t m_RST;
     uint16_t m_Max_message_length;
     const std::string m_Handshake{"Received"};
 };
