@@ -485,7 +485,6 @@ void setup()
 
 void loop()
 	{
-    println(String(millis()));
 	debug_data();
 	wdt.feed();
 	select_flight_mode(rocket_state);
