@@ -1,4 +1,4 @@
-name: test-clang-format-lint
+name: clang-format-lint
 
 on:
   push:
