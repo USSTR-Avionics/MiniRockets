@@ -1,43 +1,46 @@
 #if (TESTMODE == 1)
 
-#include "unity.h"
+	#include "debug_macros.h"
+	#include "sensor_fram.h"
+	#include "package_fram.h"
+	#include "unity.h"
 
-#include "debug_macros.h"
 
-#include "sensor_fram.h"
+void setup_test_sensor_fram()
+	{
+	init_fram();
+	}
 
+void teardown_test_sensor_fram()
+	{
+	// TODO: restore fram to original state
+	}
 
-void test_fram_read_write()
-    {
-    init_fram();
+void test_sensor_fram()
+	{
+	setup_test_sensor_fram();
 
-    uint8_t data = 1;
+	// TODO: write test for fram
 
-    write_to_fram(data, 0x10);
-    uint8_t result = read_from_fram(0x10);
-    
-    println(data);
-    println(result);
-
-    write_to_fram(10, 0);
-    write_to_fram(0, 10);
-    println(read_from_fram(0));
-    }
+	teardown_test_sensor_fram();
+	}
 
 int test_main()
-    {
-    println("[TESTMODE] tests starting");
-    test_fram_read_write();
-    println("[TESTMODE] tests completed");
-    exit(1);
-    }
+	{
+	println("[TESTMODE] tests starting");
+	println("testing fram...");
+	test_sensor_fram();
+	println("testing fram...done");
+	println("[TESTMODE] tests completed");
+	exit(1);
+	}
 
 void setUp(void) // run before each test
-    {
-    }
+	{
+	}
 
 void tearDown(void) // run after each test
-    {
-    }
+	{
+	}
 
 #endif // TESTMODE

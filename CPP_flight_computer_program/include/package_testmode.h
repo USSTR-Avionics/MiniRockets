@@ -11,15 +11,12 @@
 
 // DEBUG MODE dependent code and definitions go here!
 #ifdef ROCKET_DEBUGMODE
-    #warning "DEBUG MODE ENABLED"
+	#warning "DEBUG MODE ENABLED"
 #else
-    #error "ARE YOU SURE YOU WANT TO BUILD IN PRODUCTION MODE?"
-    #warning "DELETE THE ERRONEOUS LINE TO BUILD IN PRODUCTION MODE"
-#endif  // ROCKET_DEBUGMODE
+	#error "ARE YOU SURE YOU WANT TO BUILD IN PRODUCTION MODE?"
+	#warning "DELETE THE ERRONEOUS LINE TO BUILD IN PRODUCTION MODE"
+#endif // ROCKET_DEBUGMODE
 
 #include "statemachine_t.h"
-
-statemachine_t::e_rocket_state enter_state(int state);
-void test_mode_state();
 
 #endif // PACKAGE_TESTMODE_H

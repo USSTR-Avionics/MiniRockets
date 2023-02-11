@@ -1,0 +1,68 @@
+name: clang-format-lint
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+
+  pull_request:
+    branches:
+      - dev
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: clang fmt lint shell
+      run: |
+        srcpath="./CPP_flight_computer_program/src/*"
+        includepath="./CPP_flight_computer_program/include/*"
+        mainpath="./CPP_flight_computer_program/src/main.cpp"
+        srcfilelinelimit=200
+        mainsrclinecount=500
+        headerfilelinelimit=100
+        echo "line limit for main.cpp"
+        linecount=$(wc -l $mainpath | tr -dc '0-9')
+        if [ $linecount -gt $mainsrclinecount ]; then exit 1; fi
+        echo "line limits for ./src/*"
+        for i in $srcpath
+        do 
+            linecount=$(wc -l $i | grep -o '^[^ ]*')
+            if [ $linecount -gt $srcfilelinelimit ]
+            then 
+                if grep -q $mainpath <<< $i
+                then 
+                    continue
+                else
+                    echo "$i: $linecount line(s)"
+                    exit 1
+                fi
+            fi
+        done
+        echo "line limits for ./include/*"
+        for i in $includepath
+        do 
+            linecount=$(wc -l $i | grep -o '^[^ ]*')
+            if [ $linecount -gt $headerfilelinelimit ]
+            then 
+              echo "$i: $linecount line(s)"
+              exit 1
+            fi
+        done
+        echo "installing clang format"
+        sudo apt-get update
+        sudo apt-get install clang-format
+        sudo apt-get install clang-format-15 -y
+        echo "linting clang format"
+        clang-format-15 --version
+        clang-format-15 -i ./CPP_flight_computer_program/src/*  ./CPP_flight_computer_program/include/*
+    - name: commit
+      uses: EndBug/add-and-commit@v9
+      with:
+        message: 'automated lint commit'
+        add: '.'
+        default_author: github_actions

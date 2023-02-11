@@ -1,6 +1,8 @@
 #if !defined(_WATCHDOG_T4_H_)
 #define _WATCHDOG_T4_H_
 
+#pragma GCC system_header
+
 #include "Arduino.h"
 
 typedef void (*watchdog_class_ptr)();
@@ -20,9 +22,9 @@ typedef enum RTWDOG_CLK_TABLE {
 } RTWDOG_CLK_TABLE;
 
 typedef struct WDT_timings_t {
-  double trigger = 5;  // trigger is how long before the watchdog callback fires 
-  double timeout = 10; // timeout is how long before not feeding will the watchdog reset  
-  double window = 0;
+  float trigger = 5;  // trigger is how long before the watchdog callback fires 
+  float timeout = 10; // timeout is how long before not feeding will the watchdog reset  
+  float window = 0;
   uint8_t pin = 0;
   RTWDOG_CLK_TABLE clock = LPO_CLK; /* default clock, 32KHz */
   bool lp_suspend = 0;

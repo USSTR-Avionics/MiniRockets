@@ -1,11 +1,14 @@
 #ifndef SENSOR_BMP280_H
 #define SENSOR_BMP280_H
 
-#include "default_variables.h"
+#define APOGEE_BUFFER_SIZE          10
+#define APOGEE_READING_INTERVAL     75
+#define APOGEE_DIFFERENCE_THRESHOLD 0.10f
 
-float ground_base_pressure = FLO_DEF;
-float ground_base_altitude = FLO_DEF;
-float rocket_altitude   = 0.0;
+extern float ground_base_pressure;
+extern float ground_base_altitude;
+extern float rocket_altitude;
+
 
 int init_bmp280();
 float get_bmp280_pressure();
