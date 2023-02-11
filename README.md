@@ -3,7 +3,7 @@
 [![PlatformIO CI master](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/building_test.yml/badge.svg?branch=master)](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/building_test.yml)
 [![test-clang-format-lint](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/clang-format-check.yml/badge.svg)](https://github.com/USSTR-Avionics/Avionics_code/actions/workflows/clang-format-check.yml)
 ![open issues](https://img.shields.io/github/issues-raw/USSTR-Avionics/Avionics_code)
-![open PRs](https://img.shields.io/github/issues-pr/USSTR-Avionics/Avionics_code/open)
+![](https://img.shields.io/github/issues-pr-raw/USSTR-Avionics/Avionics_code)
 ![](https://badgen.net/badge/teensy_kill_count/2/red)
 ---
 
@@ -61,6 +61,9 @@ Click on the :heavy_check_mark: on the bottom bar in VSCode
     `git fetch upstream dev`  
 
 2. Open up a Pull Request with an appropriate title and explanantion of code changes
+
+> "Your git commits should tell us WHY and not WHAT, the code tells us what was changed you should
+tell us why it was changed"
 
 
 # Documentation

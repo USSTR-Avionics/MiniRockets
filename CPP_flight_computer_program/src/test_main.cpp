@@ -2,30 +2,35 @@
 
 	#include "debug_macros.h"
 	#include "sensor_fram.h"
+    #include "package_fram.h"
 	#include "unity.h"
 
 
-void test_fram_read_write()
+void setup_test_sensor_fram()
 	{
 	init_fram();
-
-	uint8_t data = 1;
-
-	write_to_fram(data, 0x10);
-	uint8_t result = read_from_fram(0x10);
-
-	println(data);
-	println(result);
-
-	write_to_fram(10, 0);
-	write_to_fram(0, 10);
-	println(read_from_fram(0));
 	}
+
+void teardown_test_sensor_fram()
+    {
+    // TODO: restore fram to original state
+    }
+
+void test_sensor_fram()
+    {
+    setup_test_sensor_fram();
+
+    // TODO: write test for fram
+
+    teardown_test_sensor_fram();
+    }
 
 int test_main()
 	{
 	println("[TESTMODE] tests starting");
-	test_fram_read_write();
+    println("testing fram...");
+    test_sensor_fram();
+    println("testing fram...done");
 	println("[TESTMODE] tests completed");
 	exit(1);
 	}
