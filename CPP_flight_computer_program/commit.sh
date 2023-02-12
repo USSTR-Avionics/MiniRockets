@@ -14,9 +14,10 @@ if [ $current_branch == "(dev)" ]
 then
     echo "You are on dev branch"
     git status
-    `git add .`
-    `git commit -m "$1"`
-    `git push origin dev`
+    git add .
+    git commit -m "$1"
+    git push origin dev
+    echo "head on to github and create a pull request"
 else
     echo "You are NOT on (dev) branch"
 fi
