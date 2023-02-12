@@ -13,7 +13,7 @@ fi
 if [ $current_branch == "(dev)" ]
 then
     echo "You are on dev branch"
-    `git status`
+    git status
     `git add .`
     `git commit -m "$1"`
     `git push origin dev`
