@@ -1,8 +1,8 @@
 #ifndef SENSOR_THERMOCOUPLE_H
 #define SENSOR_THERMOCOUPLE_H
 
-#define MAXDO 3
-#define MAXCS 4
+#define MAXDO  3
+#define MAXCS  4
 #define MAXCLK 5
 
 void init_thermocouple();

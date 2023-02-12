@@ -1,24 +1,24 @@
-#include <SPI.h>
-#include "Adafruit_MAX31855.h" 
 #include "sensor_thermocouple.h"
+#include "Adafruit_MAX31855.h"
+#include <SPI.h>
 
 Adafruit_MAX31855 thermocouple(MAXCLK, MAXCS, MAXDO);
 
-//TODO?
+// TODO?
 void init_thermocouple()
-    {
-    }
+	{
+	}
 
-//RETRUN EXTERNAL TEMPERATURE (READ AT END OF WIRE)
+// RETRUN EXTERNAL TEMPERATURE (READ AT END OF WIRE)
 float get_external_temperature()
-{
-   float external_temp =  thermocouple.readCelsius();
-   return external_temp;
-}
+	{
+	float external_temp = thermocouple.readCelsius();
+	return external_temp;
+	}
 
-//RETURN INTERNAL TEMPERATURE (READ ON CHIP)
+// RETURN INTERNAL TEMPERATURE (READ ON CHIP)
 float get_internal_temperature()
-{
-    float internal_temp = thermocouple.readInternal();
-    return internal_temp;
-}
+	{
+	float internal_temp = thermocouple.readInternal();
+	return internal_temp;
+	}
