@@ -14,6 +14,9 @@ void setup()
 {
     Serial.begin(9600); // arg doesn't need to be 9600 just true
     Wire.begin();
+    
+    // delete this if compile fail
+    Radio.check();
 
     // do the reset for the radio
     Radio.Init();
