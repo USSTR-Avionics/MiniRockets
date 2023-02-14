@@ -1,4 +1,5 @@
 #include <RH_RF95.h>
+#include <string>
 
 namespace RF95
 {
@@ -137,19 +138,19 @@ namespace RF95
         }
     }
 
-    void Switch_Mode(const RFM95W::Mode &Type)
+    void Switch_Mode(const Mode &Type)
     {
         switch (Type)
         {
-            case RFM95W::Mode::RX:
+            case Mode::RX:
                 m_RF95.setModeRx();
                 break;
 
-            case RFM95W::Mode::TX:
+            case Mode::TX:
                 m_RF95.setModeTx();
                 break;
 
-            case RFM95W::Mode::IDLE:
+            case Mode::IDLE:
                 m_RF95.setModeIdle();
                 break;
         }

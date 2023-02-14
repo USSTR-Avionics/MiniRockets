@@ -65,6 +65,18 @@ public:
     void Set_Preamble_Length(const uint8_t &Length);
     void Switch_Mode(const Mode &Type);
 
+    void check()
+    {
+        if(m_RF95 == nullptr)
+        {
+            Serial.println("no memory");
+        }
+        else
+        {
+            Serial.println("Radio online");
+        }
+    };
+
     RFM95W() = delete;
     RFM95W(const RFM95W &RHS) = delete;
 

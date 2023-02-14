@@ -15,8 +15,7 @@
 #define SERVER_ADDRESS 2
 
 // Singleton instance of the radio driver
-//RH_RF22 driver;
-RH_RF22 driver(5, 4); // ESP8266
+RH_RF22 driver;
 
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);
@@ -59,3 +58,4 @@ void loop()
     Serial.println("sendtoWait failed");
   delay(500);
 }
+
