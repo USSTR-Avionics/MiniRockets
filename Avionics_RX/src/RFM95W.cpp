@@ -6,8 +6,8 @@ RFM95W::RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type)
     m_RF95 = std::make_unique<RH_RF95>(Slave, Interrupt);
 
 
-
-    Switch_Mode(Type);
+    // it stuck here
+    // Switch_Mode(Type);
 
     m_Max_message_length = m_RF95->maxMessageLength();
 };
