@@ -2,7 +2,6 @@
 #include <SPI.h>
 #include <Wire.h>
 #include "RFM95W.h"
-#include <RH_RF95.h>
 
 uint16_t Slave{13};
 uint16_t Interrupt{32};
@@ -13,8 +12,20 @@ static RFM95W Radio(Slave, Interrupt);
 
 void setup()
 {
-    Serial.begin(9600); // arg doesn't need to be 9600 just true
+    pinMode(Reset, OUTPUT);
+    digitalWrite(Reset, HIGH);
+
+    while (!Serial);
+    Serial.begin(9600);
+    delay(100);
     Wire.begin();
+
+    // manual reset
+    digitalWrite(RFM95_RST, LOW);
+    delay(10);
+    digitalWrite(RFM95_RST, HIGH);
+    delay(10);
+
     
     // // delete this if compile fail
     Radio.check();
