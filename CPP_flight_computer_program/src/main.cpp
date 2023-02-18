@@ -481,6 +481,14 @@ void setup()
 	// rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
 
 	println("setup() exit");
+<<<<<<< HEAD
+=======
+
+	if (start_counter_time == 0UL)
+		{
+		start_counter_time = millis();
+		}
+>>>>>>> e36e35cbb97da95c64c49409bd6a7fa7fdfd3d6d
 	}
 
 void loop()
