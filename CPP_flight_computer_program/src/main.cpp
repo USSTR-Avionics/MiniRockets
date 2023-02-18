@@ -482,10 +482,10 @@ void setup()
 
 	println("setup() exit");
 
-    if (start_counter_time  == 0UL)
-        {
-        start_counter_time = millis();
-        }
+	if (start_counter_time == 0UL)
+		{
+		start_counter_time = millis();
+		}
 	}
 
 void loop()
