@@ -21,9 +21,9 @@ void setup()
     Wire.begin();
 
     // manual reset
-    digitalWrite(RFM95_RST, LOW);
+    digitalWrite(Reset, LOW);
     delay(10);
-    digitalWrite(RFM95_RST, HIGH);
+    digitalWrite(Reset, HIGH);
     delay(10);
 
     
@@ -38,7 +38,7 @@ void setup()
 void loop()
 {
     delay(1000);
-    // Radio.UDP_Send("Hello from the other side");
+    Radio.UDP_Send("Hello from the other side");
     Serial.println("loop");
 
     // write your code here
