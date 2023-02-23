@@ -10,8 +10,8 @@
 #include "sensor_kx134.h"
 #include "sensor_led.h"
 #include "sensor_parachute.h"
-#include "sensor_thermocouple.h"
 #include "sensor_radio.h"
+#include "sensor_thermocouple.h"
 
 #include "rocket_profile.h"
 #include "statemachine_t.h"
@@ -72,8 +72,8 @@ int init_all()
 	ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
 	rocket_state         = statemachine_t::e_rocket_state::unarmed;
 
-    // zombie pin init
-    pinMode(PIN_A14, INPUT_PULLUP);
+	// zombie pin init
+	pinMode(PIN_A14, INPUT_PULLUP);
 
 #ifdef ROCKET_DEBUGMODE
 	rocket_state = set_current_state_for_statemachine(rocket_state, GROUND_IDLE_STATE);
@@ -384,13 +384,13 @@ void watchdog_callback()
 	}
 
 int check_zombie_mode()
-    {
-    if (digitalRead(PIN_A14) == HIGH)   
-        {
-        return EXIT_SUCCESS;
-        }
-    return EXIT_FAILURE;
-    }
+	{
+	if (digitalRead(PIN_A14) == HIGH)
+		{
+		return EXIT_SUCCESS;
+		}
+	return EXIT_FAILURE;
+	}
 
 int debug_data()
 	{
@@ -452,15 +452,15 @@ void setup()
 
 	init_all();
 
-    // zombie mode ensures that the main loop() 
-    // does not start running, overwriting previous
-    // data on the FRAM
-    if (check_zombie_mode() == EXIT_SUCCESS)
-        {
-        println("[ZOMBIE MODE] detected");
-        dump_fram_to_serial();
-        exit(0);
-        }
+	// zombie mode ensures that the main loop()
+	// does not start running, overwriting previous
+	// data on the FRAM
+	if (check_zombie_mode() == EXIT_SUCCESS)
+		{
+		println("[ZOMBIE MODE] detected");
+		dump_fram_to_serial();
+		exit(0);
+		}
 
 	if (health_check() == EXIT_FAILURE)
 		{
@@ -482,14 +482,13 @@ void setup()
 
 void loop()
 	{
-    float notanumber = std::numeric_limits<float>::quiet_NaN();
-    wdt.feed();
+	float notanumber = std::numeric_limits<float>::quiet_NaN();
+	wdt.feed();
 	debug_data();
 	select_flight_mode(rocket_state);
-    write_data_chunk_to_fram(
-        millis(), rocket_state, 
-        kx134_accel_x, kx134_accel_y, kx134_accel_z, 
-        notanumber, notanumber, notanumber, 
-        rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature()
-        );
+	write_data_chunk_to_fram(
+	    millis(), rocket_state,
+	    kx134_accel_x, kx134_accel_y, kx134_accel_z,
+	    notanumber, notanumber, notanumber,
+	    rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
 	}

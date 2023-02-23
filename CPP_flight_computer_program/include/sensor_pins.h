@@ -12,9 +12,9 @@
 #define BUZZER_PIN 8
 
 // Thermocouple pins
-#define MAXDO  12
-#define MAXCS  10
-#define MAXCLK 27
+#define MAXDO      12
+#define MAXCS      10
+#define MAXCLK     27
 
 
 #endif // SENSOR_PINS_H_

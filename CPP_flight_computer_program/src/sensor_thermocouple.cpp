@@ -7,13 +7,13 @@ Adafruit_MAX31855 thermocouple(MAXCLK, MAXCS, MAXDO);
 
 void init_thermocouple()
 	{
-    return;
+	return;
 	}
 
 /*
  * @note reads temperature at the end of the wire
  * @return float external temperature in degrees Celsius
-*/
+ */
 float get_thermocouple_external_temperature()
 	{
 	float external_temp = thermocouple.readCelsius();

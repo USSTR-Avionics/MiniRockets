@@ -10,19 +10,19 @@ void dump_fram_to_serial();
 
 
 typedef struct _sensor_chunk_layout
-    {
-    uint32_t timestamp;
-    uint8_t current_state;
-    float accl_x;
-    float accl_y;
-    float accl_z;
-    float gyro_x;
-    float gyro_y;
-    float gyro_z;
-    float rel_alt;
-    float pressure;
-    float thermocouple_temp;
-    } sensor_chunk_layout;
+	{
+	uint32_t timestamp;
+	uint8_t current_state;
+	float accl_x;
+	float accl_y;
+	float accl_z;
+	float gyro_x;
+	float gyro_y;
+	float gyro_z;
+	float rel_alt;
+	float pressure;
+	float thermocouple_temp;
+	} sensor_chunk_layout;
 
 
 // this is a global to store sensor_chunk data

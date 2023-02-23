@@ -11,7 +11,7 @@
 int init_fram();
 
 // ! These should not be used directly, use the package_fram.h API instead
-int write_to_fram(uint16_t, uint8_t); 
-int read_from_fram(int);              
+int write_to_fram(uint16_t, uint8_t);
+int read_from_fram(int);
 
 #endif // SENSOR_FRAM_H
