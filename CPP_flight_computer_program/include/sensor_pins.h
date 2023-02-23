@@ -16,4 +16,5 @@
 #define MAXCS  10
 #define MAXCLK 27
 
+
 #endif // SENSOR_PINS_H_

@@ -12,7 +12,7 @@
 #pragma GCC diagnostic ignored "-Wdouble-promotion"
 
 
-static int fram_cursor = FRAM_INIT_ADDRESS;
+static uint32_t fram_cursor = FRAM_INIT_ADDRESS;
 
 // definition of extern global sensor_chunk
 sensor_chunk_layout sensor_chunk = {};

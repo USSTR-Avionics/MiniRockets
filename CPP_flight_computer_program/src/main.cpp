@@ -389,6 +389,15 @@ void watchdog_callback()
 	loop();
 	}
 
+int check_zombie_mode()
+    {
+    if (digitalRead(PIN_A14) == HIGH)   
+        {
+        return EXIT_SUCCESS;
+        }
+    return EXIT_FAILURE;
+    }
+
 int debug_data()
 	{
 #ifdef ROCKET_DEBUGMODE
@@ -449,13 +458,16 @@ void setup()
 
 	init_all();
 
-#if (DUMP_FRAM_DATA == 1)
-    #warning "DUMP_FRAM_DATA ENABLED"
-    #warning "dumping FRAM data to serial"
-    #warning "this will not enter the main loop"
-    dump_fram_to_serial();
-    exit(0);
-#endif // DUMP_FRAM_DATA
+    // zombie mode ensures that the main loop() 
+    // does not start running, overwriting previous
+    // data on the FRAM
+    pinMode(PIN_A14, INPUT_PULLUP);
+    if (check_zombie_mode() == EXIT_SUCCESS)
+        {
+        println("[ZOMBIE MODE] detected");
+        dump_fram_to_serial();
+        exit(0);
+        }
 
 	if (health_check() == EXIT_FAILURE)
 		{
