@@ -7,12 +7,12 @@
 #include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
 #include "sensor_buzzer.h"
-#include "sensor_fram.h" // TODO: sub with package
 #include "sensor_kx134.h"
 #include "sensor_led.h"
 #include "sensor_parachute.h"
 #include "sensor_radio.h"
 #include "sensor_sdcard.h"
+#include "sensor_thermocouple.h"
 
 #include "rocket_profile.h"
 #include "statemachine_t.h"
@@ -22,14 +22,20 @@
 
 #include "test_main.h"
 
+#include "half.h"
+#include "sensor_fram.h"
+
 #include <Arduino.h>
 #include <RH_RF95.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <cstdint> // switch to machine independent types
 #include <cstdlib>
+#include <limits>
 
 
+float notanumber = std::numeric_limits<float>::quiet_NaN();
+int framcursorcounter = 0x10;
 
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
@@ -60,7 +66,7 @@ int init_all()
 	init_bmp280();
 
 	// init_SD();
-	init_fram();
+	init_fram_package();
 
 	// init_LED();
 
@@ -127,24 +133,7 @@ int health_check()
 		}
 
 	// FRAM checks
-	count                   = 0;
 
-	uint8_t test_byte_write = 128;
-
-	while (count < 10)
-		{
-		write_to_fram(test_byte_write, 0);
-		uint8_t test_byte_read = read_from_fram(0);
-
-		if (test_byte_read == test_byte_write)
-			{
-			count++;
-			}
-		else
-			{
-			return EXIT_FAILURE;
-			}
-		}
 
 	// write_to_sd_card(EVENTLOG, "health checks passed");
 
@@ -485,7 +474,26 @@ void setup()
 
 void loop()
 	{
-	debug_data();
-	wdt.feed();
-	select_flight_mode(rocket_state);
+    int count = 0;
+    while (count < 10)
+        {
+	    wdt.feed();
+        write_data_chunk_to_fram(millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, notanumber, notanumber, notanumber, get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude), get_bmp280_pressure(), get_thermocouple_external_temperature(), 0);
+        count++;
+        }
+
+    count = 0;
+    framcursorcounter = 0x10;
+    
+    while (count < 10)
+        {
+        wdt.feed();
+        read_data_chunk_from_fram(framcursorcounter);
+        framcursorcounter += 25;
+        count++;
+        }
+
+    exit(1);
+	// debug_data();
+	// select_flight_mode(rocket_state);
 	}

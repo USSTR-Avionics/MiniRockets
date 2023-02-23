@@ -1,9 +1,10 @@
 #ifndef PACKAGE_FRAM_H
 #define PACKAGE_FRAM_H
 
-int write_temperature_to_fram(float);
-int write_acceleration_to_fram(float);
-float read_temperature_from_fram(int where);
-float read_acceleration_from_fram(int where);
+#include <stdint.h>
+
+int init_fram_package();
+int write_data_chunk_to_fram(uint32_t, uint8_t, float, float, float, float, float, float, float, float, float, uint16_t);
+void read_data_chunk_from_fram(uint8_t);
 
 #endif // PACKAGE_FRAM_H
