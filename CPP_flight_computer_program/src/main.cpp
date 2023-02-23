@@ -34,9 +34,6 @@
 #include <limits>
 
 
-float notanumber = std::numeric_limits<float>::quiet_NaN();
-int framcursorcounter = 0x10;
-
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
 unsigned long debug_time    = 0UL;
@@ -484,15 +481,12 @@ void setup()
 	wdt.feed();
 
 	// TODO: add a method to read previous state from FRAM and restore it
-	// int value_from_fram = read_from_fram(0x0);
-	// rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
-
 	println("setup() exit");
-
 	}
 
 void loop()
 	{
+    float notanumber = std::numeric_limits<float>::quiet_NaN();
     wdt.feed();
 	debug_data();
 	select_flight_mode(rocket_state);

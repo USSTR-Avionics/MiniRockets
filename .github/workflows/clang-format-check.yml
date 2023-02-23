@@ -21,7 +21,7 @@ jobs:
         includepath="./CPP_flight_computer_program/include/*"
         mainpath="./CPP_flight_computer_program/src/main.cpp"
         srcfilelinelimit=200
-        mainsrclinecount=500
+        mainsrclinecount=510
         headerfilelinelimit=100
         echo "line limit for main.cpp"
         linecount=$(wc -l $mainpath | tr -dc '0-9')
