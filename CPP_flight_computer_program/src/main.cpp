@@ -10,9 +10,8 @@
 #include "sensor_kx134.h"
 #include "sensor_led.h"
 #include "sensor_parachute.h"
-#include "sensor_radio.h"
-#include "sensor_sdcard.h"
 #include "sensor_thermocouple.h"
+#include "sensor_radio.h"
 
 #include "rocket_profile.h"
 #include "statemachine_t.h"
@@ -21,9 +20,6 @@
 #include "debug_macros.h"
 
 #include "test_main.h"
-
-#include "half.h"
-#include "sensor_fram.h"
 
 #include <Arduino.h>
 #include <RH_RF95.h>
