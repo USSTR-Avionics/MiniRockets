@@ -437,7 +437,7 @@ int debug_data()
 // STANDARD ENTRY POINTS
 void setup()
 	{
-	Serial.begin(9600); // arg doesnt need to be 9600 just true
+	Serial.begin(9600);
 	Wire.begin();
 
 #if (TESTMODE == 1)
@@ -448,6 +448,14 @@ void setup()
 #endif // TESTMODE
 
 	init_all();
+
+#if (DUMP_FRAM_DATA == 1)
+    #warning "DUMP_FRAM_DATA ENABLED"
+    #warning "dumping FRAM data to serial"
+    #warning "this will not enter the main loop"
+    dump_fram_to_serial();
+    exit(0);
+#endif // DUMP_FRAM_DATA
 
 	if (health_check() == EXIT_FAILURE)
 		{
@@ -470,30 +478,18 @@ void setup()
 	// rocket_state = set_state_for_statemachine(&rocket_state, value_from_fram);
 
 	println("setup() exit");
+
 	}
 
 void loop()
 	{
-    int count = 0;
-    while (count < 10)
-        {
-	    wdt.feed();
-        write_data_chunk_to_fram(millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, notanumber, notanumber, notanumber, get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude), get_bmp280_pressure(), get_thermocouple_external_temperature(), 0);
-        count++;
-        }
-
-    count = 0;
-    framcursorcounter = 0x10;
-    
-    while (count < 10)
-        {
-        wdt.feed();
-        read_data_chunk_from_fram(framcursorcounter);
-        framcursorcounter += 25;
-        count++;
-        }
-
-    exit(1);
-	// debug_data();
-	// select_flight_mode(rocket_state);
+    wdt.feed();
+	debug_data();
+	select_flight_mode(rocket_state);
+    write_data_chunk_to_fram(
+        millis(), rocket_state, 
+        kx134_accel_x, kx134_accel_y, kx134_accel_z, 
+        notanumber, notanumber, notanumber, 
+        rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature()
+        );
 	}

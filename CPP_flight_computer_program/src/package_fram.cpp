@@ -1,5 +1,6 @@
 #include "debug_macros.h"
 #include "sensor_fram.h"
+#include "package_fram.h"
 #include "half.h"
 #include <Arduino.h>
 #include <cstdint>
@@ -8,16 +9,88 @@
 
 // it's okay to ignore this as we're using it for reading only!
 #pragma GCC diagnostic ignored "-Wstrict-aliasing" 
+#pragma GCC diagnostic ignored "-Wdouble-promotion"
 
+
+static int fram_cursor = FRAM_INIT_ADDRESS;
+
+// definition of extern global sensor_chunk
+sensor_chunk_layout sensor_chunk = {};
 
 int init_fram_package()
     {
     return init_fram();
     }
 
+void print_current_sensor_chunk(bool printheader)
+    {
+    if (printheader)
+        {
+        // print csv format header
+        String csv_header = "cursor,timestamp,rocket_state,accl_x,accl_y,accl_z,gyro_x,gyro_y,gyro_z,rel_alt,pressure,thermocouple_temp";
+        println(csv_header);
+        }
+
+    // construct string for printing
+    char print_string[100];
+    sprintf(
+        print_string, 
+        "%x,%lu,%u,%f,%f,%f,%f,%f,%f,%f,%f,%f", 
+        fram_cursor,sensor_chunk.timestamp, sensor_chunk.current_state, 
+        (float)sensor_chunk.accl_x, (float)sensor_chunk.accl_y, (float)sensor_chunk.accl_z, 
+        (float)sensor_chunk.gyro_x, (float)sensor_chunk.gyro_y, (float)sensor_chunk.gyro_z, 
+        (float)sensor_chunk.rel_alt,(float)sensor_chunk.pressure, (float)sensor_chunk.thermocouple_temp);
+
+    // print string
+    println(print_string);
+    }
+
 void dump_fram_to_serial()
 	{
-	// TODO: build csv string and dump to USB serial
+    fram_cursor = FRAM_INIT_ADDRESS;
+    while (true)
+        {
+        if (read_data_chunk_from_fram(fram_cursor) == EXIT_FAILURE)
+            {
+            break;
+            }
+        print_current_sensor_chunk(false);
+        fram_cursor += 25;
+        }
+	}
+
+auto write_float32_to_fram(float data) -> int
+	{
+    uint8_t* ptr_to_f32 = (uint8_t*)&data;
+
+    write_to_fram(ptr_to_f32[0], fram_cursor);
+    fram_cursor++;
+    write_to_fram(ptr_to_f32[1], fram_cursor);
+    fram_cursor++;
+    write_to_fram(ptr_to_f32[2], fram_cursor);
+    fram_cursor++;
+    write_to_fram(ptr_to_f32[3], fram_cursor);
+    fram_cursor++;
+
+	return EXIT_SUCCESS;
+	}
+
+auto read_float32_from_fram(int where) -> float
+	{
+    uint8_t float16_arr[4];
+
+    float16_arr[0] = read_from_fram(where);
+    where++;
+    float16_arr[1] = read_from_fram(where);
+    where++;
+    float16_arr[2] = read_from_fram(where);
+    where++;
+    float16_arr[3] = read_from_fram(where);
+    where++;
+
+    float f32_val = *(float*)float16_arr;
+    
+    return f32_val;
 	}
 
 /**
@@ -34,6 +107,7 @@ auto write_float16_to_fram(float data) -> int
     write_to_fram(ptr_to_f16[0], fram_cursor);
     fram_cursor++;
     write_to_fram(ptr_to_f16[1], fram_cursor);
+    fram_cursor++;
 
 	return EXIT_SUCCESS;
 	}
@@ -51,12 +125,26 @@ auto read_float16_from_fram(int where) -> float
     return FLOAT16::ToFloat32(f16_val);
 	}
 
+/*
+ * @brief Writes a data chunk to the FRAM.
+ * @param timestamp The timestamp of the data chunk.
+ * @param current_state The current state of the rocket.
+ * @param accl_x The x axis acceleration.
+ * @param accl_y The y axis acceleration.
+ * @param accl_z The z axis acceleration.
+ * @param gyro_x The x axis gyroscope.
+ * @param gyro_y The y axis gyroscope.
+ * @param gyro_z The z axis gyroscope.
+ * @param rel_alt The relative altitude.
+ * @param pressure The pressure.
+ * @param thermocouple_temp The thermocouple temperature.
+ * @return EXIT_SUCCESS if the write succeeded, EXIT_FAILURE otherwise.
+*/
 int write_data_chunk_to_fram(
     uint32_t timestamp, uint8_t current_state, 
     float accl_x, float accl_y, float accl_z, 
     float gyro_x, float gyro_y, float gyro_z,
-    float rel_alt, float pressure, float thermocouple_temp,
-    uint16_t extra_space)
+    float rel_alt, float pressure, float thermocouple_temp)
     {
     // data chunk format
     // |----------------------|-----------|-----------|
@@ -71,14 +159,11 @@ int write_data_chunk_to_fram(
     // | gyroscope y axis     | 02 bytes  | float16   |
     // | gyroscope z axis     | 02 bytes  | float16   |
     // | relative altitude    | 02 bytes  | float16   |
-    // | pressure             | 02 bytes  | float16   |
+    // | pressure             | 04 bytes  | float32   |
     // | thermocouple temp    | 02 bytes  | float16   |
-    // | extra space          | 02 byte   | undefined |
     // |----------------------|-----------|-----------|
     // | total                | 25 bytes  |           |
     // |----------------------|-----------|-----------|
-
-    println("--------------------------------------------------fram cursor before write: " + String(fram_cursor));
 
     if (fram_cursor + 25 > FRAM_MAX_ADDRESS)
         {
@@ -87,8 +172,6 @@ int write_data_chunk_to_fram(
         }
 
     // write timestamp
-    println("Writing timestamp: " + String(timestamp) + " to FRAM at address: " + String(fram_cursor));
-
     uint8_t* ptr_to_u32 = (uint8_t*)&timestamp;
     write_to_fram(ptr_to_u32[0], fram_cursor);
     fram_cursor++;
@@ -100,60 +183,40 @@ int write_data_chunk_to_fram(
     fram_cursor++;
 
     // write rocket state
-    println("Writing rocket state: " + String(current_state) + " to FRAM at address: " + String(fram_cursor));
-
     write_to_fram(current_state, fram_cursor);
     fram_cursor++;
 
     // write acceleration x axis
-    println("Writing acceleration x axis: " + String(accl_x) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(accl_x);
 
     // write acceleration y axis
-    println("Writing acceleration y axis: " + String(accl_y) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(accl_y);
 
     // write acceleration z axis
-    println("Writing acceleration z axis: " + String(accl_z) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(accl_z);
 
     // write gyroscope x axis
-    println("Writing gyroscope x axis: " + String(gyro_x) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(gyro_x);
 
     // write gyroscope y axis
-    println("Writing gyroscope y axis: " + String(gyro_y) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(gyro_y);
 
     // write gyroscope z axis
-    println("Writing gyroscope z axis: " + String(gyro_z) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(gyro_z);
 
     // write relative altitude
-    println("Writing relative altitude: " + String(rel_alt) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(rel_alt);
 
     // write pressure
-    println("Writing pressure: " + String(pressure) + " to FRAM at address: " + fram_cursor);
-    write_float16_to_fram(pressure);
+    write_float32_to_fram(pressure);
 
     // write thermocouple temp
-    println("Writing thermocouple temp: " + String(thermocouple_temp) + " to FRAM at address: " + fram_cursor);
     write_float16_to_fram(thermocouple_temp);
-
-    // write extra space
-    // ! unimplemented()
-    println("Writing extra space: " + String(extra_space) + " to FRAM at address: " + fram_cursor);
-    extra_space = 0;
-    fram_cursor++;
-    fram_cursor++;
-
-    println("----------------------------------------------------fram cursor after write: " + String(fram_cursor));
 
     return EXIT_SUCCESS;
     }
 
-void read_data_chunk_from_fram(uint8_t cursor_position)
+int read_data_chunk_from_fram(uint32_t cursor_position)
     {
     // data chunk format
     // |----------------------|-----------|-----------|
@@ -168,13 +231,18 @@ void read_data_chunk_from_fram(uint8_t cursor_position)
     // | gyroscope y axis     | 02 bytes  | float16   |
     // | gyroscope z axis     | 02 bytes  | float16   |
     // | relative altitude    | 02 bytes  | float16   |
-    // | pressure             | 02 bytes  | float16   |
+    // | pressure             | 04 bytes  | float32   |
     // | thermocouple temp    | 02 bytes  | float16   |
-    // | extra space          | 02 byte   | undefined |
     // |----------------------|-----------|-----------|
     // | total                | 25 bytes  |           |
 
-    println("------------------------------------------------------fram cursor before read: " + String(cursor_position));
+    if (cursor_position + 25 > FRAM_MAX_ADDRESS)
+        {
+        // error, we're out of space
+        return EXIT_FAILURE;
+        }
+
+    sensor_chunk = {};
 
     // read timestamp
     uint32_t timestamp = 0;
@@ -188,95 +256,78 @@ void read_data_chunk_from_fram(uint8_t cursor_position)
     ptr_to_u32[3] = read_from_fram(cursor_position);
     cursor_position++;
 
-    println("read timestamp at cursor position " + String(cursor_position - 4) + ": " + String(timestamp));
+    sensor_chunk.timestamp = timestamp;
 
     // read rocket state
     uint8_t current_state = read_from_fram(cursor_position);
     cursor_position++;
 
-    println("read rocket state at cursor position " + String(cursor_position - 1) + ": " + String(current_state));
+    sensor_chunk.current_state = current_state;
 
     // read acceleration x axis
     float accl_x = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read acceleration x axis at cursor position " + String(cursor_position - 2) + ": " + String(accl_x));
+    sensor_chunk.accl_x = accl_x;
 
     // read acceleration y axis
     float accl_y = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read acceleration y axis at cursor position " + String(cursor_position - 2) + ": " + String(accl_y));
+    sensor_chunk.accl_y = accl_y;
 
     // read acceleration z axis
     float accl_z = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read acceleration z axis at cursor position " + String(cursor_position - 2) + ": " + String(accl_z));
+    sensor_chunk.accl_z = accl_z;
 
     // read gyroscope x axis
     float gyro_x = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read gyroscope x axis at cursor position " + String(cursor_position - 2) + ": " + String(gyro_x));
+    sensor_chunk.gyro_x = gyro_x;
 
     // read gyroscope y axis
     float gyro_y = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read gyroscope y axis at cursor position " + String(cursor_position - 2) + ": " + String(gyro_y));
+    sensor_chunk.gyro_y = gyro_y;
 
     // read gyroscope z axis
     float gyro_z = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read gyroscope z axis at cursor position " + String(cursor_position - 2) + ": " + String(gyro_z));
+    sensor_chunk.gyro_z = gyro_z;
 
     // read relative altitude
     float rel_alt = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read relative altitude at cursor position " + String(cursor_position - 2) + ": " + String(rel_alt));
+    sensor_chunk.rel_alt = rel_alt;
 
     // read pressure
-    float pressure = read_float16_from_fram(cursor_position);
+    float pressure = read_float32_from_fram(cursor_position);
+    cursor_position++;
+    cursor_position++;
     cursor_position++;
     cursor_position++;
 
-    println("read pressure at cursor position " + String(cursor_position - 2) + ": " + String(pressure));
+    sensor_chunk.pressure = pressure;
 
     // read thermocouple temp
     float thermocouple_temp = read_float16_from_fram(cursor_position);
     cursor_position++;
     cursor_position++;
 
-    println("read thermocouple temp at cursor position " + String(cursor_position - 2) + ": " + String(thermocouple_temp));
+    sensor_chunk.thermocouple_temp = thermocouple_temp;
 
-    // read extra space
-    // ! unimplemented()
-    cursor_position++;
-    cursor_position++;
-
-    int extra_space = 0;
-    println("read extra space at cursor position " + String(cursor_position - 2) + ": " + String(extra_space));
-
-    println("----------------------------------------------------------fram cursor after read: " + String(cursor_position));
-
-    // print csv format header
-    String csv_header = "timestamp,rocket_state,accl_x,accl_y,accl_z,gyro_x,gyro_y,gyro_z,rel_alt,pressure,thermocouple_temp";
-    println(csv_header);
-
-    // construct string for printing
-    char print_string[100];
-    sprintf(print_string, "%lu,%u,%f,%f,%f,%f,%f,%f,%f,%f,%f", timestamp, current_state, accl_x, accl_y, accl_z, gyro_x, gyro_y, gyro_z, rel_alt, pressure, thermocouple_temp);
-
-    // print string
-    println(print_string);
+    return EXIT_SUCCESS;
     }

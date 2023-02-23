@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-static int fram_cursor = 0x10;
-
 #define FRAM_MAX_ADDRESS  0x7FE0
 #define FRAM_MIN_ADDRESS  0x00
 #define FRAM_INIT_ADDRESS 0x10
