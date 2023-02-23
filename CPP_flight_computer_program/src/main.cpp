@@ -64,8 +64,6 @@ int init_all()
 	{
 	init_kx134();
 	init_bmp280();
-
-	// init_SD();
 	init_fram_package();
 
 	// init_LED();
@@ -80,6 +78,9 @@ int init_all()
 	ground_base_pressure = get_bmp280_pressure();
 	ground_base_altitude = get_bmp280_altitude(ground_base_pressure);
 	rocket_state         = statemachine_t::e_rocket_state::unarmed;
+
+    // zombie pin init
+    pinMode(PIN_A14, INPUT_PULLUP);
 
 #ifdef ROCKET_DEBUGMODE
 	rocket_state = set_current_state_for_statemachine(rocket_state, GROUND_IDLE_STATE);
@@ -461,7 +462,6 @@ void setup()
     // zombie mode ensures that the main loop() 
     // does not start running, overwriting previous
     // data on the FRAM
-    pinMode(PIN_A14, INPUT_PULLUP);
     if (check_zombie_mode() == EXIT_SUCCESS)
         {
         println("[ZOMBIE MODE] detected");
@@ -474,8 +474,6 @@ void setup()
 		println("[FAILED] Health Check"); // also write to reserved fram space
 		exit(1);                          // this should also fail if init_all() fails;
 		}
-
-	// write_to_sd_card(EVENTLOG, "setup exit");
 
 	buzzer_on();
 

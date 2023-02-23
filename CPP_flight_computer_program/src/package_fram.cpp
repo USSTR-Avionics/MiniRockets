@@ -119,6 +119,7 @@ auto read_float16_from_fram(int where) -> float
     float16_arr[0] = read_from_fram(where);
     where++;
     float16_arr[1] = read_from_fram(where);
+    where++;
 
     FLOAT16 f16_val = *(FLOAT16*)float16_arr;
 
@@ -235,6 +236,7 @@ int read_data_chunk_from_fram(uint32_t cursor_position)
     // | thermocouple temp    | 02 bytes  | float16   |
     // |----------------------|-----------|-----------|
     // | total                | 25 bytes  |           |
+    // |----------------------|-----------|-----------|
 
     if (cursor_position + 25 > FRAM_MAX_ADDRESS)
         {
