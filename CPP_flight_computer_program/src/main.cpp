@@ -2,9 +2,7 @@
 #include "package_statemachine_t.h"
 #include "package_statistics.h"
 #include "package_testmode.h"
-#include "package_watchdog.h"
-
-#include "sensor_bmi088.h"
+#include "package_watchdog.h" #include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
 #include "sensor_buzzer.h"
 #include "sensor_kx134.h"
@@ -79,8 +77,6 @@ int init_all()
 	rocket_state = set_current_state_for_statemachine(rocket_state, GROUND_IDLE_STATE);
 #endif
 
-	// write_to_sd_card(DATALOG, datalog_fmt_header);
-
 	return EXIT_SUCCESS;
 	}
 
@@ -140,7 +136,7 @@ int health_check()
 
 void ground_idle_mode()
 	{
-	println("[ROCKET STATE] GROUND IDLE");
+	// println("[ROCKET STATE] GROUND IDLE");
 
 	setLedGreen();
 
@@ -171,7 +167,7 @@ void ground_idle_mode()
 
 void powered_flight_mode()
 	{
-	println("[ROCKET STATE] POWERED FLIGHT");
+	// println("[ROCKET STATE] POWERED FLIGHT");
 
 	setLedRed();
 
@@ -250,7 +246,7 @@ int apogee_check()
 
 void unpowered_flight_mode()
 	{
-	println("[ROCKET STATE] UNPOWERED FLIGHT");
+	// println("[ROCKET STATE] UNPOWERED FLIGHT");
 
 	setLedBlue();
 
@@ -262,7 +258,7 @@ void unpowered_flight_mode()
 
 void soft_recovery_mode()
 	{
-	println("[ROCKET STATE] SOFT RECOVERY");
+	// println("[ROCKET STATE] SOFT RECOVERY");
 
 	while (true)
 		{
@@ -289,9 +285,7 @@ void soft_recovery_mode()
 
 void ballistic_descent_mode()
 	{
-	println("[ROCKET STATE] BALLISTIC DESCENT");
-
-	// ledON("YELLOW");
+	// println("[ROCKET STATE] BALLISTIC DESCENT");
 
 	// TODO: Add a backup deployment height
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
@@ -305,9 +299,7 @@ void ballistic_descent_mode()
 
 void chute_descent_mode()
 	{
-	println("[ROCKET STATE] CHUTE DESCENT");
-	// TODO:
-	// ledON("ORANGE");
+	// println("[ROCKET STATE] CHUTE DESCENT");
 
 	// TODO: check gyroscope stabilisation over time
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
@@ -320,7 +312,7 @@ void chute_descent_mode()
 
 void land_safe_mode()
 	{
-	println("[ROCKET STATE] LAND SAFE");
+	// println("[ROCKET STATE] LAND SAFE");
 	// STOP DATA COLLECTION
 	// CHECK IF SD CARD CAN STILL BE WRITTEN TO
 	// IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
@@ -400,7 +392,6 @@ int debug_data()
 	{
 #ifdef ROCKET_DEBUGMODE
 
-	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
 	String data_string     = "";
 
 	if (debug_time == 0UL)
@@ -428,8 +419,9 @@ int debug_data()
 
 	// write_to_sd_card(DATALOG, data_string.c_str());
 
-	println(data_string_fmt);
-	print("data_string: ");
+	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
+	// println(data_string_fmt);
+	// print("data_string: ");
 	println(data_string);
 
 	// scan_and_print_I2C_devices();
