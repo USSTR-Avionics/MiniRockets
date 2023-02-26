@@ -138,10 +138,10 @@ int health_check()
 
 void ground_idle_mode()
 	{
-	println("[ROCKET STATE] GROUND IDLE");
+	//println("[ROCKET STATE] GROUND IDLE");
 
 	setLedGreen();
-
+	//println("TEST");
 	if (starting_time == 0)
 		{
 		starting_time = millis();
@@ -169,7 +169,7 @@ void ground_idle_mode()
 
 void powered_flight_mode()
 	{
-	println("[ROCKET STATE] POWERED FLIGHT");
+	//println("[ROCKET STATE] POWERED FLIGHT");
 
 	setLedRed();
 
@@ -214,6 +214,8 @@ int apogee_check()
 				int x_mean = sum_x/count;
 				int y_mean = sum_y/count;
 				int slope = ( sum_xy - (sum_x * y_mean) ) / (sum_x2 - (sum_x * x_mean) );
+				//print(slope);
+				//print(",");
 				if (slope <= 0)
 				{
 					return EXIT_SUCCESS;
@@ -225,7 +227,7 @@ int apogee_check()
 
 void unpowered_flight_mode()
 	{
-	println("[ROCKET STATE] UNPOWERED FLIGHT");
+	//println("[ROCKET STATE] UNPOWERED FLIGHT");
 
 	setLedBlue();
 
@@ -237,7 +239,7 @@ void unpowered_flight_mode()
 
 void soft_recovery_mode()
 	{
-	println("[ROCKET STATE] SOFT RECOVERY");
+	//println("[ROCKET STATE] SOFT RECOVERY");
 
 	while (true)
 		{
@@ -264,7 +266,7 @@ void soft_recovery_mode()
 
 void ballistic_descent_mode()
 	{
-	println("[ROCKET STATE] BALLISTIC DESCENT");
+	//println("[ROCKET STATE] BALLISTIC DESCENT");
 
 	// ledON("YELLOW");
 
@@ -280,7 +282,7 @@ void ballistic_descent_mode()
 
 void chute_descent_mode()
 	{
-	println("[ROCKET STATE] CHUTE DESCENT");
+	//println("[ROCKET STATE] CHUTE DESCENT");
 	// TODO:
 	// ledON("ORANGE");
 
@@ -295,7 +297,7 @@ void chute_descent_mode()
 
 void land_safe_mode()
 	{
-	println("[ROCKET STATE] LAND SAFE");
+	//println("[ROCKET STATE] LAND SAFE");
 	// STOP DATA COLLECTION
 	// CHECK IF SD CARD CAN STILL BE WRITTEN TO
 	// IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
@@ -383,10 +385,10 @@ int debug_data()
 		debug_time = millis();
 		}
 
-	if ((millis() - debug_time) < DEBUG_INTERVAL)
+	/*if ((millis() - debug_time) < DEBUG_INTERVAL)
 		{
 		return EXIT_FAILURE;
-		}
+		}*/
 
 	data_string += String(millis()) + ",";
 	data_string += String(rocket_state) + ",";
@@ -403,8 +405,8 @@ int debug_data()
 
 	// write_to_sd_card(DATALOG, data_string.c_str());
 
-	println(data_string_fmt);
-	print("data_string: ");
+	//println(data_string_fmt);
+	//print("data_string: ");
 	println(data_string);
 
 	// scan_and_print_I2C_devices();
@@ -434,12 +436,12 @@ void setup()
 	// zombie mode ensures that the main loop()
 	// does not start running, overwriting previous
 	// data on the FRAM
-	if (check_zombie_mode() == EXIT_SUCCESS)
+	/*if (check_zombie_mode() == EXIT_SUCCESS)
 		{
 		println("[ZOMBIE MODE] detected");
 		dump_fram_to_serial();
 		exit(0);
-		}
+		}*/
 
 	if (health_check() == EXIT_FAILURE)
 		{
