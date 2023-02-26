@@ -11,3 +11,8 @@ void buzzer_on()
 	// pin8 output the voice, every scale is 0.5 sencond
 	tone(BUZZER_PIN, melody[1], duration);
 	}
+
+void buzzer_off()
+    {
+    digitalWrite(BUZZER_PIN, LOW);
+    }

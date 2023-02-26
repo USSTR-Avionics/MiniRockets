@@ -35,7 +35,7 @@ void print_current_sensor_chunk(bool printheader)
 	char print_string[100];
 	sprintf(
 	    print_string,
-	    "%x,%lu,%u,%f,%f,%f,%f,%f,%f,%f,%f,%f",
+	    "%lx,%lu,%u,%f,%f,%f,%f,%f,%f,%f,%f,%f",
 	    fram_cursor, sensor_chunk.timestamp, sensor_chunk.current_state,
 	    (float)sensor_chunk.accl_x, (float)sensor_chunk.accl_y, (float)sensor_chunk.accl_z,
 	    (float)sensor_chunk.gyro_x, (float)sensor_chunk.gyro_y, (float)sensor_chunk.gyro_z,

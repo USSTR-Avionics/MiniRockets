@@ -86,13 +86,11 @@ int init_all()
 
 int health_check()
 	{
-	return EXIT_SUCCESS; // TODO: implement health checks and delete this line
-
-	println("health_check()");
+	println("running health_check()");
 
 	// KX134 checks
-	float z_thresh_low   = 9.0;
-	float z_thresh_high  = 11.0;
+	float z_thresh_high   = -9.0;
+	float z_thresh_low  = -11.0;
 	float curr_z_reading = get_kx134_accel_z();
 
 	int count            = 0;
@@ -104,6 +102,10 @@ int health_check()
 			}
 		else
 			{
+            println("KX134 health check failed");
+            println("curr_z_reading: " + String(curr_z_reading));
+            println("z_thresh_low: " + String(z_thresh_low));
+            println("z_thresh_high: " + String(z_thresh_high));
 			return EXIT_FAILURE;
 			}
 		}
@@ -122,14 +124,16 @@ int health_check()
 			}
 		else
 			{
+            println("BMP280 health check failed");
+            println("curr_alt_reading: " + String(curr_alt_reading));
+            println("alt_thresh_low: " + String(alt_thresh_low));
+            println("alt_thresh_high: " + String(alt_thresh_high));
 			return EXIT_FAILURE;
 			}
 		}
 
 	// FRAM checks
 
-
-	// write_to_sd_card(EVENTLOG, "health checks passed");
 
 	return EXIT_SUCCESS;
 	}
@@ -385,7 +389,7 @@ void watchdog_callback()
 
 int check_zombie_mode()
 	{
-	if (digitalRead(PIN_A14) == HIGH)
+	if (digitalRead(PIN_A16) == HIGH)
 		{
 		return EXIT_SUCCESS;
 		}
@@ -457,6 +461,7 @@ void setup()
 	// data on the FRAM
 	if (check_zombie_mode() == EXIT_SUCCESS)
 		{
+        setLedBlue();
 		println("[ZOMBIE MODE] detected");
 		dump_fram_to_serial();
 		exit(0);
@@ -464,11 +469,10 @@ void setup()
 
 	if (health_check() == EXIT_FAILURE)
 		{
+        setLedRed();
 		println("[FAILED] Health Check"); // also write to reserved fram space
 		exit(1);                          // this should also fail if init_all() fails;
 		}
-
-	buzzer_on();
 
 	config.trigger  = WATCHDOG_TRIGGER;
 	config.timeout  = WATCHDOG_TIMEOUT;
@@ -476,12 +480,14 @@ void setup()
 	wdt.begin(config);
 	wdt.feed();
 
-	// TODO: add a method to read previous state from FRAM and restore it
+	// TODO: add a method to read previous state from EEPROM and restore it
+
 	println("setup() exit");
 	}
 
 void loop()
 	{
+    setLedGreen();
 	float notanumber = std::numeric_limits<float>::quiet_NaN();
 	wdt.feed();
 	debug_data();
