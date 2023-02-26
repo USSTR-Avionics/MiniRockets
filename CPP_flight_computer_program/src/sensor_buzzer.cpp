@@ -13,6 +13,6 @@ void buzzer_on()
 	}
 
 void buzzer_off()
-    {
-    digitalWrite(BUZZER_PIN, LOW);
-    }
+	{
+	digitalWrite(BUZZER_PIN, LOW);
+	}
