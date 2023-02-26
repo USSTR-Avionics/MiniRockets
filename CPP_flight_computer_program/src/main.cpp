@@ -35,7 +35,9 @@ unsigned long starting_time = 0UL;
 unsigned long debug_time    = 0UL;
 int descent_check           = 0;
 float last_alt              = 0;
-
+float apogee_buffer[APOGEE_BUFFER_SIZE];
+float time_buffer[APOGEE_BUFFER_SIZE];
+uint8_t apogee_buffer_cursor = 0;
 
 // STATE MACHINE
 static statemachine_t::e_rocket_state rocket_state;
@@ -191,57 +193,34 @@ void powered_flight_mode()
  */
 int apogee_check()
 	{
-	// fill buffer with altitude readings taken every APOGEE_READING_INTERVAL milliseconds
-	starting_time                = millis();
-	uint8_t apogee_buffer_cursor = 0;
-	float apogee_buffer[APOGEE_BUFFER_SIZE];
-
-	while (true)
-		{
-		if (millis() - starting_time > APOGEE_READING_INTERVAL)
-			{
-			if (apogee_buffer_cursor == 0)
-				{
-				apogee_buffer[apogee_buffer_cursor] = ceilf(get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) * 100) / 100; // rounding up to 2 decimal places
-				}
-			else
-				{
-				float altitude_reading              = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-				float ema_adjusted                  = get_exponential_moving_average(altitude_reading, apogee_buffer[apogee_buffer_cursor - 1], MODERATE_EMA_SMOOTHING);
-				apogee_buffer[apogee_buffer_cursor] = ceilf(ema_adjusted * 100) / 100; // rounding up to 2 decimal places
-				}
-
-			// increment apogee buffer cursor
-			apogee_buffer_cursor++;
-			// reset local timer
-			starting_time = millis();
-			}
-
+		apogee_buffer[apogee_buffer_cursor] = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+		time_buffer[apogee_buffer_cursor] = millis();
+		apogee_buffer_cursor++;
 		if (apogee_buffer_cursor >= APOGEE_BUFFER_SIZE)
 			{
-			break;
+				apogee_buffer_cursor = 0;
+				int count = APOGEE_BUFFER_SIZE;
+				int sum_x = 0;
+				int sum_y = 0;
+				int sum_x2 = 0;
+				int sum_xy = 0;
+				for (int i=0;i<APOGEE_BUFFER_SIZE; i++)
+				{
+					sum_x += time_buffer[i];
+					sum_y += apogee_buffer[i];
+					sum_x2 += (time_buffer[i]*time_buffer[i]);
+					sum_xy += (time_buffer[i]*apogee_buffer[i]);
+				}
+				int x_mean = sum_x/count;
+				int y_mean = sum_y/count;
+				int slope = ( sum_xy - (sum_x * y_mean) ) / (sum_x2 - (sum_x * x_mean) );
+				if (slope <= 0)
+				{
+					return EXIT_SUCCESS;
+				}
+				
 			}
-		}
-
-	// calculate exponential moving average of apogee buffer
-	float apogee_buffer_ema = apogee_buffer[0];
-	for (int i = 1; i < APOGEE_BUFFER_SIZE; i++)
-		{
-		apogee_buffer_ema = get_exponential_moving_average(apogee_buffer[i], apogee_buffer_ema, MODERATE_EMA_SMOOTHING);
-		}
-
-	bool ema_lessthan_oldestreading = apogee_buffer_ema < apogee_buffer[0];
-	bool ema_greaterthan_zero       = apogee_buffer_ema > ZERO_FLOAT;
-	bool ema_greaterthan_threshold  = (apogee_buffer[0] - apogee_buffer[APOGEE_BUFFER_SIZE - 1]) > APOGEE_DIFFERENCE_THRESHOLD;
-
-	if (ema_lessthan_oldestreading && ema_greaterthan_zero && ema_greaterthan_threshold)
-		{
-		return EXIT_SUCCESS;
-		}
-	else
-		{
-		return EXIT_FAILURE;
-		}
+			return EXIT_FAILURE;
 	}
 
 void unpowered_flight_mode()
