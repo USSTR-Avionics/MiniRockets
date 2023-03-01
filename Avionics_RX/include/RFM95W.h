@@ -36,20 +36,28 @@ public:
         IDLE
     };
 
-    RFM95W(const uint8_t &Slave, const uint8_t &Interrupt, const Mode &Type = Mode::IDLE);
+    RFM95W(const uint8_t &CS, const uint8_t &Interrupt);
 
     // core
-    void Init() const;
+    // void Init();
     bool TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX = 500) const;
     void UDP_Send(const char Data[]) const;
 
 
-    std::string Receive();
+    // Receive
+    std::string TCP_Receive() const;
+    std::string UDP_Receive() const;
+
 
     // Time_Out in milliseconds
-    std::string Receive(const uint8_t &Time_Out);
+    std::string TCP_Receive(const uint8_t &Time_Out) const;
+    std::string UDP_Receive(const uint8_t &Time_Out) const;
+
+    // Time_Out in milliseconds
+
 
     // util
+    bool Mem_check() const;
     uint16_t Max_Message_Length() const;
 
     /*
@@ -65,119 +73,15 @@ public:
     void Set_Preamble_Length(const uint8_t &Length);
     void Switch_Mode(const Mode &Type);
 
-    void check()
-    {
-        if(m_RF95 == nullptr)
-        {
-            Serial.println("no memory");
-        }
-        else
-        {
-            Serial.println("Radio online");
-        }
-    };
+    RH_RF95* get();
 
     RFM95W() = delete;
     RFM95W(const RFM95W &RHS) = delete;
 
 private:
-    std::unique_ptr<RH_RF95> m_RF95;
-    uint16_t m_Max_message_length;
+    RH_RF95 *m_RF95;
+    uint16_t m_Max_message_length{16};
     const std::string m_Handshake{"Received"};
 };
-/*
-*//*
- * ========================================================================
- *                                 UDP
- * ========================================================================
- *//*
-
-// I could also just inherit from RFM95W
-class RFM95W_TX
-{
-public:
-    enum class Mode
-    {
-        RX,
-        TX,
-        IDLE
-    };
-
-    RFM95W_TX(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type = Mode::IDLE);
-
-    // core
-    bool Send(const std::string &Data, const uint16_t &Time_Out_TX) const;
-
-    // util
-    uint16_t Max_Message_Length() const;
-
-
-    *//*
-     * Settings
-        It is very important therefore, that if you are using the RH_RF95 driver with another SPI based device,
-        that you disable interrupts while you transfer data o and from that other device.
-        Use cli() to disable interrupts and sei() to readable them.
-     *//*
-    bool Set_Frequency(const float &Frequency);
-    // default RH_RF95::Bw125Cr45Sf128
-    void Set_Modem_Config_Choice(const uint8_t &Index);
-    // in bytes
-    void Set_Preamble_Length(const uint8_t &Length);
-    void Switch_Mode(const Mode &Type);
-
-
-    RFM95W_TX() = delete;
-    RFM95W_TX(const RFM95W_TX &RHS) = delete;
-
-private:
-    std::unique_ptr<RH_RF95> m_RF95;
-    uint8_t m_RST;
-    uint16_t m_Max_message_length;
-};
-
-class RFM95W_RX
-{
-public:
-    enum class Mode
-    {
-        RX,
-        TX,
-        IDLE
-    };
-
-    RFM95W_RX(const uint8_t &Slave, const uint8_t &Interrupt, const uint8_t &Reset, const Mode &Type = Mode::IDLE);
-
-    // core
-    std::tuple<bool, const std::string> Receive();
-
-    // Time_Out in milliseconds
-    std::tuple<bool, const std::string> Receive(const uint8_t &Time_Out);
-
-    // util
-    uint16_t Max_Message_Length() const;
-
-
-    *//*
-     * Settings
-        It is very important therefore, that if you are using the RH_RF95 driver with another SPI based device,
-        that you disable interrupts while you transfer data o and from that other device.
-        Use cli() to disable interrupts and sei() to readable them.
-     *//*
-    bool Set_Frequency(const float &Frequency);
-    // default RH_RF95::Bw125Cr45Sf128
-    void Set_Modem_Config_Choice(const uint8_t &Index);
-    // in bytes
-    void Set_Preamble_Length(const uint8_t &Length);
-    void Switch_Mode(const Mode &Type);
-
-
-    RFM95W_RX() = delete;
-    RFM95W_RX(const RFM95W_RX &RHS) = delete;
-
-private:
-    std::unique_ptr<RH_RF95> m_RF95;
-    uint8_t m_RST;
-    uint16_t m_Max_message_length;
-};*/
 
 #endif //CPP_FLIGHT_COMPUTER_PROGRAM_RFM95W_H

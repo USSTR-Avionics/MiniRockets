@@ -56,7 +56,6 @@ bool RH_RF95::init()
 //	Serial.println(spiRead(RH_RF95_REG_01_OP_MODE), HEX);
 	return false; // No device present?
     }
-
     // Add by Adrien van den Bossche <vandenbo@univ-tlse2.fr> for Teensy
     // ARM M4 requires the below. else pin interrupt doesn't work properly.
     // On all other platforms, its innocuous, belt and braces
@@ -85,7 +84,6 @@ bool RH_RF95::init()
 	attachInterrupt(interruptNumber, isr2, RISING);
     else
 	return false; // Too many devices, not enough interrupt vectors
-
     // Set up FIFO
     // We configure so that we can use the entire 256 byte FIFO for either receive
     // or transmit, but not both at the same time
@@ -97,7 +95,6 @@ bool RH_RF95::init()
     // payload is TO + FROM + ID + FLAGS + message data
     // RX mode is implmented with RXCONTINUOUS
     // max message data length is 255 - 4 = 251 octets
-
     setModeIdle();
 
     // Set up default configuration
