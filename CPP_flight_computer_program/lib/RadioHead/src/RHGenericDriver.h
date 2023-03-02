@@ -1,7 +1,7 @@
 // RHGenericDriver.h
 // Author: Mike McCauley (mikem@airspayce.com)
 // Copyright (C) 2014 Mike McCauley
-// $Id: RHGenericDriver.h,v 1.17 2016/04/04 01:40:12 mikem Exp $
+// $Id: RHGenericDriver.h,v 1.24 2020/04/09 23:40:34 mikem Exp $
 
 #ifndef RHGenericDriver_h
 #define RHGenericDriver_h
@@ -58,6 +58,9 @@ public:
     /// Constructor
     RHGenericDriver();
 
+    /// Generic destructor to prevent warnings when objects are dynamically allocated
+    virtual ~RHGenericDriver() {};
+    
     /// Initialise the Driver transport hardware and software.
     /// Make sure the Driver is properly configured before calling init().
     /// \return true if initialisation succeeded.
@@ -103,7 +106,11 @@ public:
 
     /// Starts the receiver and blocks until a valid received 
     /// message is available.
-    virtual void            waitAvailable();
+  /// Default implementation calls available() repeatedly until it returns true;
+  /// \param[in] polldelay Time between polling available() in milliseconds. This can be useful
+  /// in multitaking environment like Linux to prevent waitAvailableTimeout
+  /// using all the CPU while polling for receiver activity
+    virtual void            waitAvailable(uint16_t polldelay = 0);
 
     /// Blocks until the transmitter 
     /// is no longer transmitting.
@@ -115,10 +122,14 @@ public:
     /// \return true if the radio completed transmission within the timeout period. False if it timed out.
     virtual bool            waitPacketSent(uint16_t timeout);
 
-    /// Starts the receiver and blocks until a received message is available or a timeout
-    /// \param[in] timeout Maximum time to wait in milliseconds.
+    /// Starts the receiver and blocks until a received message is available or a timeout.
+  /// Default implementation calls available() repeatedly until it returns true;
+  /// \param[in] timeout Maximum time to wait in milliseconds.
+  /// \param[in] polldelay Time between polling available() in milliseconds. This can be useful
+  /// in multitaking environment like Linux to prevent waitAvailableTimeout
+  /// using all the CPU while polling for receiver activity
     /// \return true if a message is available
-    virtual bool            waitAvailableTimeout(uint16_t timeout);
+  virtual bool            waitAvailableTimeout(uint16_t timeout, uint16_t polldelay = 0);
 
     // Bent G Christensen (bentor@gmail.com), 08/15/2016
     /// Channel Activity Detection (CAD).
@@ -206,14 +217,14 @@ public:
     /// Usually it is the RSSI of the last received message, which is measured when the preamble is received.
     /// If you called readRssi() more recently, it will return that more recent value.
     /// \return The most recent RSSI measurement in dBm.
-    int8_t        lastRssi();
+    virtual int16_t        lastRssi();
 
     /// Returns the operating mode of the library.
     /// \return the current mode, one of RF69_MODE_*
-    RHMode          mode();
+    virtual RHMode          mode();
 
     /// Sets the operating mode of the transport.
-    void            setMode(RHMode mode);
+    virtual void            setMode(RHMode mode);
 
     /// Sets the transport hardware into low-power sleep mode
     /// (if supported). May be overridden by specific drivers to initialte sleep mode.
@@ -235,17 +246,17 @@ public:
     /// Caution: not all drivers can correctly report this count. Some underlying hardware only report
     /// good packets.
     /// \return The number of bad packets received.
-    uint16_t       rxBad();
+    virtual uint16_t       rxBad();
 
     /// Returns the count of the number of 
     /// good received packets
     /// \return The number of good packets received.
-    uint16_t       rxGood();
+    virtual uint16_t       rxGood();
 
     /// Returns the count of the number of 
     /// packets successfully transmitted (though not necessarily received by the destination)
     /// \return The number of packets successfully transmitted
-    uint16_t       txGood();
+    virtual uint16_t       txGood();
 
 protected:
 
@@ -283,7 +294,7 @@ protected:
     uint8_t             _txHeaderFlags;
 
     /// The value of the last received RSSI value, in some transport specific units
-    volatile int8_t     _lastRssi;
+    volatile int16_t     _lastRssi;
 
     /// Count of the number of bad messages (eg bad checksum etc) received
     volatile uint16_t   _rxBad;
@@ -296,11 +307,12 @@ protected:
     
     /// Channel activity detected
     volatile bool       _cad;
+
+    /// Channel activity timeout in ms
     unsigned int        _cad_timeout;
 
 private:
 
 };
-
 
 #endif 

@@ -11,10 +11,10 @@
 .cache/*
 
 .secret
+.DS_Store
 
 Rust_flight_computer_program/*
 Rust_flight_computer_program/
 
 linted_flight_computer_program/
 linted_flight_computer_program/*
-
