@@ -1,22 +1,16 @@
 #include "RFM95W.h"
 
-RFM95W::RFM95W(const uint8_t &CS, const uint8_t &Interrupt)
+void RFM95W::Init(RH_RF95 &Radio)
 {
     // default configuration: 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol(2^7), CRC on
-    m_RF95 = new RH_RF95(CS, Interrupt);
+    m_RF95 = &Radio;
+    m_Max_message_length = m_RF95->maxMessageLength();
 };
-
 
 bool RFM95W::TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint16_t &Time_Out_TX) const
 {
-    // 'atoi()' used to convert a string to an integer value,
-    // but function will not report conversion errors; consider using 'strtoul' instead
-    // const uint8_t Message = std::atoi(Data);
-
     // returns false if message too long
-
-    // need to double check to make sure sizeof(*Data) does not return sizeof(Data_ptr)
-    m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data));
+    if (!m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data))) return false;
 
     if(m_RF95->waitPacketSent(Time_Out_TX) == true)
     {
@@ -41,11 +35,9 @@ bool RFM95W::TCP_Send(const char Data[], const uint16_t &Time_Out_RX, const uint
     return false;
 }
 
-void RFM95W::UDP_Send(const char Data[]) const
+bool RFM95W::UDP_Send(const char Data[]) const
 {
-    if(m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data)))
-        Serial.println("sent");
-
+    return m_RF95->send(reinterpret_cast<const uint8_t*>(Data), sizeof(*Data));
 }
 
 std::string RFM95W::TCP_Receive() const
@@ -126,12 +118,12 @@ std::string RFM95W::UDP_Receive(const uint8_t &Time_Out) const
 
 }
 
-bool RFM95W::Set_Frequency(const float &Frequency)
+bool RFM95W::Set_Frequency(const float &Frequency) const
 {
     return m_RF95->setFrequency(Frequency);
 }
 
-void RFM95W::Set_Modem_Config_Choice(const uint8_t &Index)
+void RFM95W::Set_Modem_Config_Choice(const uint8_t &Index) const
 {
     switch(Index)
     {
@@ -154,7 +146,7 @@ void RFM95W::Set_Modem_Config_Choice(const uint8_t &Index)
     }
 }
 
-void RFM95W::Switch_Mode(const RFM95W::Mode &Type)
+void RFM95W::Switch_Mode(const RFM95W::Mode &Type) const
 {
     switch(Type)
     {
@@ -177,7 +169,7 @@ uint16_t RFM95W::Max_Message_Length() const
     return m_Max_message_length;
 }
 
-void RFM95W::Set_Preamble_Length(const uint8_t &Length)
+void RFM95W::Set_Preamble_Length(const uint8_t &Length) const
 {
     m_RF95->setPreambleLength(Length);
 }
@@ -187,7 +179,8 @@ bool RFM95W::Mem_check() const
     return m_RF95 != nullptr;
 }
 
-RH_RF95 *RFM95W::get()
+void RFM95W::Set_TX_Power(const int8_t &Power) const
 {
-    return m_RF95;
+    m_RF95->setTxPower(Power);
 }
+
