@@ -10,6 +10,7 @@
 #include "sensor_parachute.h"
 #include "sensor_radio.h"
 #include "sensor_thermocouple.h"
+#include "RFM95W.h"
 
 #include "rocket_profile.h"
 #include "statemachine_t.h"
@@ -27,7 +28,6 @@
 #include <cstdlib>
 #include <limits>
 
-
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
 unsigned long debug_time    = 0UL;
@@ -37,6 +37,9 @@ float last_alt              = 0;
 
 // STATE MACHINE
 static statemachine_t::e_rocket_state rocket_state;
+
+// RFM95 radio
+RFM95W RF95;
 
 // GLOBAL VARS
 float ground_base_pressure = 0.0f;
@@ -439,6 +442,30 @@ void setup()
 	Serial.begin(9600);
 	Wire.begin();
 
+    // ============= NO TOUCH =============
+    uint16_t CS{10};
+    uint16_t Interrupt{32};
+    uint16_t Reset{30};
+
+    RH_RF95 Radio(CS, Interrupt);
+
+    pinMode(Reset, OUTPUT);
+    digitalWrite(Reset, HIGH);
+    // manual reset
+    digitalWrite(Reset, LOW);
+    delay(10);
+    digitalWrite(Reset, HIGH);
+    delay(10);
+
+    Radio.init();
+    // RAII concern, passing obj into ptr that could be destroyed... arduino magic?
+    RF95.Init(Radio);
+    // ============= NO TOUCH END =============
+
+    // do the reset for the radio
+    RF95.Set_Frequency(915.7);
+
+
 #if (TESTMODE == 1)
 	#warning "TESTMODE ENABLED"
 	#warning "only tests will be run, no rocket code"
@@ -482,6 +509,7 @@ void loop()
 	setLedGreen();
 	float notanumber = std::numeric_limits<float>::quiet_NaN();
 	wdt.feed();
+    RF95.UDP_Send("message");
 	debug_data();
 	select_flight_mode(rocket_state);
 	write_data_chunk_to_fram(
