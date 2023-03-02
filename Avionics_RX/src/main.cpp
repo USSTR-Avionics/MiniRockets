@@ -8,6 +8,7 @@ uint16_t Interrupt{32};
 uint16_t Reset{30};
 
 RFM95W RF95;
+RH_RF95 Radio(CS, Interrupt);
 
 void setup()
 {
@@ -16,7 +17,6 @@ void setup()
     delay(100);
     Wire.begin();
 
-    RH_RF95 Radio(CS, Interrupt);
 
     pinMode(Reset, OUTPUT);
     digitalWrite(Reset, HIGH);
@@ -39,6 +39,6 @@ void loop()
 {
     delay(1000);
     Serial.println(RF95.Mem_check());
-    RF95.UDP_Send("Hello from the other side");
+    Serial.println(RF95.TCP_Receive(500).c_str());
 
 }

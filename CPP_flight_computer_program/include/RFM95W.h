@@ -1,16 +1,16 @@
 #ifndef CPP_FLIGHT_COMPUTER_PROGRAM_RFM95W_H
 #define CPP_FLIGHT_COMPUTER_PROGRAM_RFM95W_H
 
-
-
 /*
 YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
+
     LoRa packet format:
         8 symbol PREAMBLE
         Explicit header with header CRC (default CCITT, handled internally by the radio)
         4 octets HEADER: (TO, FROM, ID, FLAGS)
         0 to 251 octets DATA
         CRC (default CCITT, handled internally by the radio)
+
     LoRa Chirp Options:
         typedef enum
         {
@@ -19,6 +19,8 @@ YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
             Bw31_25Cr48Sf512,	   //< Bw = 31.25 kHz, Cr = 4/8, Sf = 512chips/symbol, CRC on. Slow+long range
             Bw125Cr48Sf4096,           //< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
         } ModemConfigChoice;
+
+
      Settings:
         It is very important therefore, that if you are using the RH_RF95 driver with another SPI based device,
         that you disable interrupts while you transfer data o and from that other device.
@@ -50,8 +52,8 @@ public:
     std::string UDP_Receive() const;
 
     // Time_Out in milliseconds
-    std::string TCP_Receive(const uint8_t &Time_Out) const;
-    std::string UDP_Receive(const uint8_t &Time_Out) const;
+    std::string TCP_Receive(const uint16_t &Time_Out) const;
+    std::string UDP_Receive(const uint16_t &Time_Out) const;
 
     // util
     bool Mem_check() const;

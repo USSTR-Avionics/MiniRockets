@@ -71,7 +71,7 @@ std::string RFM95W::UDP_Receive() const
 
 }
 
-std::string RFM95W::TCP_Receive(const uint8_t &Time_Out) const
+std::string RFM95W::TCP_Receive(const uint16_t &Time_Out) const
 {
     uint8_t Buffer[m_Max_message_length];
     // isn't this just m_Max_Message_Length + 1
@@ -100,7 +100,7 @@ std::string RFM95W::TCP_Receive(const uint8_t &Time_Out) const
 
 }
 
-std::string RFM95W::UDP_Receive(const uint8_t &Time_Out) const
+std::string RFM95W::UDP_Receive(const uint16_t &Time_Out) const
 {
     uint8_t Buffer[m_Max_message_length];
     // isn't this just m_Max_Message_Length + 1
@@ -183,3 +183,4 @@ void RFM95W::Set_TX_Power(const int8_t &Power) const
 {
     m_RF95->setTxPower(Power);
 }
+

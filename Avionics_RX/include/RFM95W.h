@@ -52,8 +52,8 @@ public:
     std::string UDP_Receive() const;
 
     // Time_Out in milliseconds
-    std::string TCP_Receive(const uint8_t &Time_Out) const;
-    std::string UDP_Receive(const uint8_t &Time_Out) const;
+    std::string TCP_Receive(const uint16_t &Time_Out) const;
+    std::string UDP_Receive(const uint16_t &Time_Out) const;
 
     // util
     bool Mem_check() const;

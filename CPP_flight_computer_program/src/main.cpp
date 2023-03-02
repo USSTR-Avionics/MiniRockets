@@ -39,7 +39,11 @@ float last_alt              = 0;
 static statemachine_t::e_rocket_state rocket_state;
 
 // RFM95 radio
+uint16_t CS{10};
+uint16_t Interrupt{32};
+
 RFM95W RF95;
+RH_RF95 Radio(CS, Interrupt);
 
 // GLOBAL VARS
 float ground_base_pressure = 0.0f;
@@ -443,26 +447,24 @@ void setup()
 	Wire.begin();
 
     // ============= NO TOUCH =============
-    uint16_t CS{10};
-    uint16_t Interrupt{32};
+    // magic
     uint16_t Reset{30};
-
-    RH_RF95 Radio(CS, Interrupt);
 
     pinMode(Reset, OUTPUT);
     digitalWrite(Reset, HIGH);
+
     // manual reset
     digitalWrite(Reset, LOW);
     delay(10);
     digitalWrite(Reset, HIGH);
     delay(10);
 
+    // pass radio into class
     Radio.init();
-    // RAII concern, passing obj into ptr that could be destroyed... arduino magic?
     RF95.Init(Radio);
     // ============= NO TOUCH END =============
 
-    // do the reset for the radio
+    // radio config
     RF95.Set_Frequency(915.7);
 
 
@@ -509,7 +511,7 @@ void loop()
 	setLedGreen();
 	float notanumber = std::numeric_limits<float>::quiet_NaN();
 	wdt.feed();
-    RF95.UDP_Send("message");
+	Serial.println(RF95.TCP_Receive(500).c_str());
 	debug_data();
 	select_flight_mode(rocket_state);
 	write_data_chunk_to_fram(
