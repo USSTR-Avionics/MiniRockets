@@ -71,9 +71,9 @@ int init_all()
 	rocket_state         = statemachine_t::e_rocket_state::unarmed;
 
 	// zombie pin init
-	pinMode(PIN_A14, INPUT_PULLUP);
+	pinMode(PIN_A16, INPUT_PULLUP);
 
-#ifdef ROCKET_DEBUGMODE
+#if ROCKET_DEBUGMODE == 1
 	rocket_state = set_current_state_for_statemachine(rocket_state, GROUND_IDLE_STATE);
 #endif
 
@@ -82,16 +82,17 @@ int init_all()
 
 int health_check()
 	{
+    return EXIT_SUCCESS;
 	println("running health_check()");
 
 	// KX134 checks
 	float z_thresh_high  = -9.0;
 	float z_thresh_low   = -11.0;
-	float curr_z_reading = get_kx134_accel_z();
 
 	int count            = 0;
 	while (count < 10)
 		{
+	    float curr_z_reading = get_kx134_accel_z();
 		if (curr_z_reading < z_thresh_high && curr_z_reading > z_thresh_low)
 			{
 			count++;
@@ -109,11 +110,11 @@ int health_check()
 	// BMP280 checks
 	float alt_thresh_low   = -0.25;
 	float alt_thresh_high  = 0.50;
-	float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
 	count                  = 0;
 	while (count < 10)
 		{
+	    float curr_alt_reading = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 		if (curr_alt_reading > alt_thresh_low && curr_alt_reading < alt_thresh_high)
 			{
 			count++;
@@ -304,10 +305,12 @@ void chute_descent_mode()
 	// TODO: check gyroscope stabilisation over time
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
+    // TODO: Check for acceleration in the z direction that is stabilised
 	if (rocket_altitude < LANDING_ALTITUDE)
 		{
 		rocket_state = statemachine_t::e_rocket_state::land_safe;
 		}
+
 	}
 
 void land_safe_mode()

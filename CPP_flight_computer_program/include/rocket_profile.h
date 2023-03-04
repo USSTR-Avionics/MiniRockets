@@ -9,19 +9,11 @@
 // rocket params
 #define ROCKET_HEIGHT        1 // in metres
 
-#if TESTPROFILE == 1
-	#define LIFTOFF_THRESHOLD 2.00f // in ms^-2
-#else
-	#define LIFTOFF_THRESHOLD 11.0f // in ms^-2
-#endif                              // TESTPROFILE
+#define LIFTOFF_THRESHOLD 11.0f // in ms^-2
 
 #define DESCENT_CHECK_AMOUNT 2
 
-#if TESTPROFILE == 1
-	#define APOGEE_CONFIRMATION_THRESHOLD 0.10f // in meters
-#else
-	#define APOGEE_CONFIRMATION_THRESHOLD 0.50f // in meters
-#endif                                          // TESTPROFILE
+#define APOGEE_CONFIRMATION_THRESHOLD 0.50f // in meters
 
 #define ALTITUDE_CHANGE             0.600f
 #define PARACHUTE_DEPLOYMENT_HEIGHT 200.0f // in meters
