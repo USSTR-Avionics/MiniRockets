@@ -395,7 +395,7 @@ int debug_data()
 	{
 #ifdef ROCKET_DEBUGMODE
 
-	String data_string     = "";
+	String data_string = "";
 
 	if (debug_time == 0UL)
 		{
@@ -410,15 +410,15 @@ int debug_data()
 	data_string += String(millis()) + ",";
 	data_string += String(rocket_state) + ",";
 
-	kx134_accel_x   = get_kx134_accel_x();
-	kx134_accel_y   = get_kx134_accel_y();
-	kx134_accel_z   = get_kx134_accel_z();
-	data_string     = data_string + String(kx134_accel_x) + ",";
-	data_string     = data_string + String(kx134_accel_y) + ",";
-	data_string     = data_string + String(kx134_accel_z) + ",";
+	kx134_accel_x          = get_kx134_accel_x();
+	kx134_accel_y          = get_kx134_accel_y();
+	kx134_accel_z          = get_kx134_accel_z();
+	data_string            = data_string + String(kx134_accel_x) + ",";
+	data_string            = data_string + String(kx134_accel_y) + ",";
+	data_string            = data_string + String(kx134_accel_z) + ",";
 
-	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-	data_string     = data_string + String(rocket_altitude);
+	rocket_altitude        = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+	data_string            = data_string + String(rocket_altitude);
 
 	// write_to_sd_card(DATALOG, data_string.c_str());
 
