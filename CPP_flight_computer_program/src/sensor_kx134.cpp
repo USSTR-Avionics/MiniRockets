@@ -1,5 +1,8 @@
 #include "SparkFun_Qwiic_KX13X.h"
 
+// As the rocket accelerates upwards
+// the acceleration in the z direction becomes more nad more positive
+
 QwiicKX134 kxAccel;
 outputData accel_data;
 

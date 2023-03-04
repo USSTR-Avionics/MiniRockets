@@ -2,9 +2,11 @@
 #define SENSOR_LED_H
 
 int init_LED();
-void setLedGreen();
+
 void setLedRed();
+void setLedGreen();
 void setLedBlue();
+
 void flashSOS();
 void flashInternalLed(bool);
 

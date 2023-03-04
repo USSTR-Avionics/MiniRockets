@@ -2,6 +2,7 @@
 #define SENSOR_BUZZER_H
 
 void buzzer_on();
+void buzzer_off();
 
 #define NOTE_B0  31
 #define NOTE_C1  33

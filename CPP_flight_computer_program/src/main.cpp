@@ -2,9 +2,7 @@
 #include "package_statemachine_t.h"
 #include "package_statistics.h"
 #include "package_testmode.h"
-#include "package_watchdog.h"
-
-#include "sensor_bmi088.h"
+#include "package_watchdog.h" #include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
 #include "sensor_buzzer.h"
 #include "sensor_kx134.h"
@@ -81,20 +79,16 @@ int init_all()
 	rocket_state = set_current_state_for_statemachine(rocket_state, GROUND_IDLE_STATE);
 #endif
 
-	// write_to_sd_card(DATALOG, datalog_fmt_header);
-
 	return EXIT_SUCCESS;
 	}
 
 int health_check()
 	{
-	return EXIT_SUCCESS; // TODO: implement health checks and delete this line
-
-	println("health_check()");
+	println("running health_check()");
 
 	// KX134 checks
-	float z_thresh_low   = 9.0;
-	float z_thresh_high  = 11.0;
+	float z_thresh_high  = -9.0;
+	float z_thresh_low   = -11.0;
 	float curr_z_reading = get_kx134_accel_z();
 
 	int count            = 0;
@@ -106,6 +100,10 @@ int health_check()
 			}
 		else
 			{
+			println("KX134 health check failed");
+			println("curr_z_reading: " + String(curr_z_reading));
+			println("z_thresh_low: " + String(z_thresh_low));
+			println("z_thresh_high: " + String(z_thresh_high));
 			return EXIT_FAILURE;
 			}
 		}
@@ -124,6 +122,10 @@ int health_check()
 			}
 		else
 			{
+			println("BMP280 health check failed");
+			println("curr_alt_reading: " + String(curr_alt_reading));
+			println("alt_thresh_low: " + String(alt_thresh_low));
+			println("alt_thresh_high: " + String(alt_thresh_high));
 			return EXIT_FAILURE;
 			}
 		}
@@ -131,14 +133,16 @@ int health_check()
 	// FRAM checks
 
 
-	// write_to_sd_card(EVENTLOG, "health checks passed");
-
 	return EXIT_SUCCESS;
 	}
 
 void ground_idle_mode()
 	{
+<<<<<<< HEAD
 	//println("[ROCKET STATE] GROUND IDLE");
+=======
+	// println("[ROCKET STATE] GROUND IDLE");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 
 	setLedGreen();
 	//println("TEST");
@@ -169,7 +173,11 @@ void ground_idle_mode()
 
 void powered_flight_mode()
 	{
+<<<<<<< HEAD
 	//println("[ROCKET STATE] POWERED FLIGHT");
+=======
+	// println("[ROCKET STATE] POWERED FLIGHT");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 
 	setLedRed();
 
@@ -227,7 +235,11 @@ int apogee_check()
 
 void unpowered_flight_mode()
 	{
+<<<<<<< HEAD
 	//println("[ROCKET STATE] UNPOWERED FLIGHT");
+=======
+	// println("[ROCKET STATE] UNPOWERED FLIGHT");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 
 	setLedBlue();
 
@@ -239,7 +251,11 @@ void unpowered_flight_mode()
 
 void soft_recovery_mode()
 	{
+<<<<<<< HEAD
 	//println("[ROCKET STATE] SOFT RECOVERY");
+=======
+	// println("[ROCKET STATE] SOFT RECOVERY");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 
 	while (true)
 		{
@@ -266,9 +282,13 @@ void soft_recovery_mode()
 
 void ballistic_descent_mode()
 	{
+<<<<<<< HEAD
 	//println("[ROCKET STATE] BALLISTIC DESCENT");
 
 	// ledON("YELLOW");
+=======
+	// println("[ROCKET STATE] BALLISTIC DESCENT");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 
 	// TODO: Add a backup deployment height
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
@@ -282,9 +302,13 @@ void ballistic_descent_mode()
 
 void chute_descent_mode()
 	{
+<<<<<<< HEAD
 	//println("[ROCKET STATE] CHUTE DESCENT");
 	// TODO:
 	// ledON("ORANGE");
+=======
+	// println("[ROCKET STATE] CHUTE DESCENT");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 
 	// TODO: check gyroscope stabilisation over time
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
@@ -297,7 +321,11 @@ void chute_descent_mode()
 
 void land_safe_mode()
 	{
+<<<<<<< HEAD
 	//println("[ROCKET STATE] LAND SAFE");
+=======
+	// println("[ROCKET STATE] LAND SAFE");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 	// STOP DATA COLLECTION
 	// CHECK IF SD CARD CAN STILL BE WRITTEN TO
 	// IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
@@ -366,7 +394,7 @@ void watchdog_callback()
 
 int check_zombie_mode()
 	{
-	if (digitalRead(PIN_A14) == HIGH)
+	if (digitalRead(PIN_A16) == HIGH)
 		{
 		return EXIT_SUCCESS;
 		}
@@ -377,8 +405,7 @@ int debug_data()
 	{
 #ifdef ROCKET_DEBUGMODE
 
-	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
-	String data_string     = "";
+	String data_string = "";
 
 	if (debug_time == 0UL)
 		{
@@ -393,20 +420,26 @@ int debug_data()
 	data_string += String(millis()) + ",";
 	data_string += String(rocket_state) + ",";
 
-	kx134_accel_x   = get_kx134_accel_x();
-	kx134_accel_y   = get_kx134_accel_y();
-	kx134_accel_z   = get_kx134_accel_z();
-	data_string     = data_string + String(kx134_accel_x) + ",";
-	data_string     = data_string + String(kx134_accel_y) + ",";
-	data_string     = data_string + String(kx134_accel_z) + ",";
+	kx134_accel_x          = get_kx134_accel_x();
+	kx134_accel_y          = get_kx134_accel_y();
+	kx134_accel_z          = get_kx134_accel_z();
+	data_string            = data_string + String(kx134_accel_x) + ",";
+	data_string            = data_string + String(kx134_accel_y) + ",";
+	data_string            = data_string + String(kx134_accel_z) + ",";
 
-	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-	data_string     = data_string + String(rocket_altitude);
+	rocket_altitude        = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+	data_string            = data_string + String(rocket_altitude);
 
 	// write_to_sd_card(DATALOG, data_string.c_str());
 
+<<<<<<< HEAD
 	//println(data_string_fmt);
 	//print("data_string: ");
+=======
+	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
+	// println(data_string_fmt);
+	// print("data_string: ");
+>>>>>>> 9eb40d495e789c64fcd54278b01ec810dd630f3b
 	println(data_string);
 
 	// scan_and_print_I2C_devices();
@@ -438,6 +471,7 @@ void setup()
 	// data on the FRAM
 	/*if (check_zombie_mode() == EXIT_SUCCESS)
 		{
+		setLedBlue();
 		println("[ZOMBIE MODE] detected");
 		dump_fram_to_serial();
 		exit(0);
@@ -445,11 +479,10 @@ void setup()
 
 	if (health_check() == EXIT_FAILURE)
 		{
+		setLedRed();
 		println("[FAILED] Health Check"); // also write to reserved fram space
 		exit(1);                          // this should also fail if init_all() fails;
 		}
-
-	buzzer_on();
 
 	config.trigger  = WATCHDOG_TRIGGER;
 	config.timeout  = WATCHDOG_TIMEOUT;
@@ -457,12 +490,14 @@ void setup()
 	wdt.begin(config);
 	wdt.feed();
 
-	// TODO: add a method to read previous state from FRAM and restore it
+	// TODO: add a method to read previous state from EEPROM and restore it
+
 	println("setup() exit");
 	}
 
 void loop()
 	{
+	setLedGreen();
 	float notanumber = std::numeric_limits<float>::quiet_NaN();
 	wdt.feed();
 	debug_data();
