@@ -9,7 +9,6 @@ Adafruit_FRAM_I2C fram;
 
 int init_fram()
 	{
-	Serial.println("init_fram()");
 	fram = Adafruit_FRAM_I2C();
 	fram.begin(FRAM_I2C_ADDRESS);
 

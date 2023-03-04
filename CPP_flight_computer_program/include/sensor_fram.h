@@ -9,7 +9,9 @@
 
 // actual funcs
 int init_fram();
-int write_to_fram(uint16_t what, uint8_t where); // this should not be exposed
-int read_from_fram(int);                         // this should not be exposed
+
+// ! These should not be used directly, use the package_fram.h API instead
+int write_to_fram(uint16_t, uint8_t);
+int read_from_fram(int);
 
 #endif // SENSOR_FRAM_H

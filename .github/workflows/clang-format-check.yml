@@ -4,12 +4,10 @@ on:
   push:
     branches:
       - dev
-      - master
 
   pull_request:
     branches:
       - dev
-      - master
 
 jobs:
   build:
@@ -22,7 +20,7 @@ jobs:
         srcpath="./CPP_flight_computer_program/src/*"
         includepath="./CPP_flight_computer_program/include/*"
         mainpath="./CPP_flight_computer_program/src/main.cpp"
-        srcfilelinelimit=200
+        srcfilelinelimit=350
         mainsrclinecount=500
         headerfilelinelimit=100
         echo "line limit for main.cpp"

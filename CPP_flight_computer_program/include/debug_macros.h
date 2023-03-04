@@ -8,7 +8,7 @@
 	#define println(x)     Serial.println(x)
 	#define print(x)       Serial.print(x)
 
-	#define DEBUG_INTERVAL 100
+	#define DEBUG_INTERVAL 10
 
 #else
 	#define println(x)

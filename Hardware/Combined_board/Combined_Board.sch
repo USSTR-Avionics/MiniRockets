@@ -6652,6 +6652,7 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
+<<<<<<< HEAD
 <library name="I2CFRAM">
 <packages>
 <package name="I2CFRAM">
@@ -6714,6 +6715,8 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
+=======
+>>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </libraries>
 <attributes>
 </attributes>
@@ -6751,10 +6754,17 @@ by R. Vogg  15.March.2002</description>
 <part name="SUPPLY8" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
 <part name="TERMINAL" library="TERMINAL_5MM" deviceset="TERMINAL_5MM" device=""/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="1N4004" device="" package3d_urn="urn:adsk.eagle:package:43336/1"/>
+<<<<<<< HEAD
+=======
+<part name="SUPPLY1" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
+<part name="SUPPLY3" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
+<part name="SUPPLY4" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
+>>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 <part name="U$2" library="max31855" deviceset="MAX31855" device=""/>
 <part name="SUPPLY2" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
 <part name="2N7002" library="transistor-fet" library_urn="urn:adsk.eagle:library:396" deviceset="2N3819" device="" package3d_urn="urn:adsk.eagle:package:28523/2"/>
 <part name="SUPPLY10" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
+<<<<<<< HEAD
 <part name="R4+" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="1,6/0,8" device="" package3d_urn="urn:adsk.eagle:package:30830/1" value="0"/>
 <part name="R4-" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="1,6/0,8" device="" package3d_urn="urn:adsk.eagle:package:30830/1" value="0"/>
 <part name="GND5" library="SparkFun-PowerSymbols" deviceset="GND" device=""/>
@@ -6764,6 +6774,11 @@ by R. Vogg  15.March.2002</description>
 <part name="3V" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="1,6/0,8" device="" package3d_urn="urn:adsk.eagle:package:30830/1" value="0"/>
 <part name="GND" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="1,6/0,8" device="" package3d_urn="urn:adsk.eagle:package:30830/1" value="0"/>
 <part name="GND1" library="SparkFun-PowerSymbols" deviceset="GND" device=""/>
+=======
+<part name="R4+" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="1,6/0,8" device="" package3d_urn="urn:adsk.eagle:package:30830/1"/>
+<part name="R4-" library="wirepad" library_urn="urn:adsk.eagle:library:412" deviceset="1,6/0,8" device="" package3d_urn="urn:adsk.eagle:package:30830/1"/>
+<part name="GND5" library="SparkFun-PowerSymbols" deviceset="GND" device=""/>
+>>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </parts>
 <sheets>
 <sheet>
@@ -6902,6 +6917,30 @@ by R. Vogg  15.March.2002</description>
 <instance part="GND1" gate="1" x="71.12" y="71.12" smashed="yes" rot="R270">
 <attribute name="VALUE" x="68.326" y="71.12" size="1.778" layer="96" rot="R90" align="top-center"/>
 </instance>
+<instance part="U$2" gate="G$1" x="83.82" y="63.5" smashed="yes">
+<attribute name="NAME" x="104.14" y="88.9" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="104.14" y="63.5" size="1.27" layer="95" rot="R180"/>
+</instance>
+<instance part="SUPPLY2" gate="G$1" x="73.66" y="81.28" smashed="yes" rot="R90">
+<attribute name="VALUE" x="70.866" y="81.28" size="1.778" layer="96" rot="R90" align="bottom-center"/>
+</instance>
+<instance part="2N7002" gate="G$1" x="27.94" y="119.38" smashed="yes" rot="R180">
+<attribute name="NAME" x="38.1" y="116.967" size="1.778" layer="95" rot="R180"/>
+</instance>
+<instance part="SUPPLY10" gate="G$1" x="20.32" y="121.92" smashed="yes" rot="R90">
+<attribute name="VALUE" x="17.526" y="121.92" size="1.778" layer="96" rot="R90" align="bottom-center"/>
+</instance>
+<instance part="R4+" gate="P" x="17.78" y="116.84" smashed="yes">
+<attribute name="NAME" x="11.557" y="116.1542" size="1.778" layer="95"/>
+<attribute name="VALUE" x="16.637" y="113.538" size="1.778" layer="96"/>
+</instance>
+<instance part="R4-" gate="P" x="17.78" y="109.22" smashed="yes">
+<attribute name="NAME" x="11.557" y="108.5342" size="1.778" layer="95"/>
+<attribute name="VALUE" x="16.637" y="105.918" size="1.778" layer="96"/>
+</instance>
+<instance part="GND5" gate="1" x="25.4" y="101.6" smashed="yes">
+<attribute name="VALUE" x="25.4" y="98.806" size="1.778" layer="96" rot="R180" align="top-center"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -6923,7 +6962,11 @@ by R. Vogg  15.March.2002</description>
 <pinref part="IC1" gate="A1" pin="GND"/>
 <pinref part="GND6" gate="1" pin="GND"/>
 <wire x1="76.2" y1="147.32" x2="76.2" y2="139.7" width="0.1524" layer="91"/>
+<<<<<<< HEAD
 <pinref part="C1" gate="G$1" pin="2"/>
+=======
+<pinref part="C3" gate="G$1" pin="2"/>
+>>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 <wire x1="76.2" y1="139.7" x2="76.2" y2="137.16" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="144.78" x2="53.34" y2="139.7" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="139.7" x2="76.2" y2="139.7" width="0.1524" layer="91"/>
@@ -6963,6 +7006,17 @@ by R. Vogg  15.March.2002</description>
 <wire x1="33.02" y1="60.96" x2="33.02" y2="55.88" width="0.1524" layer="91"/>
 <pinref part="GND20" gate="1" pin="GND"/>
 </segment>
+<<<<<<< HEAD
+=======
+<segment>
+<pinref part="R4-" gate="P" pin="P"/>
+<pinref part="GND5" gate="1" pin="GND"/>
+<wire x1="20.32" y1="109.22" x2="25.4" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="109.22" x2="25.4" y2="104.14" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="HEADER5" class="0">
+>>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 <segment>
 <pinref part="R4-" gate="P" pin="P"/>
 <pinref part="GND5" gate="1" pin="GND"/>
@@ -7024,6 +7078,16 @@ by R. Vogg  15.March.2002</description>
 <pinref part="SUPPLY11" gate="G$1" pin="5V"/>
 <pinref part="U$3" gate="G$1" pin="VCC"/>
 <wire x1="124.46" y1="43.18" x2="129.54" y2="43.18" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="SUPPLY2" gate="G$1" pin="5V"/>
+<wire x1="78.74" y1="81.28" x2="73.66" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="U$2" gate="G$1" pin="VIN"/>
+</segment>
+<segment>
+<pinref part="SUPPLY10" gate="G$1" pin="5V"/>
+<wire x1="22.86" y1="121.92" x2="20.32" y2="121.92" width="0.1524" layer="91"/>
+<pinref part="2N7002" gate="G$1" pin="S"/>
 </segment>
 </net>
 <net name="SCL" class="0">
@@ -7238,6 +7302,7 @@ by R. Vogg  15.March.2002</description>
 <label x="35.56" y="121.92" size="1.778" layer="95"/>
 </segment>
 </net>
+<<<<<<< HEAD
 <net name="CLK" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="27-A13/SCK1"/>
@@ -7262,6 +7327,8 @@ by R. Vogg  15.March.2002</description>
 <label x="193.04" y="48.26" size="1.778" layer="95"/>
 </segment>
 </net>
+=======
+>>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </nets>
 </sheet>
 </sheets>
