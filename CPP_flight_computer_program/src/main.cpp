@@ -2,7 +2,8 @@
 #include "package_statemachine_t.h"
 #include "package_statistics.h"
 #include "package_testmode.h"
-#include "package_watchdog.h" #include "sensor_bmi088.h"
+#include "package_watchdog.h"
+#include "sensor_bmi088.h"
 #include "sensor_bmp280.h"
 #include "sensor_buzzer.h"
 #include "sensor_kx134.h"
@@ -10,7 +11,7 @@
 #include "sensor_parachute.h"
 #include "sensor_radio.h"
 #include "sensor_thermocouple.h"
-#include "RFM95W.h"
+#include <RH_RF95.h>
 
 #include "rocket_profile.h"
 #include "statemachine_t.h"
@@ -38,12 +39,25 @@ float last_alt              = 0;
 // STATE MACHINE
 static statemachine_t::e_rocket_state rocket_state;
 
-// RFM95 radio
-uint16_t CS{10};
-uint16_t Interrupt{32};
+// RFM95 radio, hard code the pins once board is developed
+/*
+YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
+    LoRa packet format:
+        8 symbol PREAMBLE
+        Explicit header with header CRC (default CCITT, handled internally by the radio)
+        4 octets HEADER: (TO, FROM, ID, FLAGS)
+        0 to 251 octets DATA
+        CRC (default CCITT, handled internally by the radio)
 
-RFM95W RF95;
-RH_RF95 Radio(CS, Interrupt);
+     Settings:
+        It is very important therefore, that if you are using the RH_RF95 driver with another SPI based device,
+        that you disable interrupts while you transfer data o and from that other device.
+        Use cli() to disable interrupts and sei() to readable them.
+*/
+const uint16_t RF95_CS{30};
+const uint16_t RF95_int{32};
+static RH_RF95 RF95(RF95_CS, RF95_int);
+const uint32_t RF95_Max_message_length = RF95.maxMessageLength();
 
 // GLOBAL VARS
 float ground_base_pressure = 0.0f;
@@ -440,32 +454,77 @@ int debug_data()
 	return EXIT_SUCCESS;
 	}
 
+void UDP_Send(const char Data[], uint8_t &Timeout)
+{
+    RF95.send(reinterpret_cast<const uint8_t *>(Data), strlen(Data) + 1);
+    RF95.waitPacketSent(Timeout);
+}
+
+const char* UDP_Receive()
+{
+    RF95.waitAvailable();
+    uint8_t Buffer[RF95_Max_message_length];
+    uint8_t Length = sizeof(Buffer);
+
+    return RF95.recv(Buffer, &Length) ? reinterpret_cast<const char *>(Buffer) : "";
+}
+
+void RF95_Set_modem_config(const uint8_t &Index)
+{
+    /*
+    LoRa Chirp Options:
+    typedef enum
+    {
+        Bw125Cr45Sf128 = 0,	   //< Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Default medium range
+        Bw500Cr45Sf128,	           //< Bw = 500 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Fast+short range
+        Bw31_25Cr48Sf512,	   //< Bw = 31.25 kHz, Cr = 4/8, Sf = 512chips/symbol, CRC on. Slow+long range
+        Bw125Cr48Sf4096,           //< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
+    } ModemConfigChoice;
+    */
+    switch(Index)
+    {
+        case 0:
+            // this is default already
+            RF95.setModemConfig(RH_RF95::Bw125Cr45Sf128);
+            break;
+        case 1:
+            RF95.setModemConfig(RH_RF95::Bw500Cr45Sf128);
+            break;
+        case 2:
+            RF95.setModemConfig(RH_RF95::Bw31_25Cr48Sf512);
+            break;
+        case 3:
+            RF95.setModemConfig(RH_RF95::Bw125Cr48Sf4096);
+            break;
+        default:
+            RF95.setModemConfig(RH_RF95::Bw125Cr45Sf128);
+            break;
+    }
+}
+
 // STANDARD ENTRY POINTS
 void setup()
 	{
+    uint16_t RF95_reset{30};
+    pinMode(RF95_reset, OUTPUT);
+    digitalWrite(RF95_reset, HIGH);
+
 	Serial.begin(9600);
 	Wire.begin();
 
     // ============= NO TOUCH =============
-    // magic
-    uint16_t Reset{30};
-
-    pinMode(Reset, OUTPUT);
-    digitalWrite(Reset, HIGH);
-
-    // manual reset
-    digitalWrite(Reset, LOW);
+    digitalWrite(RF95_reset, LOW);
     delay(10);
-    digitalWrite(Reset, HIGH);
+    digitalWrite(RF95_reset, HIGH);
     delay(10);
 
-    // pass radio into class
-    Radio.init();
-    RF95.Init(Radio);
+    RF95.init();
     // ============= NO TOUCH END =============
 
-    // radio config
-    RF95.Set_Frequency(915.7);
+    // do the reset for the radio
+    RF95.setFrequency(915.7);
+    RF95.setTxPower(23);
+    RF95_Set_modem_config(3);
 
 
 #if (TESTMODE == 1)
@@ -511,7 +570,6 @@ void loop()
 	setLedGreen();
 	float notanumber = std::numeric_limits<float>::quiet_NaN();
 	wdt.feed();
-	Serial.println(RF95.TCP_Receive(500).c_str());
 	debug_data();
 	select_flight_mode(rocket_state);
 	write_data_chunk_to_fram(
