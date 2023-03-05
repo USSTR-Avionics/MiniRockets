@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define WRITE_INTERVAL   500
+
 int init_fram_package();
 int write_data_chunk_to_fram(uint32_t, uint8_t, float, float, float, float, float, float, float, float, float);
 int read_data_chunk_from_fram(uint32_t);

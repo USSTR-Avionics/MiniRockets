@@ -2,7 +2,8 @@
 #include "package_statemachine_t.h"
 #include "package_statistics.h"
 #include "package_testmode.h"
-#include "package_watchdog.h" #include "sensor_bmi088.h"
+#include "package_watchdog.h"
+
 #include "sensor_bmp280.h"
 #include "sensor_buzzer.h"
 #include "sensor_kx134.h"
@@ -31,6 +32,7 @@
 // PROGRAM VARS | vars generally required for the program
 unsigned long starting_time = 0UL;
 unsigned long debug_time    = 0UL;
+unsigned long write_time    = 0UL;
 int descent_check           = 0;
 float last_alt              = 0;
 
@@ -432,8 +434,28 @@ int debug_data()
 
 #endif // ROCKET_DEBUGMODE
 
+    save_data();
+
 	return EXIT_SUCCESS;
 	}
+
+void save_data()
+    {
+    if (write_time == 0)
+        {
+        write_time = millis();
+        }
+    else if (millis() - write_time > WRITE_INTERVAL)
+        {
+        write_time = millis();
+        float notanumber = std::numeric_limits<float>::quiet_NaN();
+	    write_data_chunk_to_fram(
+	        millis(), rocket_state,
+	        kx134_accel_x, kx134_accel_y, kx134_accel_z,
+	        notanumber, notanumber, notanumber,
+	        rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
+        }
+    }
 
 // STANDARD ENTRY POINTS
 void setup()
@@ -482,13 +504,7 @@ void setup()
 void loop()
 	{
 	setLedGreen();
-	float notanumber = std::numeric_limits<float>::quiet_NaN();
 	wdt.feed();
 	debug_data();
 	select_flight_mode(rocket_state);
-	write_data_chunk_to_fram(
-	    millis(), rocket_state,
-	    kx134_accel_x, kx134_accel_y, kx134_accel_z,
-	    notanumber, notanumber, notanumber,
-	    rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
 	}
