@@ -1,7 +1,0 @@
-.DS_Store
-
-.idea/
-cmake-build*/
-.vscode/
-CMakeLists.txt
-CMakeListsPrivate.txt
