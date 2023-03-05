@@ -58,14 +58,11 @@ int init_all()
 	init_kx134();
 	init_bmp280();
 	init_fram_package();
-
-	// init_LED();
+	init_LED();
 
 	// TODO:
 	// init_bmi088();
 	// init_RFM95_TX();
-
-	// init_I2C_scanner();
 
 	// Setting global variables
 	ground_base_pressure = get_bmp280_pressure();
@@ -84,12 +81,11 @@ int init_all()
 
 int health_check()
 	{
-	return EXIT_SUCCESS;
 	println("running health_check()");
 
 	// KX134 checks
-	float z_thresh_high = -9.0;
-	float z_thresh_low  = -11.0;
+	float z_thresh_high = 9.0;
+	float z_thresh_low  = 11.0;
 
 	int count           = 0;
 	while (count < 10)
@@ -132,7 +128,14 @@ int health_check()
 		}
 
 	// FRAM checks
+    int fram_write_result = write_test_data_to_fram();
+    int fram_read_result = read_test_data_from_fram();
 
+    if (fram_write_result == EXIT_FAILURE || fram_read_result == EXIT_FAILURE)
+        {
+        println("FRAM health check failed");
+        return EXIT_FAILURE;
+        }
 
 	return EXIT_SUCCESS;
 	}
@@ -378,7 +381,6 @@ void watchdog_callback()
 	{
 	wdt.feed();
 	println("watchdog_callback()");
-	// write_to_sd_card(EVENTLOG, "[MICROCONTROLLER] watchdog callback");
 	rocket_state = statemachine_t::e_rocket_state::soft_recovery;
 	loop();
 	}
@@ -391,6 +393,24 @@ int check_zombie_mode()
 		}
 	return EXIT_FAILURE;
 	}
+
+void save_data()
+    {
+    if (write_time == 0)
+        {
+        write_time = millis();
+        }
+    else if (millis() - write_time > WRITE_INTERVAL)
+        {
+        write_time = millis();
+        float notanumber = std::numeric_limits<float>::quiet_NaN();
+	    write_data_chunk_to_fram(
+	        millis(), rocket_state,
+	        kx134_accel_x, kx134_accel_y, kx134_accel_z,
+	        notanumber, notanumber, notanumber,
+	        rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
+        }
+    }
 
 int debug_data()
 	{
@@ -421,14 +441,8 @@ int debug_data()
 	rocket_altitude        = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 	data_string            = data_string + String(rocket_altitude);
 
-	// write_to_sd_card(DATALOG, data_string.c_str());
-
 	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
-	// println(data_string_fmt);
-	// print("data_string: ");
 	println(data_string);
-
-	// scan_and_print_I2C_devices();
 
 	debug_time = 0UL;
 
@@ -438,24 +452,6 @@ int debug_data()
 
 	return EXIT_SUCCESS;
 	}
-
-void save_data()
-    {
-    if (write_time == 0)
-        {
-        write_time = millis();
-        }
-    else if (millis() - write_time > WRITE_INTERVAL)
-        {
-        write_time = millis();
-        float notanumber = std::numeric_limits<float>::quiet_NaN();
-	    write_data_chunk_to_fram(
-	        millis(), rocket_state,
-	        kx134_accel_x, kx134_accel_y, kx134_accel_z,
-	        notanumber, notanumber, notanumber,
-	        rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
-        }
-    }
 
 // STANDARD ENTRY POINTS
 void setup()
