@@ -12,7 +12,7 @@
 #if TESTPROFILE == 1
 	#define LIFTOFF_THRESHOLD 2.00f // in ms^-2
 #else
-	#define LIFTOFF_THRESHOLD 11.0f // in ms^-2
+	#define LIFTOFF_THRESHOLD 10.5f // in ms^-2
 #endif                              // TESTPROFILE
 
 #define DESCENT_CHECK_AMOUNT 2
