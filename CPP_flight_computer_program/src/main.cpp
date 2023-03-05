@@ -454,15 +454,15 @@ int debug_data()
 	return EXIT_SUCCESS;
 	}
 
-void UDP_Send(const char Data[], uint8_t &Timeout)
+void UDP_Send(const char Data[], uint16_t &Timeout)
 {
     RF95.send(reinterpret_cast<const uint8_t *>(Data), strlen(Data) + 1);
     RF95.waitPacketSent(Timeout);
 }
 
-const char* UDP_Receive()
+const char* UDP_Receive(const uint16_t &Timeout)
 {
-    RF95.waitAvailable();
+    RF95.waitAvailableTimeout(Timeout);
     uint8_t Buffer[RF95_Max_message_length];
     uint8_t Length = sizeof(Buffer);
 
