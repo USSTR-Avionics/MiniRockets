@@ -1,15 +1,12 @@
 // RH_Serial.cpp
 //
 // Copyright (C) 2014 Mike McCauley
-// $Id: RH_Serial.cpp,v 1.12 2016/04/04 01:40:12 mikem Exp $
+// $Id: RH_Serial.cpp,v 1.17 2020/01/07 23:35:02 mikem Exp $
 
 #include <RH_Serial.h>
-#if (RH_PLATFORM == RH_PLATFORM_STM32F2)
-#else
- #include <HardwareSerial.h>
-#endif
 #include <RHCRC.h>
 
+#ifdef RH_HAVE_SERIAL
 RH_Serial::RH_Serial(HardwareSerial& serial)
     :
     _serial(serial),
@@ -38,18 +35,18 @@ bool RH_Serial::available()
     return _rxBufValid;
 }
 
-void RH_Serial::waitAvailable()
+void RH_Serial::waitAvailable(uint16_t polldelay)
 {
 #if (RH_PLATFORM == RH_PLATFORM_UNIX)
     // Unix version driver in RHutil/HardwareSerial knows how to wait without polling
     while (!available())
 	_serial.waitAvailable();
 #else
-    RHGenericDriver::waitAvailable();
+    RHGenericDriver::waitAvailable(polldelay);
 #endif
 }
 
-bool RH_Serial::waitAvailableTimeout(uint16_t timeout)
+bool RH_Serial::waitAvailableTimeout(uint16_t timeout, uint16_t polldelay)
 {
 #if (RH_PLATFORM == RH_PLATFORM_UNIX)
     // Unix version driver in RHutil/HardwareSerial knows how to wait without polling
@@ -60,10 +57,12 @@ bool RH_Serial::waitAvailableTimeout(uint16_t timeout)
         if (available())
            return true;
 	YIELD;
+	if (polldelay)
+	    delay(polldelay);
     }
     return false;
 #else
-    return RHGenericDriver::waitAvailableTimeout(timeout);
+    return RHGenericDriver::waitAvailableTimeout(timeout, polldelay);
 #endif
 }
 
@@ -185,7 +184,6 @@ bool RH_Serial::recv(uint8_t* buf, uint8_t* len)
 {
     if (!available())
 	return false;
-
     if (buf && len)
     {
 	// Skip the 4 headers that are at the beginning of the rxBuf
@@ -200,6 +198,9 @@ bool RH_Serial::recv(uint8_t* buf, uint8_t* len)
 // Caution: this may block
 bool RH_Serial::send(const uint8_t* data, uint8_t len)
 {
+    if (len > RH_SERIAL_MAX_MESSAGE_LEN)
+	return false;
+
     if (!waitCAD()) 
 	return false;  // Check channel activity
 
@@ -238,3 +239,5 @@ uint8_t RH_Serial::maxMessageLength()
 {
     return RH_SERIAL_MAX_MESSAGE_LEN;
 }
+
+#endif // HAVE_SERIAL

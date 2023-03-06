@@ -1,7 +1,7 @@
 // RHGenericDriver.cpp
 //
 // Copyright (C) 2014 Mike McCauley
-// $Id: RHGenericDriver.cpp,v 1.19 2015/12/11 01:10:24 mikem Exp $
+// $Id: RHGenericDriver.cpp,v 1.24 2020/01/07 23:35:02 mikem Exp $
 
 #include <RHGenericDriver.h>
 
@@ -26,16 +26,20 @@ bool RHGenericDriver::init()
 }
 
 // Blocks until a valid message is received
-void RHGenericDriver::waitAvailable()
+void RHGenericDriver::waitAvailable(uint16_t polldelay)
 {
     while (!available())
+      {
 	YIELD;
+	if (polldelay)
+	  delay(polldelay);
+      }
 }
 
 // Blocks until a valid message is received or timeout expires
 // Return true if there is a message available
 // Works correctly even on millis() rollover
-bool RHGenericDriver::waitAvailableTimeout(uint16_t timeout)
+bool RHGenericDriver::waitAvailableTimeout(uint16_t timeout, uint16_t polldelay)
 {
     unsigned long starttime = millis();
     while ((millis() - starttime) < timeout)
@@ -45,6 +49,8 @@ bool RHGenericDriver::waitAvailableTimeout(uint16_t timeout)
            return true;
 	}
 	YIELD;
+	if (polldelay)
+	  delay(polldelay);
     }
     return false;
 }
@@ -84,7 +90,11 @@ bool RHGenericDriver::waitCAD()
     {
          if (millis() - t > _cad_timeout) 
 	     return false;
+#if (RH_PLATFORM == RH_PLATFORM_STM32) // stdlib on STMF103 gets confused if random is redefined
+	 delay(_random(1, 10) * 100);
+#else
          delay(random(1, 10) * 100); // Should these values be configurable? Macros?
+#endif
     }
 
     return true;
@@ -147,7 +157,7 @@ uint8_t RHGenericDriver::headerFlags()
     return _rxHeaderFlags;
 }
 
-int8_t RHGenericDriver::lastRssi()
+int16_t RHGenericDriver::lastRssi()
 {
     return _lastRssi;
 }
@@ -170,10 +180,9 @@ bool  RHGenericDriver::sleep()
 // Diagnostic help
 void RHGenericDriver::printBuffer(const char* prompt, const uint8_t* buf, uint8_t len)
 {
-    uint8_t i;
-
 #ifdef RH_HAVE_SERIAL
     Serial.println(prompt);
+    uint8_t i;
     for (i = 0; i < len; i++)
     {
 	if (i % 16 == 15)
@@ -208,7 +217,7 @@ void RHGenericDriver::setCADTimeout(unsigned long cad_timeout)
     _cad_timeout = cad_timeout;
 }
 
-#if (RH_PLATFORM == RH_PLATFORM_ARDUINO) && defined(RH_PLATFORM_ATTINY)
+#if (RH_PLATFORM == RH_PLATFORM_ATTINY)
 // Tinycore does not have __cxa_pure_virtual, so without this we
 // get linking complaints from the default code generated for pure virtual functions
 extern "C" void __cxa_pure_virtual()

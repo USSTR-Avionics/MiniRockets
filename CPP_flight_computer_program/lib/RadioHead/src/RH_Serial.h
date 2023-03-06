@@ -1,7 +1,7 @@
 // RH_Serial.h
 //
 // Copyright (C) 2014 Mike McCauley
-// $Id: RH_Serial.h,v 1.11 2016/04/04 01:40:12 mikem Exp $
+// $Id: RH_Serial.h,v 1.14 2020/01/07 23:35:02 mikem Exp $
 
 // Works with any serial port. Tested with Arduino Mega connected to Serial1
 // Also works with 3DR Radio V1.3 Telemetry kit (serial at 57600baud)
@@ -10,6 +10,18 @@
 #define RH_Serial_h
 
 #include <RHGenericDriver.h>
+#if (RH_PLATFORM == RH_PLATFORM_STM32F2)
+ #define HardwareSerial USARTSerial
+#elif defined (ARDUINO_ARCH_STM32F4)
+ #include <libmaple/HardwareSerial.h>
+#elif (RH_PLATFORM == RH_PLATFORM_ATTINY_MEGA)
+ #include <UART.h>
+#elif (RH_PLATFORM == RH_PLATFORM_ARDUINO) && defined(ARDUINO_attinyxy6)
+// AT Tiny Mega 3216 etc
+ #define HardwareSerial UartClass
+#else
+ #include <HardwareSerial.h>
+#endif
 
 // Special characters
 #define STX 0x02
@@ -33,11 +45,6 @@
 #define RH_SERIAL_MAX_MESSAGE_LEN (RH_SERIAL_MAX_PAYLOAD_LEN - RH_SERIAL_HEADER_LEN)
 #endif
 
-#if (RH_PLATFORM == RH_PLATFORM_STM32F2)
- #define HardwareSerial USARTSerial
-#endif
-
-class HardwareSerial;
 
 /////////////////////////////////////////////////////////////////////
 /// \class RH_Serial RH_Serial.h <RH_Serial.h>
@@ -110,6 +117,10 @@ class HardwareSerial;
 /// - On Linux, names like /dev/ttyUSB0 (for a FTDO USB-serial converter)
 /// - On OSX, names like /dev/tty.usbserial-A501YSWL (for a FTDO USB-serial converter)
 ///
+/// On STM32 F4 Discovery with Arduino and Arduino_STM32, there are 4 serial ports. We had success with port 2
+/// (TX on pin PA2 and RX on pin PA3) and initialising the driver like this:
+/// RH_Serial driver(Serial2);
+///
 /// Note that it is necessary for you to select which Serial port your RF_Serial will use and pass it to the 
 /// contructor. On Linux you must pass an instance of HardwareSerial.
 ///
@@ -163,13 +174,19 @@ public:
 
     /// Wait until a new message is available from the driver.
     /// Blocks until a complete message is received as reported by available()
-    virtual void waitAvailable();
+  /// \param[in] polldelay Time between polling available() in milliseconds. This can be useful
+  /// in multitaking environment like Linux to prevent waitAvailableTimeout
+  /// using all the CPU while polling for receiver activity
+    virtual void waitAvailable(uint16_t polldelay = 0);
 
     /// Wait until a new message is available from the driver or the timeout expires.
     /// Blocks until a complete message is received as reported by available() or the timeout expires.
     /// \param[in] timeout The maximum time to wait in milliseconds
+  /// \param[in] polldelay Time between polling available() in milliseconds. This can be useful
+  /// in multitaking environment like Linux to prevent waitAvailableTimeout
+  /// using all the CPU while polling for receiver activity
     /// \return true if a message is available as reported by available(), false on timeout.
-    virtual bool waitAvailableTimeout(uint16_t timeout);
+    virtual bool waitAvailableTimeout(uint16_t timeout, uint16_t polldelay = 0);
 
     /// If there is a valid message available, copy it to buf and return true
     /// else return false.
@@ -177,7 +194,7 @@ public:
     /// You should be sure to call this function frequently enough to not miss any messages
     /// It is recommended that you call it in your main loop.
     /// \param[in] buf Location to copy the received message
-    /// \param[in,out] len Pointer to available space in buf. Set to the actual number of octets copied.
+    /// \param[in,out] len Pointer to the number of octets available in buf. The number be reset to the actual number of octets copied.
     /// \return true if a valid message was copied to buf
     virtual bool recv(uint8_t* buf, uint8_t* len);
 
@@ -254,5 +271,7 @@ protected:
 /// @example serial_reliable_datagram_client.pde
 /// @example serial_reliable_datagram_server.pde
 /// @example serial_gateway.pde
+/// @example serial_encrypted_reliable_datagram_client.pde
+/// @example serial_encrypted_reliable_datagram_server.pde
 
 #endif
