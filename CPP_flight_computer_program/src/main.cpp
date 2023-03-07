@@ -84,8 +84,8 @@ int health_check()
 	println("running health_check()");
 
 	// KX134 checks
-	float z_thresh_high = 9.0;
-	float z_thresh_low  = 11.0;
+	float z_thresh_high = 11.0;
+	float z_thresh_low  =  9.0;
 
 	int count           = 0;
 	while (count < 10)
