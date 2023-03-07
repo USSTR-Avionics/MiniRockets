@@ -6,8 +6,6 @@
 #ifndef RH_ASK_h
 #define RH_ASK_h
 
-#pragma GCC system_header
-
 #include <RHGenericDriver.h>
 
 // Maximum message length (including the headers, byte count and FCS) we are willing to support
