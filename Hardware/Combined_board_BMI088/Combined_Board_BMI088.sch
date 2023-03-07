@@ -6943,7 +6943,6 @@ general purpose rectifier, 1 A</description>
 </deviceset>
 </devicesets>
 </library>
-<<<<<<< HEAD
 <library name="transistor-fet" urn="urn:adsk.eagle:library:396">
 <description>&lt;b&gt;Field Effect Transistors&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;&lt;p&gt;
@@ -7157,8 +7156,6 @@ by R. Vogg  15.March.2002</description>
 </deviceset>
 </devicesets>
 </library>
-=======
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </libraries>
 <attributes>
 </attributes>
@@ -7209,7 +7206,6 @@ by R. Vogg  15.March.2002</description>
 <part name="SUPPLY3" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
 <part name="SUPPLY4" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
 <part name="U$2" library="max31855" deviceset="MAX31855" device=""/>
-<<<<<<< HEAD
 <part name="SUPPLY2" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
 <part name="2N7002" library="transistor-fet" library_urn="urn:adsk.eagle:library:396" deviceset="2N3819" device="" package3d_urn="urn:adsk.eagle:package:28523/2"/>
 <part name="SUPPLY10" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
@@ -7218,8 +7214,6 @@ by R. Vogg  15.March.2002</description>
 <part name="GND5" library="SparkFun-PowerSymbols" deviceset="GND" device=""/>
 <part name="U$3" library="I2CFRAM" deviceset="I2CFRAM" device=""/>
 <part name="SUPPLY11" library="SparkFun-PowerSymbols" deviceset="5V" device=""/>
-=======
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </parts>
 <sheets>
 <sheet>
@@ -7282,13 +7276,8 @@ by R. Vogg  15.March.2002</description>
 <attribute name="NAME" x="100.584" y="150.241" size="1.778" layer="95" font="vector"/>
 <attribute name="VALUE" x="100.584" y="145.161" size="1.778" layer="96" font="vector"/>
 </instance>
-<<<<<<< HEAD
 <instance part="GND6" gate="1" x="76.2" y="134.62" smashed="yes">
 <attribute name="VALUE" x="76.2" y="134.366" size="1.778" layer="96" align="top-center"/>
-=======
-<instance part="GND6" gate="1" x="76.2" y="132.08" smashed="yes">
-<attribute name="VALUE" x="76.2" y="131.826" size="1.778" layer="96" align="top-center"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </instance>
 <instance part="SUPPLY5" gate="G$1" x="154.94" y="154.94" smashed="yes">
 <attribute name="VALUE" x="154.94" y="157.734" size="1.778" layer="96" align="bottom-center"/>
@@ -7302,7 +7291,6 @@ by R. Vogg  15.March.2002</description>
 <instance part="GND11" gate="1" x="17.78" y="27.94" smashed="yes">
 <attribute name="VALUE" x="17.78" y="27.686" size="1.778" layer="96" align="top-center"/>
 </instance>
-<<<<<<< HEAD
 <instance part="M1" gate="G$1" x="66.04" y="111.76" smashed="yes" rot="R270">
 <attribute name="NAME" x="67.564" y="121.666" size="1.778" layer="95" font="vector" rot="R270"/>
 <attribute name="VALUE" x="59.436" y="121.666" size="1.778" layer="95" font="vector" rot="R270" align="top-left"/>
@@ -7322,27 +7310,6 @@ by R. Vogg  15.March.2002</description>
 </instance>
 <instance part="SUPPLY7" gate="G$1" x="88.9" y="104.14" smashed="yes" rot="R180">
 <attribute name="VALUE" x="88.9" y="101.346" size="1.778" layer="96" rot="R180" align="bottom-center"/>
-=======
-<instance part="M1" gate="G$1" x="38.1" y="111.76" smashed="yes" rot="R270">
-<attribute name="NAME" x="39.624" y="121.666" size="1.778" layer="95" font="vector" rot="R270"/>
-<attribute name="VALUE" x="31.496" y="121.666" size="1.778" layer="95" font="vector" rot="R270" align="top-left"/>
-</instance>
-<instance part="M2" gate="G$1" x="63.5" y="111.76" smashed="yes" rot="R270">
-<attribute name="NAME" x="65.024" y="121.666" size="1.778" layer="95" font="vector" rot="R270"/>
-<attribute name="VALUE" x="56.896" y="121.666" size="1.778" layer="95" font="vector" rot="R270" align="top-left"/>
-</instance>
-<instance part="GND12" gate="1" x="25.4" y="104.14" smashed="yes" rot="R270">
-<attribute name="VALUE" x="22.606" y="104.14" size="1.778" layer="96" rot="R90" align="top-center"/>
-</instance>
-<instance part="GND13" gate="1" x="50.8" y="104.14" smashed="yes" rot="R270">
-<attribute name="VALUE" x="50.546" y="104.14" size="1.778" layer="96" rot="R270" align="top-center"/>
-</instance>
-<instance part="SUPPLY6" gate="G$1" x="35.56" y="104.14" smashed="yes" rot="R180">
-<attribute name="VALUE" x="35.56" y="101.346" size="1.778" layer="96" rot="R180" align="bottom-center"/>
-</instance>
-<instance part="SUPPLY7" gate="G$1" x="60.96" y="104.14" smashed="yes" rot="R180">
-<attribute name="VALUE" x="60.96" y="101.346" size="1.778" layer="96" rot="R180" align="bottom-center"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </instance>
 <instance part="BMP1" gate="G$1" x="86.36" y="43.18" smashed="yes">
 <attribute name="NAME" x="83.82" y="53.34" size="1.27" layer="95"/>
@@ -7385,7 +7352,6 @@ by R. Vogg  15.March.2002</description>
 <instance part="SUPPLY4" gate="G$1" x="190.5" y="40.64" smashed="yes">
 <attribute name="VALUE" x="190.5" y="43.434" size="1.778" layer="96" align="bottom-center"/>
 </instance>
-<<<<<<< HEAD
 <instance part="U$2" gate="G$1" x="83.82" y="63.5" smashed="yes">
 <attribute name="NAME" x="104.14" y="88.9" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="104.14" y="63.5" size="1.27" layer="95" rot="R180"/>
@@ -7416,11 +7382,6 @@ by R. Vogg  15.March.2002</description>
 </instance>
 <instance part="SUPPLY11" gate="G$1" x="104.14" y="187.96" smashed="yes" rot="R90">
 <attribute name="VALUE" x="101.346" y="187.96" size="1.778" layer="96" rot="R90" align="bottom-center"/>
-=======
-<instance part="U$2" gate="G$1" x="81.28" y="73.66" smashed="yes">
-<attribute name="NAME" x="101.6" y="99.06" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="101.6" y="73.66" size="1.27" layer="95" rot="R180"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </instance>
 </instances>
 <busses>
@@ -7518,11 +7479,7 @@ by R. Vogg  15.March.2002</description>
 <pinref part="GND6" gate="1" pin="GND"/>
 <wire x1="76.2" y1="147.32" x2="76.2" y2="139.7" width="0.1524" layer="91"/>
 <pinref part="C3" gate="G$1" pin="2"/>
-<<<<<<< HEAD
 <wire x1="76.2" y1="139.7" x2="76.2" y2="137.16" width="0.1524" layer="91"/>
-=======
-<wire x1="76.2" y1="139.7" x2="76.2" y2="134.62" width="0.1524" layer="91"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 <wire x1="53.34" y1="144.78" x2="53.34" y2="139.7" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="139.7" x2="76.2" y2="139.7" width="0.1524" layer="91"/>
 <junction x="76.2" y="139.7"/>
@@ -7541,24 +7498,14 @@ by R. Vogg  15.March.2002</description>
 </segment>
 <segment>
 <pinref part="M1" gate="G$1" pin="GND"/>
-<<<<<<< HEAD
 <wire x1="60.96" y1="109.22" x2="60.96" y2="104.14" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="104.14" x2="55.88" y2="104.14" width="0.1524" layer="91"/>
-=======
-<wire x1="33.02" y1="109.22" x2="33.02" y2="104.14" width="0.1524" layer="91"/>
-<wire x1="33.02" y1="104.14" x2="27.94" y2="104.14" width="0.1524" layer="91"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 <pinref part="GND12" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="M2" gate="G$1" pin="GND"/>
-<<<<<<< HEAD
 <wire x1="86.36" y1="109.22" x2="86.36" y2="104.14" width="0.1524" layer="91"/>
 <wire x1="86.36" y1="104.14" x2="81.28" y2="104.14" width="0.1524" layer="91"/>
-=======
-<wire x1="58.42" y1="109.22" x2="58.42" y2="104.14" width="0.1524" layer="91"/>
-<wire x1="58.42" y1="104.14" x2="53.34" y2="104.14" width="0.1524" layer="91"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 <pinref part="GND13" gate="1" pin="GND"/>
 </segment>
 <segment>
@@ -7613,20 +7560,12 @@ by R. Vogg  15.March.2002</description>
 <segment>
 <pinref part="M1" gate="G$1" pin="V+"/>
 <pinref part="SUPPLY6" gate="G$1" pin="5V"/>
-<<<<<<< HEAD
 <wire x1="63.5" y1="109.22" x2="63.5" y2="104.14" width="0.1524" layer="91"/>
-=======
-<wire x1="35.56" y1="109.22" x2="35.56" y2="104.14" width="0.1524" layer="91"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </segment>
 <segment>
 <pinref part="M2" gate="G$1" pin="V+"/>
 <pinref part="SUPPLY7" gate="G$1" pin="5V"/>
-<<<<<<< HEAD
 <wire x1="88.9" y1="109.22" x2="88.9" y2="104.14" width="0.1524" layer="91"/>
-=======
-<wire x1="60.96" y1="109.22" x2="60.96" y2="104.14" width="0.1524" layer="91"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </segment>
 <segment>
 <pinref part="IC1" gate="A1" pin="VO"/>
@@ -7673,7 +7612,6 @@ by R. Vogg  15.March.2002</description>
 <pinref part="U1" gate="G$1" pin="PS"/>
 <wire x1="129.54" y1="30.48" x2="127" y2="30.48" width="0.1524" layer="91"/>
 <label x="124.46" y="30.48" size="1.778" layer="95"/>
-<<<<<<< HEAD
 </segment>
 <segment>
 <pinref part="SUPPLY2" gate="G$1" pin="5V"/>
@@ -7689,8 +7627,6 @@ by R. Vogg  15.March.2002</description>
 <pinref part="SUPPLY11" gate="G$1" pin="5V"/>
 <pinref part="U$3" gate="G$1" pin="VCC"/>
 <wire x1="104.14" y1="187.96" x2="109.22" y2="187.96" width="0.1524" layer="91"/>
-=======
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </segment>
 </net>
 <net name="SCL" class="0">
@@ -7708,14 +7644,11 @@ by R. Vogg  15.March.2002</description>
 <pinref part="U$4" gate="G$1" pin="SCL/SCLK"/>
 <wire x1="48.26" y1="60.96" x2="48.26" y2="53.34" width="0.1524" layer="91"/>
 <label x="48.26" y="45.72" size="1.778" layer="95" rot="R90"/>
-<<<<<<< HEAD
 </segment>
 <segment>
 <pinref part="U$3" gate="G$1" pin="SCL"/>
 <wire x1="109.22" y1="172.72" x2="101.6" y2="172.72" width="0.1524" layer="91"/>
 <label x="96.52" y="172.72" size="1.778" layer="95"/>
-=======
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </segment>
 </net>
 <net name="SDA" class="0">
@@ -7733,14 +7666,11 @@ by R. Vogg  15.March.2002</description>
 <pinref part="U$4" gate="G$1" pin="SDA/SCI"/>
 <wire x1="43.18" y1="60.96" x2="43.18" y2="53.34" width="0.1524" layer="91"/>
 <label x="43.18" y="45.72" size="1.778" layer="95" rot="R90"/>
-<<<<<<< HEAD
 </segment>
 <segment>
 <pinref part="U$3" gate="G$1" pin="SDA"/>
 <wire x1="139.7" y1="187.96" x2="147.32" y2="187.96" width="0.1524" layer="91"/>
 <label x="147.32" y="187.96" size="1.778" layer="95"/>
-=======
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </segment>
 </net>
 <net name="RED" class="0">
@@ -7806,15 +7736,9 @@ by R. Vogg  15.March.2002</description>
 <net name="TVCX" class="0">
 <segment>
 <pinref part="M1" gate="G$1" pin="SIG"/>
-<<<<<<< HEAD
 <wire x1="66.04" y1="109.22" x2="66.04" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="66.04" y1="99.06" x2="71.12" y2="99.06" width="0.1524" layer="91"/>
 <label x="71.12" y="99.06" size="1.778" layer="95"/>
-=======
-<wire x1="38.1" y1="109.22" x2="38.1" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="38.1" y1="99.06" x2="43.18" y2="99.06" width="0.1524" layer="91"/>
-<label x="43.18" y="99.06" size="1.778" layer="95"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="3-LRCLK2"/>
@@ -7825,15 +7749,9 @@ by R. Vogg  15.March.2002</description>
 <net name="TVCY" class="0">
 <segment>
 <pinref part="M2" gate="G$1" pin="SIG"/>
-<<<<<<< HEAD
 <wire x1="91.44" y1="109.22" x2="91.44" y2="99.06" width="0.1524" layer="91"/>
 <wire x1="91.44" y1="99.06" x2="96.52" y2="99.06" width="0.1524" layer="91"/>
 <label x="96.52" y="99.06" size="1.778" layer="95"/>
-=======
-<wire x1="63.5" y1="109.22" x2="63.5" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="99.06" x2="68.58" y2="99.06" width="0.1524" layer="91"/>
-<label x="68.58" y="99.06" size="1.778" layer="95"/>
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="4-BCLK2"/>
@@ -7941,7 +7859,6 @@ by R. Vogg  15.March.2002</description>
 <wire x1="25.4" y1="154.94" x2="27.94" y2="154.94" width="0.1524" layer="91"/>
 </segment>
 </net>
-<<<<<<< HEAD
 <net name="N$3" class="0">
 <segment>
 <pinref part="R4+" gate="P" pin="P"/>
@@ -7973,8 +7890,6 @@ by R. Vogg  15.March.2002</description>
 <label x="114.3" y="66.04" size="1.778" layer="95"/>
 </segment>
 </net>
-=======
->>>>>>> cb246cc0c8c7291e23c4099b66599b745082cb42
 </nets>
 </sheet>
 </sheets>
