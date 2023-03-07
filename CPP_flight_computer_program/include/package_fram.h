@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define WRITE_INTERVAL   500
+#define WRITE_INTERVAL 500
 
 int init_fram_package();
 int write_test_data_to_fram();
