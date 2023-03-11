@@ -56,7 +56,7 @@ YOU CAN ONLY HAVE 2 INSTANCES OF THIS OBJ AT 1 TIME (3 IF MEGA)
         that you disable interrupts while you transfer data o and from that other device.
         Use cli() to disable interrupts and sei() to readable them.
 */
-const uint16_t RF95_CS { 30 };
+const uint16_t RF95_CS { 10 };
 const uint16_t RF95_int { 32 };
 static RH_RF95 RF95(RF95_CS, RF95_int);
 const uint32_t RF95_Max_message_length = RF95.maxMessageLength();
@@ -474,7 +474,7 @@ int debug_data()
 	return EXIT_SUCCESS;
 	}
 
-void UDP_Send(const char Data[], uint16_t& Timeout)
+void UDP_Send(const char* Data, const uint16_t& Timeout)
 	{
 	RF95.send(reinterpret_cast<const uint8_t*>(Data), strlen(Data) + 1);
 	RF95.waitPacketSent(Timeout);
@@ -489,7 +489,7 @@ const char* UDP_Receive(const uint16_t& Timeout)
 	return RF95.recv(Buffer, &Length) ? reinterpret_cast<const char*>(Buffer) : "";
 	}
 
-void RF95_Set_modem_config(const uint8_t& Index)
+void RF95_Set_modem_config(const uint16_t& Index)
 	{
 	/*
 	LoRa Chirp Options:
@@ -544,7 +544,7 @@ void setup()
 	// do the reset for the radio
 	RF95.setFrequency(915.7);
 	RF95.setTxPower(23);
-	RF95_Set_modem_config(3);
+	RF95_Set_modem_config(2);
 
 
 #if (TESTMODE == 1)
@@ -591,4 +591,6 @@ void loop()
 	wdt.feed();
 	debug_data();
 	select_flight_mode(rocket_state);
+
+	UDP_Send("abcdefg", 500);
 	}

@@ -43,6 +43,9 @@ check:
 preview:
 	clang-format-15 -style=file ./src/* ./include/*
 
+compile_commands.json:
+	pio run -t compiledb
+
 clean:
 	pio run -t clean
 
