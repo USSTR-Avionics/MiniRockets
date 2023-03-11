@@ -23,6 +23,8 @@
 #ifndef __SD_H__
 #define __SD_H__
 
+#pragma GCC system_header
+
 #include <Arduino.h>
 #include <SdFat.h>
 #if !defined(SD_FAT_TEENSY_MODIFIED)

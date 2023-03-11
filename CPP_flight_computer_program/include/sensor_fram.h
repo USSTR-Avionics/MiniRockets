@@ -1,16 +1,17 @@
 #ifndef SENSOR_FRAM_H
 #define SENSOR_FRAM_H
 
-#include "Adafruit_EEPROM_I2C.h"
-#include "Adafruit_FRAM_I2C.h"
+#include <stdint.h>
 
-
-// debug funcs
-int c_return_delay_test();
+#define FRAM_MAX_ADDRESS  0x7FE0
+#define FRAM_MIN_ADDRESS  0x00
+#define FRAM_INIT_ADDRESS 0x10
 
 // actual funcs
 int init_fram();
-int write_temperature_to_fram(float);
-int write_acceleration_to_fram(float);
 
-#endif // MEMORY_FRAM_H
+// ! These should not be used directly, use the package_fram.h API instead
+int write_to_fram(uint16_t, uint8_t);
+int read_from_fram(int);
+
+#endif // SENSOR_FRAM_H

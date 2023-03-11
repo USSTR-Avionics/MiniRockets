@@ -1,6 +1,8 @@
 #include <Watchdog_t4.h>
 #include "Arduino.h"
 
+#pragma GCC system_header
+
 #define WDOGb_WCR(b)		(*(volatile uint16_t*)(b))
 #define WDOGb_WSR(b)		(*(volatile uint16_t*)(b+0x2))
 #define WDOGb_WRSR(b)		(*(volatile uint16_t*)(b+0x4))
@@ -49,10 +51,10 @@ WDT_FUNC void WDT_OPT::begin(WDT_timings_t config) {
     uint16_t toVal = 0;
 
     if ( config.clock == LPO_CLK || config.clock == INT_CLK ) { /* LPO_CLOCK & INT_CLOCK are 32KHz */
-      double highest_limit_without_prescaler = ((1.0f/32.0f)*65535.0f);
-      double lowest_limit_without_prescaler = ((1.0f/32.0f)*1.0f);
-      double highest_limit_with_prescaler = ((255.0f/32.0f)*65535.0f);
-      double lowest_limit_with_prescaler = ((255.0f/32.0f)*1.0f);
+      float highest_limit_without_prescaler = ((1.0f/32.0f)*65535.0f);
+      float lowest_limit_without_prescaler = ((1.0f/32.0f)*1.0f);
+      float highest_limit_with_prescaler = ((255.0f/32.0f)*65535.0f);
+      float lowest_limit_with_prescaler = ((255.0f/32.0f)*1.0f);
       (void)lowest_limit_with_prescaler; /* unused, kept for reference */
       config.timeout = constrain(config.timeout, lowest_limit_without_prescaler, highest_limit_with_prescaler);
       config.window = constrain(config.window, lowest_limit_without_prescaler, highest_limit_with_prescaler);
@@ -99,11 +101,11 @@ WDT_FUNC void WDT_OPT::begin(WDT_timings_t config) {
     }
     else config.pin = 0;
 
-    double highest_limit_without_prescaler = ((1.0f/32.0f)*254.0f);
+    float highest_limit_without_prescaler = ((1.0f/32.0f)*254.0f);
     (void)highest_limit_without_prescaler; /* unused, kept for reference */
-    double lowest_limit_without_prescaler = ((1.0f/32.0f)*1.0f);
-    double highest_limit_with_prescaler = ((255.0f/32.0f)*254.0f);
-    double lowest_limit_with_prescaler = ((255.0f/32.0f)*1.0f);
+    float lowest_limit_without_prescaler = ((1.0f/32.0f)*1.0f);
+    float highest_limit_with_prescaler = ((255.0f/32.0f)*254.0f);
+    float lowest_limit_with_prescaler = ((255.0f/32.0f)*1.0f);
     (void)lowest_limit_with_prescaler; /* unused, kept for reference */
     config.timeout = constrain(config.timeout, lowest_limit_without_prescaler, highest_limit_with_prescaler);
     config.window = constrain(config.window, lowest_limit_without_prescaler, highest_limit_with_prescaler);
@@ -203,7 +205,7 @@ WDT_FUNC void WDT_OPT::watchdog_isr() {
   if ( watchdog_class_handler ) watchdog_class_handler();
   if ( WDT3 == _device ) WDOGb_CS(_device) |= WDOG_CS_FLG;
   else WDOGb_WICR(_device) |= WDOG_WICR_WTIS;
-  asm volatile ("dsb"); /* disable double firing of interrupt */
+  asm volatile ("dsb"); /* disable float firing of interrupt */
 }
 
 void ewm_isr() {
@@ -213,5 +215,5 @@ void ewm_isr() {
 WDT_FUNC void WDT_OPT::ewatchdog_isr() {
   if ( watchdog_class_handler ) watchdog_class_handler();
   EWM_CTRL &= ~(1U << 3); /* disable further interrupts, EWM has been triggered, only way out is reset */
-  asm volatile ("dsb"); /* disable double firing of interrupt */
+  asm volatile ("dsb"); /* disable float firing of interrupt */
 }
