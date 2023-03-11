@@ -474,7 +474,7 @@ int debug_data()
 	return EXIT_SUCCESS;
 	}
 
-void UDP_Send(const char Data[], uint16_t& Timeout)
+void UDP_Send(const char Data[], const uint16_t& Timeout)
 	{
 	RF95.send(reinterpret_cast<const uint8_t*>(Data), strlen(Data) + 1);
 	RF95.waitPacketSent(Timeout);
@@ -587,8 +587,9 @@ void setup()
 
 void loop()
 	{
-	setLedGreen();
+/*	setLedGreen();
 	wdt.feed();
 	debug_data();
-	select_flight_mode(rocket_state);
+	select_flight_mode(rocket_state);*/
+    UDP_Send("Message", 1000);
 	}
