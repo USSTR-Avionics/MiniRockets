@@ -19,6 +19,8 @@ help:
 	@echo "    Check that all source files are formatted correctly."
 	@echo "make preview"
 	@echo "    Preview the changes that would be made by make format."
+	@echo "make compiledb"
+	@echo "    Generate a compile_commands.json file for clangd."
 	@echo "make clean"
 	@echo "    Clean the project dependencies."
 	@echo "make upload"
@@ -43,7 +45,7 @@ check:
 preview:
 	clang-format-15 -style=file ./src/* ./include/*
 
-compile_commands.json:
+compiledb:
 	pio run -t compiledb
 
 clean:
