@@ -525,14 +525,14 @@ void RF95_Set_modem_config(const uint8_t& Index)
 // STANDARD ENTRY POINTS
 void setup()
 	{
-	const uint16_t RF95_reset { 30 };
-	pinMode(RF95_reset, OUTPUT);
-	digitalWrite(RF95_reset, HIGH);
-
 	Serial.begin(9600);
 	Wire.begin();
 
 	// ============= NO TOUCH =============
+	const uint16_t RF95_reset { 30 };
+	pinMode(RF95_reset, OUTPUT);
+	digitalWrite(RF95_reset, HIGH);
+
 	digitalWrite(RF95_reset, LOW);
 	delay(10);
 	digitalWrite(RF95_reset, HIGH);
@@ -559,6 +559,7 @@ void setup()
 	// zombie mode ensures that the main loop()
 	// does not start running, overwriting previous
 	// data on the FRAM
+	delay(1000);
 	if (check_zombie_mode() == EXIT_SUCCESS)
 		{
 		setLedBlue();
@@ -581,8 +582,6 @@ void setup()
 	wdt.feed();
 
 	// TODO: add a method to read previous state from EEPROM and restore it
-
-	println("setup() exit");
 	}
 
 void loop()

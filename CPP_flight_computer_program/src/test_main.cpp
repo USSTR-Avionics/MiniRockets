@@ -28,9 +28,11 @@ void test_sensor_fram()
 int test_main()
 	{
 	println("[TESTMODE] tests starting");
+
 	println("testing fram...");
 	test_sensor_fram();
 	println("testing fram...done");
+
 	println("[TESTMODE] tests completed");
 	exit(1);
 	}
