@@ -213,7 +213,7 @@ void powered_flight_mode()
 		}
 	}
 
-/*
+/**
  * @note - this function will take a little under a second to run
  */
 int apogee_check()
@@ -415,65 +415,6 @@ int check_zombie_mode()
 	return EXIT_FAILURE;
 	}
 
-void save_data()
-	{
-	if (write_time == 0)
-		{
-		write_time = millis();
-		}
-	else if (millis() - write_time > WRITE_INTERVAL)
-		{
-		write_time       = millis();
-		float notanumber = std::numeric_limits<float>::quiet_NaN();
-		write_data_chunk_to_fram(
-		    millis(), rocket_state,
-		    kx134_accel_x, kx134_accel_y, kx134_accel_z,
-		    notanumber, notanumber, notanumber,
-		    rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
-		}
-	}
-
-int debug_data()
-	{
-#ifdef ROCKET_DEBUGMODE
-
-	String data_string = "";
-
-	if (debug_time == 0UL)
-		{
-		debug_time = millis();
-		}
-
-	if ((millis() - debug_time) < DEBUG_INTERVAL)
-		{
-		return EXIT_FAILURE;
-		}
-
-	data_string += String(millis()) + ",";
-	data_string += String(rocket_state) + ",";
-
-	kx134_accel_x          = get_kx134_accel_x();
-	kx134_accel_y          = get_kx134_accel_y();
-	kx134_accel_z          = get_kx134_accel_z();
-	data_string            = data_string + String(kx134_accel_x) + ",";
-	data_string            = data_string + String(kx134_accel_y) + ",";
-	data_string            = data_string + String(kx134_accel_z) + ",";
-
-	rocket_altitude        = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
-	data_string            = data_string + String(rocket_altitude);
-
-	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
-	println(data_string);
-
-	debug_time = 0UL;
-
-#endif // ROCKET_DEBUGMODE
-
-	save_data();
-
-	return EXIT_SUCCESS;
-	}
-
 void UDP_Send(const char* Data, const uint16_t& Timeout)
 	{
 	RF95.send(reinterpret_cast<const uint8_t*>(Data), strlen(Data) + 1);
@@ -520,6 +461,67 @@ void RF95_Set_modem_config(const uint16_t& Index)
 		RF95.setModemConfig(RH_RF95::Bw125Cr45Sf128);
 		break;
 		}
+	}
+
+void save_data()
+	{
+	if (write_time == 0)
+		{
+		write_time = millis();
+		}
+	else if (millis() - write_time > WRITE_INTERVAL)
+		{
+		write_time       = millis();
+		float notanumber = 0.0f;
+		write_data_chunk_to_fram(
+		    millis(), rocket_state,
+		    kx134_accel_x, kx134_accel_y, kx134_accel_z,
+		    notanumber, notanumber, notanumber,
+		    rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
+		}
+	}
+
+int debug_data()
+	{
+	String data_string = "";
+
+#ifdef ROCKET_DEBUGMODE
+
+	if (debug_time == 0UL)
+		{
+		debug_time = millis();
+		}
+
+	if ((millis() - debug_time) < DEBUG_INTERVAL)
+		{
+		return EXIT_FAILURE;
+		}
+
+	data_string += String(millis()) + ",";
+	data_string += String(rocket_state) + ",";
+
+	kx134_accel_x          = get_kx134_accel_x();
+	kx134_accel_y          = get_kx134_accel_y();
+	kx134_accel_z          = get_kx134_accel_z();
+	data_string            = data_string + String(kx134_accel_x) + ",";
+	data_string            = data_string + String(kx134_accel_y) + ",";
+	data_string            = data_string + String(kx134_accel_z) + ",";
+
+	rocket_altitude        = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+	data_string            = data_string + String(rocket_altitude);
+
+	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
+	println(data_string);
+
+	debug_time = 0UL;
+
+#endif // ROCKET_DEBUGMODE
+
+	save_data();
+
+	UDP_Send(data_string.c_str(), 500);
+
+	return EXIT_SUCCESS;
 	}
 
 // STANDARD ENTRY POINTS
@@ -590,6 +592,4 @@ void loop()
 	wdt.feed();
 	debug_data();
 	select_flight_mode(rocket_state);
-
-	UDP_Send("abcdefg", 500);
 	}
