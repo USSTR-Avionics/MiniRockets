@@ -294,7 +294,7 @@ int read_data_chunk_from_fram(uint32_t cursor_position)
 	uint8_t current_state  = read_from_fram(cursor_position);
 	cursor_position++;
 
-    println("current state: " + String(current_state));
+	println("current state: " + String(current_state));
 
 	sensor_chunk.current_state = current_state;
 

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define WRITE_INTERVAL 500
+#define WRITE_INTERVAL             500
 #define SENSOR_CHUNK_SIZE_IN_BYTES 25
 
 int init_fram_package();
