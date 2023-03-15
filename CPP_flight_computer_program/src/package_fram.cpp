@@ -276,8 +276,6 @@ int read_data_chunk_from_fram(uint32_t cursor_position)
 		return EXIT_FAILURE;
 		}
 
-	sensor_chunk        = {};
-
 	// read timestamp
 	uint32_t timestamp  = 0;
 	uint8_t* ptr_to_u32 = (uint8_t*)&timestamp;
@@ -295,6 +293,8 @@ int read_data_chunk_from_fram(uint32_t cursor_position)
 	// read rocket state
 	uint8_t current_state  = read_from_fram(cursor_position);
 	cursor_position++;
+
+    println("current state: " + String(current_state));
 
 	sensor_chunk.current_state = current_state;
 
