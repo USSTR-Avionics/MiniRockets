@@ -20,7 +20,7 @@ int init_fram()
  * @param    what    the data to write
  * @param    where   the address to write to
  */
-int write_to_fram(uint16_t what, uint8_t where)
+int write_to_fram(uint8_t what, uint16_t where)
 	{
 	if (fram.write(where, what))
 		{
