@@ -561,7 +561,6 @@ void setup()
 	// zombie mode ensures that the main loop()
 	// does not start running, overwriting previous
 	// data on the FRAM
-	delay(1000);
 	if (check_zombie_mode() == EXIT_SUCCESS)
 		{
 		setLedBlue();
