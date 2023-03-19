@@ -5,14 +5,18 @@
 
 Adafruit_MAX31855 thermocouple(MAXCLK, MAXCS, MAXDO);
 
+/**
+ * @brief    initialize the thermocouple
+ * @note     this is a void function as initialization is not needed
+*/
 void init_thermocouple()
 	{
 	return;
 	}
 
-/*
- * @note reads temperature at the end of the wire
- * @return float external temperature in degrees Celsius
+/**
+ * @note    reads temperature at the end of the wire
+ * @return  float external temperature in degrees Celsius
  */
 float get_thermocouple_external_temperature()
 	{
@@ -20,9 +24,9 @@ float get_thermocouple_external_temperature()
 	return external_temp;
 	}
 
-/*
- * @note reads temperature on the chip
- * @return float internal temperature in degrees Celsius
+/**
+ * @note    reads temperature on the chip
+ * @return  float internal temperature in degrees Celsius
  */
 float get_thermocouple_internal_temperature()
 	{

@@ -7,6 +7,10 @@ Adafruit_BMP280 bmp; // use I2C interface
 Adafruit_Sensor* bmp_pressure = bmp.getPressureSensor();
 
 
+/**
+ * @brief     initialize the BMP280
+ * @return    EXIT_SUCCESS or EXIT_FAILURE
+*/
 int init_bmp280()
 	{
 	if (!bmp.begin())
@@ -22,27 +26,34 @@ int init_bmp280()
 	return EXIT_SUCCESS;
 	}
 
+/**
+ * @brief     get the altitude from the BMP280
+ * @param     ground_base_pressure_param   the pressure at ground level to be used as a reference
+ * @brief     this should not be used to get altitude actively, use get_bmp280_relative_altitude() instead
+ * @return    the altitude in meters
+*/
 float get_bmp280_altitude(float ground_base_pressure_param)
 	{
 	return bmp.readAltitude(ground_base_pressure_param);
 	}
 
+/**
+ * @brief    get the pressure from the BMP280
+ * @return   the pressure in Pascals
+*/
 float get_bmp280_pressure()
 	{
 	return bmp.readPressure();
 	}
 
+/**
+ * @brief    get the relative altitude from the BMP280
+ * @param    ground_base_pressure_param   the pressure at ground level to be used as a reference
+ * @param    ground_base_altitude_param   the altitude at ground level to be used as a reference
+ * @return   the altitude in meters 
+*/
 float get_bmp280_relative_altitude(float ground_base_pressure_param, float ground_base_altitude_param)
 	{
 	return get_bmp280_altitude(ground_base_pressure_param) - ground_base_altitude_param;
 	}
 
-float radians_to_degrees(float r)
-	{
-	return r * (float)(180 / M_PI);
-	}
-
-float degrees_to_radians(float d)
-	{
-	return d * (float)(M_PI / 180);
-	}

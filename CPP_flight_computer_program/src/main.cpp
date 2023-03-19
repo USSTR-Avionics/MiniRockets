@@ -74,16 +74,16 @@ float rocket_apogee                    = 0.0f;
 
 
 
+/**
+ * @brief    initialize all sensors and relevant variables
+ * @post     zombie pin is set to input pullup
+*/
 int init_all()
 	{
 	init_kx134();
 	init_bmp280();
 	init_fram_package();
 	init_LED();
-
-	// TODO:
-	// init_bmi088();
-	// init_RFM95_TX();
 
 	// Setting global variables
 	ground_base_pressure = get_bmp280_pressure();
@@ -100,10 +100,12 @@ int init_all()
 	return EXIT_SUCCESS;
 	}
 
+/**
+ * @brief    check the health of all sensors
+ * @return   EXIT_SUCCESS if all sensors are healthy, EXIT_FAILURE otherwise
+*/
 int health_check()
 	{
-	println("running health_check()");
-
 	// KX134 checks
 	float z_thresh_high = 11.0;
 	float z_thresh_low  = 9.0;
@@ -152,20 +154,26 @@ int health_check()
 	int fram_write_result = write_test_data_to_fram();
 	int fram_read_result  = read_test_data_from_fram();
 
-	if (fram_write_result == EXIT_FAILURE || fram_read_result == EXIT_FAILURE)
+	if (fram_write_result == EXIT_FAILURE)
 		{
-		println("FRAM health check failed");
+		println("FRAM write health check failed");
+		return EXIT_FAILURE;
+		}
+	else if (fram_read_result == EXIT_FAILURE)
+		{
+		println("FRAM read health check failed");
 		return EXIT_FAILURE;
 		}
 
 	return EXIT_SUCCESS;
 	}
 
+/**
+ * @brief    handles the ground idle state
+*/
 void ground_idle_mode()
 	{
-	// println("[ROCKET STATE] GROUND IDLE");
-
-	setLedGreen();
+	set_led_green();
 
 	if (starting_time == 0)
 		{
@@ -192,11 +200,12 @@ void ground_idle_mode()
 		}
 	}
 
+/**
+ * @brief    handles the powered flight state
+*/
 void powered_flight_mode()
 	{
-	// println("[ROCKET STATE] POWERED FLIGHT");
-
-	setLedRed();
+	set_led_red();
 
 	// powered to unpowered flight is typical of deceleration
 	kx134_accel_z = get_kx134_accel_z();
@@ -214,7 +223,9 @@ void powered_flight_mode()
 	}
 
 /**
- * @note - this function will take a little under a second to run
+ * @brief   checks if apogee was retroactively achieved   
+ * @note    this function will take a little under a second to run
+ * @return  EXIT_SUCCESS if apogee was achieved, EXIT_FAILURE otherwise
  */
 int apogee_check()
 	{
@@ -271,11 +282,12 @@ int apogee_check()
 		}
 	}
 
+/**
+ * @brief    handles the unpowered flight state
+*/
 void unpowered_flight_mode()
 	{
-	// println("[ROCKET STATE] UNPOWERED FLIGHT");
-
-	setLedBlue();
+	set_led_blue();
 
 	if (apogee_check() == EXIT_SUCCESS)
 		{
@@ -283,10 +295,13 @@ void unpowered_flight_mode()
 		}
 	}
 
+/**
+ * @brief    handles the software recovery
+ * @note     this will block all other code until parachute is deployed
+ * @post     the main loop() is restarted, and the rocket will be in the chute descent state
+*/
 void soft_recovery_mode()
 	{
-	// println("[ROCKET STATE] SOFT RECOVERY");
-
 	while (true)
 		{
 		wdt.feed(); // feeding the watchdog to avoid a reset
@@ -310,11 +325,11 @@ void soft_recovery_mode()
 	loop(); // restart the loop
 	}
 
+/**
+ * @brief    handles the ballistic descent state
+*/
 void ballistic_descent_mode()
 	{
-	// println("[ROCKET STATE] BALLISTIC DESCENT");
-
-	// TODO: Add a backup deployment height
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
 	if (rocket_altitude <= PARACHUTE_DEPLOYMENT_HEIGHT)
@@ -324,10 +339,11 @@ void ballistic_descent_mode()
 		}
 	}
 
+/**
+ * @brief    handles the chute descent state
+*/
 void chute_descent_mode()
 	{
-	// println("[ROCKET STATE] CHUTE DESCENT");
-
 	// TODO: check gyroscope stabilisation over time
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
@@ -338,14 +354,12 @@ void chute_descent_mode()
 		}
 	}
 
+/**
+ * @brief    handles the land safe state
+ * @note     this assumes that the rocket lands on the ground (see chute descent mode())
+*/
 void land_safe_mode()
 	{
-	// println("[ROCKET STATE] LAND SAFE");
-	// STOP DATA COLLECTION
-	// CHECK IF SD CARD CAN STILL BE WRITTEN TO
-	// IF SD CARD CAN BE WRITTEN TO AND FLASHCHIP OK
-	// WRITE TO SD CARD
-	// write_to_sd_card(EVENTLOG, "[ROCKET] Landed");
 	if (starting_time == 0)
 		{
 		starting_time = millis();
@@ -356,10 +370,15 @@ void land_safe_mode()
 		starting_time = 0UL;
 		buzzer_on();
 		}
-	// TODO: call on func to read, unzip and write date to SD card
-	// ledON(somecolour);
 	}
 
+/**
+ * @brief    handles the state transitions
+ * @param    rs    the current state of the rocket
+ * @return   EXIT_SUCCESS
+ * @post     calls on the relevant state handler
+ * @note     deafults to software recovery if the rocket is in an unknown state
+*/
 int select_flight_mode(statemachine_t::e_rocket_state& rs)
 	{
 	switch (rs)
@@ -398,6 +417,11 @@ int select_flight_mode(statemachine_t::e_rocket_state& rs)
 	return EXIT_FAILURE;
 	}
 
+/**
+ * @brief    handles the watchdog reset
+ * @note     this is called when the watchdog timer expires
+ * @post     the main loop() is restarted, and the rocket will be in the soft recovery state
+*/
 void watchdog_callback()
 	{
 	wdt.feed();
@@ -406,6 +430,10 @@ void watchdog_callback()
 	loop();
 	}
 
+/**
+ * @brief    check if the rocket is in zombie mode, zombie mode is to detect if FRAM should be dumped to or not
+ * @return   EXIT_SUCCESS if the rocket is in zombie mode, EXIT_FAILURE otherwise
+*/
 int check_zombie_mode()
 	{
 	if (digitalRead(PIN_A16) == HIGH)
@@ -463,6 +491,9 @@ void RF95_Set_modem_config(const uint16_t& Index)
 		}
 	}
 
+/**
+ * @brief    saves the current data chunk to FRAM
+*/
 void save_data()
 	{
 	if (write_time == 0)
@@ -481,6 +512,10 @@ void save_data()
 		}
 	}
 
+/**
+ * @brief    prints the current data chunk to the serial port, if in ROCKET_DEBUGMODE
+ * @note     this always writes the current data chunk to the FRAM
+*/
 int debug_data()
 	{
 	String data_string = "";
@@ -563,7 +598,7 @@ void setup()
 	// data on the FRAM
 	if (check_zombie_mode() == EXIT_SUCCESS)
 		{
-		setLedBlue();
+		set_led_blue();
 		println("[ZOMBIE MODE] detected");
 		dump_fram_to_serial();
 		exit(0);
@@ -571,7 +606,7 @@ void setup()
 
 	if (health_check() == EXIT_FAILURE)
 		{
-		setLedRed();
+		set_led_red();
 		println("[FAILED] Health Check"); // also write to reserved fram space
 		exit(1);                          // this should also fail if init_all() fails;
 		}
@@ -587,8 +622,9 @@ void setup()
 
 void loop()
 	{
-	setLedGreen();
+	set_led_green();
 	wdt.feed();
 	debug_data();
 	select_flight_mode(rocket_state);
+	set_led_red();
 	}

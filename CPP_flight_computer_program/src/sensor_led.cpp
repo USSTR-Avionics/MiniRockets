@@ -5,6 +5,9 @@
 #define BUILTIN_LED 13 // this does not really change unless microcontroller changes
 
 
+/**
+ * @brief  initialize the LED pins
+ */
 int init_LED()
 	{
 	pinMode(BUILTIN_LED, OUTPUT);
@@ -14,38 +17,40 @@ int init_LED()
 	return EXIT_SUCCESS;
 	}
 
-void setLedGreen()
+/**
+ * @brief  set the green LED on
+ */
+void set_led_green()
 	{
 	digitalWrite(LED_GREEN, HIGH);
 	digitalWrite(LED_RED, LOW);
 	digitalWrite(LED_BLUE, LOW);
 	}
 
-void setLedRed()
+/**
+ * @brief  set the red LED on
+ */
+void set_led_red()
 	{
 	digitalWrite(LED_RED, HIGH);
 	digitalWrite(LED_GREEN, LOW);
 	digitalWrite(LED_BLUE, LOW);
 	}
 
-void setLedBlue()
+/**
+ * @brief  set the blue LED on
+ */
+void set_led_blue()
 	{
 	digitalWrite(LED_BLUE, HIGH);
 	digitalWrite(LED_RED, LOW);
 	digitalWrite(LED_GREEN, LOW);
 	}
 
-void flashSOS()
-	{
-	while (true)
-		{
-		digitalWrite(LED_BLUE, HIGH);
-		delay(500);
-		digitalWrite(LED_BLUE, LOW);
-		}
-	}
-
-void flashInternalLed(bool x)
+/**
+ * @brief  flash the internal LED
+ */
+void flash_internal_led(bool x)
 	{
 	if (x == true)
 		{

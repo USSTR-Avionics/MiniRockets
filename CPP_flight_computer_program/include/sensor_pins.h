@@ -16,5 +16,8 @@
 #define MAXCS      10
 #define MAXCLK     27
 
+// Parachute pins
+#define PARACHUTE_PIN 2
+
 
 #endif // SENSOR_PINS_H_

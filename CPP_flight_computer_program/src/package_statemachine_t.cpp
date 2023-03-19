@@ -1,5 +1,12 @@
 #include "statemachine_t.h"
 
+/**
+ * @brief    set the current state of the statemachine
+ * @param    rs      the statemachine to set the state of
+ * @param    state   the state to set the statemachine to
+ * @return   the state that was set
+ * @post     the statemachine will be set to the state specified
+*/
 statemachine_t::e_rocket_state set_current_state_for_statemachine(statemachine_t::e_rocket_state& rs, int state)
 	{
 	switch (state)
@@ -35,6 +42,11 @@ statemachine_t::e_rocket_state set_current_state_for_statemachine(statemachine_t
 		}
 	}
 
+/**
+ * @brief    get the current state of the statemachine
+ * @param    rs      the statemachine to get the state of
+ * @return   the state of the statemachine
+*/
 int get_current_state_for_statemachine(statemachine_t::e_rocket_state& rs)
 	{
 	return rs;

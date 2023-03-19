@@ -3,11 +3,10 @@
 
 int init_LED();
 
-void setLedRed();
-void setLedGreen();
-void setLedBlue();
+void set_led_red();
+void set_led_green();
+void set_led_blue();
 
-void flashSOS();
-void flashInternalLed(bool);
+void flash_internal_led(bool);
 
 #endif // SENSOR_LED_H

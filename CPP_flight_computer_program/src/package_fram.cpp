@@ -17,11 +17,20 @@ static uint32_t fram_cursor      = FRAM_INIT_ADDRESS;
 // definition of extern global sensor_chunk
 sensor_chunk_layout sensor_chunk = {};
 
+/**
+ * @brief Initialize the FRAM package
+ * @return EXIT_SUCCESS if the initialization succeeded, EXIT_FAILURE otherwise.
+*/
 int init_fram_package()
 	{
 	return init_fram();
 	}
 
+/**
+ * @brief    write test data to FRAM
+ * @note     the test data is cleaned up by read_test_data_from_fram()
+ * @return   EXIT_SUCCESS or EXIT_FAILURE
+*/
 int write_test_data_to_fram()
 	{
 	int result = 0;
@@ -38,6 +47,11 @@ int write_test_data_to_fram()
 	return EXIT_FAILURE;
 	}
 
+/**
+ * @brief    read test data from FRAM
+ * @note     the test data is written by write_test_data_to_fram() and cleaned up by this function
+ * @return   EXIT_SUCCESS or EXIT_FAILURE
+*/
 int read_test_data_from_fram()
 	{
 	int result = 0;
@@ -47,6 +61,13 @@ int read_test_data_from_fram()
 	result += read_from_fram(0x23);
 	result += read_from_fram(0x24);
 
+    // restoring the previously written values
+    write_to_fram(0, 0x20);
+    write_to_fram(0, 0x21);
+    write_to_fram(0, 0x22);
+    write_to_fram(0, 0x23);
+    write_to_fram(0, 0x24);
+
 	if (result == 150)
 		{
 		return EXIT_SUCCESS;
@@ -54,6 +75,10 @@ int read_test_data_from_fram()
 	return EXIT_FAILURE;
 	}
 
+/**
+ * @brief    print the current sensor chunk to serial in csv format 
+ * @param    printheader     whether to print the csv header or not
+*/
 void print_current_sensor_chunk(bool printheader)
 	{
 	if (printheader)
@@ -77,6 +102,9 @@ void print_current_sensor_chunk(bool printheader)
 	println(print_string);
 	}
 
+/**
+ * @brief    dump the contents of the FRAM to serial
+*/
 void dump_fram_to_serial()
 	{
 	fram_cursor = FRAM_INIT_ADDRESS;
@@ -91,6 +119,11 @@ void dump_fram_to_serial()
 		}
 	}
 
+/**
+ * @brief    write a 32 bit floating point number to FRAM
+ * @post     the cursor is incremented by 4
+ * @param    data    the data to write
+*/
 auto write_float32_to_fram(float data) -> int
 	{
 	uint8_t* ptr_to_f32 = (uint8_t*)&data;
@@ -107,6 +140,11 @@ auto write_float32_to_fram(float data) -> int
 	return EXIT_SUCCESS;
 	}
 
+/**
+ * @brief    read a 32 bit floating point number from FRAM
+ * @param    where   the address to read from
+ * @return   the read float data
+*/
 auto read_float32_from_fram(int where) -> float
 	{
 	uint8_t float16_arr[4];
@@ -126,10 +164,10 @@ auto read_float32_from_fram(int where) -> float
 	}
 
 /**
- * @brief Writes a f16 data type to the FRAM.
- * @post The FRAM cursor will be incremented by 2.
- * @param data The data to write to the FRAM.
- * @return EXIT_SUCCESS if the write succeeded, EXIT_FAILURE otherwise.
+ * @brief  writes a f16 data type to the FRAM
+ * @post   the FRAM cursor will be incremented by 2
+ * @param  data The data to write to the FRAM
+ * @return EXIT_SUCCESS if the write succeeded, EXIT_FAILURE otherwise
  */
 auto write_float16_to_fram(float data) -> int
 	{
@@ -144,6 +182,11 @@ auto write_float16_to_fram(float data) -> int
 	return EXIT_SUCCESS;
 	}
 
+/**
+ * @brief  reads a f16 data type from the FRAM
+ * @param  where The address to read from
+ * @return the read data
+*/
 auto read_float16_from_fram(int where) -> float
 	{
 	uint8_t float16_arr[2];
@@ -158,20 +201,21 @@ auto read_float16_from_fram(int where) -> float
 	return FLOAT16::ToFloat32(f16_val);
 	}
 
-/*
- * @brief Writes a data chunk to the FRAM.
- * @param timestamp The timestamp of the data chunk.
- * @param current_state The current state of the rocket.
- * @param accl_x The x axis acceleration.
- * @param accl_y The y axis acceleration.
- * @param accl_z The z axis acceleration.
- * @param gyro_x The x axis gyroscope.
- * @param gyro_y The y axis gyroscope.
- * @param gyro_z The z axis gyroscope.
- * @param rel_alt The relative altitude.
- * @param pressure The pressure.
- * @param thermocouple_temp The thermocouple temperature.
- * @return EXIT_SUCCESS if the write succeeded, EXIT_FAILURE otherwise.
+/**
+ * @brief                   writes a data chunk to the FRAM
+ * @param timestamp         the timestamp of the data chunk
+ * @param current_state     the current state of the rocket
+ * @param accl_x            the x axis acceleration
+ * @param accl_y            the y axis acceleration
+ * @param accl_z            the z axis acceleration
+ * @param gyro_x            the x axis gyroscope
+ * @param gyro_y            the y axis gyroscope
+ * @param gyro_z            the z axis gyroscope
+ * @param rel_alt           the relative altitude
+ * @param pressure          the pressure
+ * @param thermocouple_temp the thermocouple temperature
+ * @post                    the FRAM cursor will be incremented by 25
+ * @return                  EXIT_SUCCESS if the write succeeded, EXIT_FAILURE otherwise
  */
 int write_data_chunk_to_fram(
     uint32_t timestamp, uint8_t current_state,
@@ -249,6 +293,10 @@ int write_data_chunk_to_fram(
 	return EXIT_SUCCESS;
 	}
 
+/**
+ * @brief  reads a data chunk from the FRAM
+ * @param  cursor_position the position of the cursor
+*/
 int read_data_chunk_from_fram(uint32_t cursor_position)
 	{
 	// data chunk format

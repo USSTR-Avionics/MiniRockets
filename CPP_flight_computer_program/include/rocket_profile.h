@@ -17,6 +17,6 @@
 
 #define ALTITUDE_CHANGE               0.600f
 #define PARACHUTE_DEPLOYMENT_HEIGHT   200.0f // in meters
-#define LANDING_ALTITUDE              1.000f // in meters
+#define LANDING_ALTITUDE              25.00f // in meters
 
 #endif // ROCKET_PROFILE_H

@@ -3,6 +3,10 @@
 
 #include <Arduino.h>
 
+/**
+ * @brief  turn on the buzzer
+ * @note   this WILL annoy the shit out of you
+*/
 void buzzer_on()
 	{
 	int melody[] = { NOTE_CS5, NOTE_DS5, NOTE_FS5 };
@@ -12,6 +16,9 @@ void buzzer_on()
 	tone(BUZZER_PIN, melody[1], duration);
 	}
 
+/**
+ * @brief  turn off the buzzer
+*/
 void buzzer_off()
 	{
 	digitalWrite(BUZZER_PIN, LOW);
