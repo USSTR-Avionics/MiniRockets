@@ -11,7 +11,7 @@ outputData accel_data;
 /**
  * @brief  initialize the kx134 accelerometer
  * @return EXIT_SUCCESS if successful, EXIT_FAILURE otherwise
-*/
+ */
 int init_kx134()
 	{
 	if (!kxAccel.begin())
@@ -34,7 +34,7 @@ int init_kx134()
  * @brief  get the acceleration in the x direction
  * @return the acceleration in the x direction
  * @note   the acceleration is in g's
-*/
+ */
 float get_kx134_accel_x()
 	{
 	accel_data = kxAccel.getAccelData();
@@ -45,7 +45,7 @@ float get_kx134_accel_x()
  * @brief  get the acceleration in the y direction
  * @return the acceleration in the y direction
  * @note   the acceleration is in g's
-*/
+ */
 float get_kx134_accel_y()
 	{
 	accel_data = kxAccel.getAccelData();
@@ -56,7 +56,7 @@ float get_kx134_accel_y()
  * @brief  get the acceleration in the z direction
  * @return the acceleration in the z direction
  * @note   the acceleration is in g's
-*/
+ */
 float get_kx134_accel_z()
 	{
 	accel_data = kxAccel.getAccelData();

@@ -77,7 +77,7 @@ float rocket_apogee                    = 0.0f;
 /**
  * @brief    initialize all sensors and relevant variables
  * @post     zombie pin is set to input pullup
-*/
+ */
 int init_all()
 	{
 	init_kx134();
@@ -103,7 +103,7 @@ int init_all()
 /**
  * @brief    check the health of all sensors
  * @return   EXIT_SUCCESS if all sensors are healthy, EXIT_FAILURE otherwise
-*/
+ */
 int health_check()
 	{
 	// KX134 checks
@@ -170,7 +170,7 @@ int health_check()
 
 /**
  * @brief    handles the ground idle state
-*/
+ */
 void ground_idle_mode()
 	{
 	set_led_green();
@@ -202,7 +202,7 @@ void ground_idle_mode()
 
 /**
  * @brief    handles the powered flight state
-*/
+ */
 void powered_flight_mode()
 	{
 	set_led_red();
@@ -223,7 +223,7 @@ void powered_flight_mode()
 	}
 
 /**
- * @brief   checks if apogee was retroactively achieved   
+ * @brief   checks if apogee was retroactively achieved
  * @note    this function will take a little under a second to run
  * @return  EXIT_SUCCESS if apogee was achieved, EXIT_FAILURE otherwise
  */
@@ -284,7 +284,7 @@ int apogee_check()
 
 /**
  * @brief    handles the unpowered flight state
-*/
+ */
 void unpowered_flight_mode()
 	{
 	set_led_blue();
@@ -299,7 +299,7 @@ void unpowered_flight_mode()
  * @brief    handles the software recovery
  * @note     this will block all other code until parachute is deployed
  * @post     the main loop() is restarted, and the rocket will be in the chute descent state
-*/
+ */
 void soft_recovery_mode()
 	{
 	while (true)
@@ -327,7 +327,7 @@ void soft_recovery_mode()
 
 /**
  * @brief    handles the ballistic descent state
-*/
+ */
 void ballistic_descent_mode()
 	{
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
@@ -341,7 +341,7 @@ void ballistic_descent_mode()
 
 /**
  * @brief    handles the chute descent state
-*/
+ */
 void chute_descent_mode()
 	{
 	// TODO: check gyroscope stabilisation over time
@@ -357,7 +357,7 @@ void chute_descent_mode()
 /**
  * @brief    handles the land safe state
  * @note     this assumes that the rocket lands on the ground (see chute descent mode())
-*/
+ */
 void land_safe_mode()
 	{
 	if (starting_time == 0)
@@ -378,7 +378,7 @@ void land_safe_mode()
  * @return   EXIT_SUCCESS
  * @post     calls on the relevant state handler
  * @note     deafults to software recovery if the rocket is in an unknown state
-*/
+ */
 int select_flight_mode(statemachine_t::e_rocket_state& rs)
 	{
 	switch (rs)
@@ -421,7 +421,7 @@ int select_flight_mode(statemachine_t::e_rocket_state& rs)
  * @brief    handles the watchdog reset
  * @note     this is called when the watchdog timer expires
  * @post     the main loop() is restarted, and the rocket will be in the soft recovery state
-*/
+ */
 void watchdog_callback()
 	{
 	wdt.feed();
@@ -433,7 +433,7 @@ void watchdog_callback()
 /**
  * @brief    check if the rocket is in zombie mode, zombie mode is to detect if FRAM should be dumped to or not
  * @return   EXIT_SUCCESS if the rocket is in zombie mode, EXIT_FAILURE otherwise
-*/
+ */
 int check_zombie_mode()
 	{
 	if (digitalRead(PIN_A16) == HIGH)
@@ -493,7 +493,7 @@ void RF95_Set_modem_config(const uint16_t& Index)
 
 /**
  * @brief    saves the current data chunk to FRAM
-*/
+ */
 void save_data()
 	{
 	if (write_time == 0)
@@ -515,7 +515,7 @@ void save_data()
 /**
  * @brief    prints the current data chunk to the serial port, if in ROCKET_DEBUGMODE
  * @note     this always writes the current data chunk to the FRAM
-*/
+ */
 int debug_data()
 	{
 	String data_string = "";

@@ -16,7 +16,7 @@ float get_exponential_moving_average(float new_value, float old_avg, float alpha
  * @brief    convert from radians to degrees
  * @param    r   the radians to convert
  * @return   the degrees
-*/
+ */
 float radians_to_degrees(float r)
 	{
 	return r * (float)(180 / M_PI);
@@ -26,7 +26,7 @@ float radians_to_degrees(float r)
  * @brief    convert from degrees to radians
  * @param    d   the degrees to convert
  * @return   the radians
-*/
+ */
 float degrees_to_radians(float d)
 	{
 	return d * (float)(M_PI / 180);
