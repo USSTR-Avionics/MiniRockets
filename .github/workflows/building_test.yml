@@ -30,4 +30,4 @@ jobs:
         run: pip3 install --upgrade platformio
 
       - name: Build PlatformIO Project
-        run: pio run --project-dir "./Sofdtware/CPP_flight_computer_program"
+        run: pio run --project-dir "./Software/CPP_flight_computer_program"
