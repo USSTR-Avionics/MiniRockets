@@ -445,7 +445,7 @@ int check_zombie_mode()
 
 void UDP_Send(const char* Data, const uint16_t& Timeout)
 	{
-	RF95.send(reinterpret_cast<const uint8_t*>(Data), strlen(Data) + 1);
+	RF95.send(reinterpret_cast<const uint8_t*>(Data), RF95_Max_message_length);
 	RF95.waitPacketSent(Timeout);
 	}
 
