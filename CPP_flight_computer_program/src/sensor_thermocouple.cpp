@@ -8,7 +8,7 @@ Adafruit_MAX31855 thermocouple(MAXCLK, MAXCS, MAXDO);
 /**
  * @brief    initialize the thermocouple
  * @note     this is a void function as initialization is not needed
-*/
+ */
 void init_thermocouple()
 	{
 	return;

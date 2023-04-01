@@ -20,7 +20,7 @@ sensor_chunk_layout sensor_chunk = {};
 /**
  * @brief Initialize the FRAM package
  * @return EXIT_SUCCESS if the initialization succeeded, EXIT_FAILURE otherwise.
-*/
+ */
 int init_fram_package()
 	{
 	return init_fram();
@@ -30,7 +30,7 @@ int init_fram_package()
  * @brief    write test data to FRAM
  * @note     the test data is cleaned up by read_test_data_from_fram()
  * @return   EXIT_SUCCESS or EXIT_FAILURE
-*/
+ */
 int write_test_data_to_fram()
 	{
 	int result = 0;
@@ -51,7 +51,7 @@ int write_test_data_to_fram()
  * @brief    read test data from FRAM
  * @note     the test data is written by write_test_data_to_fram() and cleaned up by this function
  * @return   EXIT_SUCCESS or EXIT_FAILURE
-*/
+ */
 int read_test_data_from_fram()
 	{
 	int result = 0;
@@ -61,12 +61,12 @@ int read_test_data_from_fram()
 	result += read_from_fram(0x23);
 	result += read_from_fram(0x24);
 
-    // restoring the previously written values
-    write_to_fram(0, 0x20);
-    write_to_fram(0, 0x21);
-    write_to_fram(0, 0x22);
-    write_to_fram(0, 0x23);
-    write_to_fram(0, 0x24);
+	// restoring the previously written values
+	write_to_fram(0, 0x20);
+	write_to_fram(0, 0x21);
+	write_to_fram(0, 0x22);
+	write_to_fram(0, 0x23);
+	write_to_fram(0, 0x24);
 
 	if (result == 150)
 		{
@@ -76,9 +76,9 @@ int read_test_data_from_fram()
 	}
 
 /**
- * @brief    print the current sensor chunk to serial in csv format 
+ * @brief    print the current sensor chunk to serial in csv format
  * @param    printheader     whether to print the csv header or not
-*/
+ */
 void print_current_sensor_chunk(bool printheader)
 	{
 	if (printheader)
@@ -104,7 +104,7 @@ void print_current_sensor_chunk(bool printheader)
 
 /**
  * @brief    dump the contents of the FRAM to serial
-*/
+ */
 void dump_fram_to_serial()
 	{
 	fram_cursor = FRAM_INIT_ADDRESS;
@@ -123,7 +123,7 @@ void dump_fram_to_serial()
  * @brief    write a 32 bit floating point number to FRAM
  * @post     the cursor is incremented by 4
  * @param    data    the data to write
-*/
+ */
 auto write_float32_to_fram(float data) -> int
 	{
 	uint8_t* ptr_to_f32 = (uint8_t*)&data;
@@ -144,7 +144,7 @@ auto write_float32_to_fram(float data) -> int
  * @brief    read a 32 bit floating point number from FRAM
  * @param    where   the address to read from
  * @return   the read float data
-*/
+ */
 auto read_float32_from_fram(int where) -> float
 	{
 	uint8_t float16_arr[4];
@@ -186,7 +186,7 @@ auto write_float16_to_fram(float data) -> int
  * @brief  reads a f16 data type from the FRAM
  * @param  where The address to read from
  * @return the read data
-*/
+ */
 auto read_float16_from_fram(int where) -> float
 	{
 	uint8_t float16_arr[2];
@@ -296,7 +296,7 @@ int write_data_chunk_to_fram(
 /**
  * @brief  reads a data chunk from the FRAM
  * @param  cursor_position the position of the cursor
-*/
+ */
 int read_data_chunk_from_fram(uint32_t cursor_position)
 	{
 	// data chunk format
@@ -341,8 +341,6 @@ int read_data_chunk_from_fram(uint32_t cursor_position)
 	// read rocket state
 	uint8_t current_state  = read_from_fram(cursor_position);
 	cursor_position++;
-
-	println("current state: " + String(current_state));
 
 	sensor_chunk.current_state = current_state;
 

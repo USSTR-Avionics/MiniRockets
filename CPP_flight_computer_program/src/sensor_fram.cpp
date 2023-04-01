@@ -11,7 +11,7 @@ Adafruit_FRAM_I2C fram;
  * @brief    initialize the FRAM
  * @note     do not call this function directly, use init_fram_package() instead
  * @return   EXIT_SUCCESS or EXIT_FAILURE
-*/
+ */
 int init_fram()
 	{
 	fram = Adafruit_FRAM_I2C();
