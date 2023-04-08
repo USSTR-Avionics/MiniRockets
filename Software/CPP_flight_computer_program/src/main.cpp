@@ -360,6 +360,8 @@ void chute_descent_mode()
  */
 void land_safe_mode()
 	{
+	flash_internal_led(true);
+
 	if (starting_time == 0)
 		{
 		starting_time = millis();
