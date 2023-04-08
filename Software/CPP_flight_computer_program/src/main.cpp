@@ -544,7 +544,7 @@ int debug_data()
 	data_string            = data_string + String(kx134_accel_y) + ",";
 	data_string            = data_string + String(kx134_accel_z) + ",";
 
-    rocket_altitude        = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
+	rocket_altitude        = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 	data_string            = data_string + String(rocket_altitude);
 
 	String data_string_fmt = "millis(), rocket_state, kx134_accel_x, kx134_accel_y, kx134_accel_z, relative_altitude";
