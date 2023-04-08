@@ -18,6 +18,16 @@ int init_LED()
 	}
 
 /**
+ * @brief  resets the led to no colour
+*/
+void reset_led()
+	{
+	digitalWrite(LED_RED, LOW);
+	digitalWrite(LED_GREEN, LOW);
+	digitalWrite(LED_BLUE, LOW);
+	}
+
+/**
  * @brief  set the green LED on
  */
 void set_led_green()
