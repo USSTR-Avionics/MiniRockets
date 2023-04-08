@@ -16,6 +16,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
@@ -24,4 +30,4 @@ jobs:
         run: pip3 install --upgrade platformio
 
       - name: Build PlatformIO Project
-        run: pio run --project-dir "./CPP_flight_computer_program"
+        run: pio run --project-dir "./Software/CPP_flight_computer_program"
