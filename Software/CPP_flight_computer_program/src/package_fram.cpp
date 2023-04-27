@@ -119,6 +119,29 @@ void dump_fram_to_serial()
 		}
 	}
 
+/*
+ * @brief    clear FRAM contents
+ */
+void clear_fram()
+    {
+    fram_cursor = FRAM_INIT_ADDRESS;
+
+    while (true)
+        {
+        if (fram_cursor > FRAM_MAX_ADDRESS)
+            {
+            println("FRAM contents cleared");
+            break;
+            }
+        if (write_to_fram(0, fram_cursor) == EXIT_FAILURE)
+            {
+            println("Write failre to FRAM");
+            break;
+            }
+        fram_cursor++;
+        }
+    }
+
 /**
  * @brief    write a 32 bit floating point number to FRAM
  * @post     the cursor is incremented by 4
