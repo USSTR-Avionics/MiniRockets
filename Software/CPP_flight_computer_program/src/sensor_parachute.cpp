@@ -8,7 +8,7 @@
  */
 void deploy_parachute()
 	{
-	pinMode(PARACHUTE_PIN, OUTPUT);
+	// pinMode(PARACHUTE_PIN, OUTPUT);
 	// digitalWrite(PARACHUTE_PIN, HIGH);
 	digitalWrite(PARACHUTE_PIN, LOW);
 	}

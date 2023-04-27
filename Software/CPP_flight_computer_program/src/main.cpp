@@ -8,6 +8,7 @@
 #include "sensor_buzzer.h"
 #include "sensor_kx134.h"
 #include "sensor_led.h"
+#include "sensor_pins.h"
 #include "sensor_parachute.h"
 #include "sensor_radio.h"
 #include "sensor_thermocouple.h"
@@ -31,6 +32,7 @@
 
 
 // PROGRAM VARS | vars generally required for the program
+unsigned long parachute_pin_timer = 0UL;
 unsigned long starting_time = 0UL;
 unsigned long debug_time    = 0UL;
 unsigned long write_time    = 0UL;
@@ -92,6 +94,11 @@ int init_all()
 
 	// zombie pin init
 	pinMode(PIN_A16, INPUT_PULLUP);
+
+    // parachute pin
+	pinMode(PARACHUTE_PIN, OUTPUT);
+    digitalWrite(PARACHUTE_PIN, HIGH);
+
 
 #if ROCKET_DEBUGMODE == 1
 	rocket_state = set_current_state_for_statemachine(rocket_state, GROUND_IDLE_STATE);
@@ -315,6 +322,7 @@ void soft_recovery_mode()
 				if (get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude) < PARACHUTE_DEPLOYMENT_HEIGHT)
 					{
 					deploy_parachute();
+                    parachute_pin_timer = millis();
 					rocket_state = statemachine_t::e_rocket_state::chute_descent;
 					break;
 					}
@@ -347,6 +355,12 @@ void chute_descent_mode()
 	// TODO: check gyroscope stabilisation over time
 	rocket_altitude = get_bmp280_relative_altitude(ground_base_pressure, ground_base_altitude);
 
+    if (parachute_pin_timer != 0 && ((millis() - parachute_pin_timer) > 7000))
+            {
+            digitalWrite(PARACHUTE_PIN, HIGH);
+            parachute_pin_timer = 0;
+            }
+
 	// TODO: Check for acceleration in the z direction that is stabilised
 	if (rocket_altitude < LANDING_ALTITUDE)
 		{
@@ -361,6 +375,12 @@ void chute_descent_mode()
 void land_safe_mode()
 	{
 	flash_internal_led(true);
+
+    if (parachute_pin_timer != 0 && ((millis() - parachute_pin_timer) > 7000))
+            {
+            digitalWrite(PARACHUTE_PIN, HIGH);
+            parachute_pin_timer = 0;
+            }
 
 	if (starting_time == 0)
 		{
