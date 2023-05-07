@@ -60,5 +60,6 @@ float get_kx134_accel_y()
 float get_kx134_accel_z()
 	{
 	accel_data = kxAccel.getAccelData();
-	return accel_data.zData * g;
+	// return accel_data.zData * g;
+	return accel_data.yData * g;
 	}

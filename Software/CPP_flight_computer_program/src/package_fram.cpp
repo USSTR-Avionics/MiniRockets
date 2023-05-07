@@ -128,9 +128,11 @@ void clear_fram()
 
     while (true)
         {
+        print("fram cleared at: ");
+        println(fram_cursor);
         if (fram_cursor > FRAM_MAX_ADDRESS)
             {
-            println("FRAM contents cleared");
+            print("FRAM contents cleared at: ");
             break;
             }
         if (write_to_fram(0, fram_cursor) == EXIT_FAILURE)
@@ -140,6 +142,8 @@ void clear_fram()
             }
         fram_cursor++;
         }
+
+    println("fram cleared");
     }
 
 /**

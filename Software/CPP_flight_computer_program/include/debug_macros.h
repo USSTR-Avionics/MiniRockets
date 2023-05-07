@@ -4,6 +4,8 @@
 #include "package_testmode.h"
 #include <Arduino.h>
 
+#define WAIT_FOR_AEROSTRUCTURE_TO_DO_SHIT 600000
+
 #ifdef ROCKET_DEBUGMODE
 	#define println(x)     Serial.println(x)
 	#define print(x)       Serial.print(x)

@@ -587,6 +587,12 @@ void setup()
 	Serial.begin(9600);
 	Wire.begin();
 
+    // For launch shenaningans
+	pinMode(PARACHUTE_PIN, OUTPUT);
+	digitalWrite(PARACHUTE_PIN, HIGH);
+    buzzer_on();
+    delay(WAIT_FOR_AEROSTRUCTURE_TO_DO_SHIT);
+
 	// ============= NO TOUCH =============
 	const uint16_t RF95_reset { 30 };
 	pinMode(RF95_reset, OUTPUT);
