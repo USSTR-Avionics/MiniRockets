@@ -9,7 +9,7 @@
 // rocket params
 #define ROCKET_HEIGHT                 1 // in metres
 
-#define LIFTOFF_THRESHOLD             11.0f // in ms^-2
+#define LIFTOFF_THRESHOLD             25.0f // in ms^-2
 
 #define DESCENT_CHECK_AMOUNT          2
 

@@ -591,7 +591,7 @@ void setup()
 	pinMode(PARACHUTE_PIN, OUTPUT);
 	digitalWrite(PARACHUTE_PIN, HIGH);
     buzzer_on();
-    delay(WAIT_FOR_AEROSTRUCTURE_TO_DO_SHIT);
+//     delay(WAIT_FOR_AEROSTRUCTURE_TO_DO_SHIT);
 
 	// ============= NO TOUCH =============
 	const uint16_t RF95_reset { 30 };
