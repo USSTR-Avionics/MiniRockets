@@ -38,6 +38,7 @@ unsigned long debug_time    = 0UL;
 unsigned long write_time    = 0UL;
 int descent_check           = 0;
 float last_alt              = 0;
+bool start_recording        = false;
 
 
 // STATE MACHINE
@@ -213,6 +214,8 @@ void ground_idle_mode()
 void powered_flight_mode()
 	{
 	set_led_red();
+
+    starting_time = true;
 
 	// powered to unpowered flight is typical of deceleration
 	kx134_accel_z = get_kx134_accel_z();
@@ -518,6 +521,10 @@ void RF95_Set_modem_config(const uint16_t& Index)
  */
 void save_data()
 	{
+    if (start_recording == false)
+        {
+        return EXIT_FAILURE;
+        }
 	if (write_time == 0)
 		{
 		write_time = millis();
