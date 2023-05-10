@@ -521,23 +521,22 @@ void RF95_Set_modem_config(const uint16_t& Index)
  */
 void save_data()
 	{
-    if (start_recording == false)
+    if (start_recording != false)
         {
-        return EXIT_FAILURE;
-        }
-	if (write_time == 0)
-		{
-		write_time = millis();
-		}
-	else if (millis() - write_time > WRITE_INTERVAL)
-		{
-		write_time       = millis();
-		float notanumber = 0.0f;
-		write_data_chunk_to_fram(
-		    millis(), rocket_state,
-		    kx134_accel_x, kx134_accel_y, kx134_accel_z,
-		    notanumber, notanumber, notanumber,
-		    rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
+	    if (write_time == 0)
+	    	{
+	    	write_time = millis();
+	    	}
+	    else if (millis() - write_time > WRITE_INTERVAL)
+	    	{
+	    	write_time       = millis();
+	    	float notanumber = 0.0f;
+	    	write_data_chunk_to_fram(
+	    	    millis(), rocket_state,
+	    	    kx134_accel_x, kx134_accel_y, kx134_accel_z,
+	    	    notanumber, notanumber, notanumber,
+	    	    rocket_altitude, get_bmp280_pressure(), get_thermocouple_external_temperature());
+            }
 		}
 	}
 
