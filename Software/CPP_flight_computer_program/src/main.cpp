@@ -215,7 +215,7 @@ void powered_flight_mode()
 	{
 	set_led_red();
 
-    starting_time = true;
+    start_recording = true;
 
 	// powered to unpowered flight is typical of deceleration
 	kx134_accel_z = get_kx134_accel_z();
