@@ -17,7 +17,7 @@ The primary goal of this project is to design and implement an autonomous system
 
 1. **Command**: The system is designed to send/receive commands to/from a ground station in real-time. It should also be capable of executing received commands on the rocket promptly.
 
-2. **Control**: The system will autonomously control the rocket, ensuring stable flight trajectories. This includes phases such as powered flight, ballistic descent, and controlled parachute deployment.
+2. **Control**: The system will quasi-autonomously control the rocket, ensuring stable flight state detection. This includes phases such as powered flight, ballistic descent, and controlled parachute deployment.
 
 3. **Data Acquisition**: The system must collect data from various sensors within the rocket. Collected data should be transmitted to the ground station in real-time, enabling real-time monitoring and analysis of the rocket's performance during flight.
 
