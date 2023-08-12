@@ -43,6 +43,6 @@ The following behaviors are considered unacceptable within the Rocket Project co
 
 ## Reporting and Enforcement
 
-If you believe someone is violating this Code of Conduct, please report it to the project maintainers at [project-email@example.com]. All reports will be reviewed and investigated, and appropriate actions will be taken. Project maintainers have the right to remove, edit, or reject comments, commits, code, issues, and other contributions that are not aligned with this Code of Conduct.
+If you believe someone is violating this Code of Conduct, please report it to the project maintainers at usstavionics@gmail.com. All reports will be reviewed and investigated, and appropriate actions will be taken. Project maintainers have the right to remove, edit, or reject comments, commits, code, issues, and other contributions that are not aligned with this Code of Conduct.
 
 We expect all participants to adhere to these guidelines and help create a positive and inclusive environment for the Rocket Project. Thank you for your collaboration and commitment to our shared goals.
