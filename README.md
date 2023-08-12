@@ -7,141 +7,87 @@
 ![](https://badgen.net/badge/teensy_kill_count/1/red)
 ---
 
-# Setup
-Using VSCode and PlatformIO (recommended)
+# Rocket Autonomy System
 
+Welcome to the Rocket Autonomy System project, developed by the University of Saskatchewan Space Design Team (USST). This software project aims to create a complete autonomous system for rockets.
 
-## Things you need to get started
-- [ ] VSCode  
-- [ ] platformIO extension  
-- [ ] install git bash for your platform  
+## Project Overview
 
+The primary goal of this project is to design and implement an autonomous system for rockets that exhibits three main capabilities:
 
-## Next Steps
+1. **Command**: The system is designed to send/receive commands to/from a ground station in real-time. It should also be capable of executing received commands on the rocket promptly.
 
-1. Fork the codebase  
-    `https://github.com/USSTR-Avionics/Avionics-code.git`  
-    a. Visit the link and fork the code base to your own profle by simply clicking fork  
-    b. Clone your own fork to your local machine  
-    c. Add the upstream repo to get latest changes  
-    d. Run this command which enables you to get the latest changes from master  
-    `git remote add upstream https://github.com/USSTR-Avionics/Avionics-code.git`  
+2. **Control**: The system will autonomously control the rocket, ensuring stable flight trajectories. This includes phases such as powered flight, ballistic descent, and controlled parachute deployment.
 
-    [troubleshooting] if you get an error saying https protocol not supported, simply erase the https:// from the pasted url and rewrite it in, there is a 
-    hidden character that gets pasted (sneaky!) on Windows.  
+3. **Data Acquisition**: The system must collect data from various sensors within the rocket. Collected data should be transmitted to the ground station in real-time, enabling real-time monitoring and analysis of the rocket's performance during flight.
 
-2. Navigate to Extensions on VSCode and install "PlatoformIO IDE"  
-    [note] restarting VSCode may be required and an internet connection is required!  
+## Key Objectives
 
-3. Select the "PIO Home" tab in VSCode > "Import Existing Project" > Navigate to the directory where the codebase was cloned >   
-    open "CPP_flight_computer_code" > Scroll down to reveal the "Import Project" > Select board as "Teensy 4.1"  
+The Rocket Autonomy System project encompasses the following key objectives:
 
-4. At the bottom click on the checkbox to build the codebase
+- **Parachute Deployment**: The system will implement logic for accurate deployment of a parachute at the rocket's apogee, ensuring a safe descent and recovery.
 
-run `pio run -t compiledb` if you need the latest compilation_commands.json file for DAP interface(s).
+- **Data Collection and Storage**: The system will gather sensor data from onboard components, including accelerometers, barometric pressure sensors, thermocouples, and other relevant sensors. Collected data will be stored for analysis.
 
+- **Ground Station Communication**: The system will establish a robust communication link between the rocket and a ground station. This link enables real-time exchange of commands and telemetry data, enhancing situational awareness and control.
 
-## BUILDING
+## Mini Rocket Flight Computer Prototype
 
-### Using the terminal
-`pio run` while in the directory where platform.ini is located
+The project began with the development of the Mini Rocket Flight Computer prototype. This early prototype was crafted using commercial off-the-shelf breakout boards assembled onto PCBs. The prototype aimed to demonstrate the system's capabilities, including:
 
-### Using VSCode and PlatoformIO
-Click on the :heavy_check_mark: on the bottom bar in VSCode
+- Parachute deployment
+- Data logging from sensors
 
+### PCB Design
 
-# Contributing
+The PCB design was completed using Eagle, a commonly used PCB design tool.
 
-1. Make sure you have all the remote changes  
-    `git pull`  
-    `git fetch --all`  
-    `git pull upstream master`   
-    `git pull upstream dev`  
-    `git fetch upstream master`  
-    `git fetch upstream dev`  
+### Version 1 (Engineering Model)
 
-2. Open up a Pull Request with an appropriate title and explanantion of code changes
+The initial version, known as the Engineering Model, served as a proof of concept. It successfully demonstrated the planned functionalities, laying the foundation for the Rocket Autonomy System project.
 
-> "Your git commits should tell us WHY and not WHAT, the code tells us what was changed you should
-tell us why it was changed"
+### Version 2 (Flight Model)
 
+The second version, referred to as the Flight Model, brought significant enhancements to the Mini Rocket Flight Computer:
 
-# Documentation
+- Added additional breakout boards, including a thermocouple and a 32kByte FRAM for expanded data storage capacity.
+- Improved power trace reliability for enhanced performance and reliability.
+- Incorporated design modifications, including a gap in the middle of the system to meet aerostructure requirements.
 
-Documentation is not expected for code, as long as variables, methods, and files are resonably named and follow the naming standards laid out in READMEs
-This is because we believe code is the best documentation as it never gets outdated, because if it gets outdated it doesn't compile anymore. Hence, will always remain up to date.
-However, provide documentation wherever relevant
+#### Sensors
 
-Javadoc style of comments are strongly recommended, but only after that function has been stabilised. Don't write documentation while developing.
+A variety of commercial off-the-shelf breakout sensors were utilized to develop and test the design rapidly. The design involved testing the following breakout boards:
 
-```
-/**
- * @brief      writes an u8 to the given FRAM address
- * @param      what    The u8 to be written
- * @param      where   The address where it is to be written
- * @return     int     0 on success; 1 on failure
-*/
+- Teensy 4.1 Development Board (PJRC)
+- KX134 Breakout (SparkFun)
+- BNO055 IMU Breakout (Adafruit)
+- BMI088 IMU Breakout (Mouser)
+- MS5611 Breakout (Smart Prototyping)
+- BMP280 Barometer (Adafruit)
+- 32kByte FRAM Breakout (Adafruit)
+- MAX31855 Thermocouple Breakout (Adafruit)
+- RFM95W LoRa Radio Transceiver Breakout (Adafruit)
+- DMC809 Servo Motors (RobotShop) (Not used in the final design)
 
-int write_to_fram(uint8_t what, uint8_t where)
-    {
-    // a black box
-    }
+#### Software
 
-```
+The software was written in C++ using PlatformIO in Visual Studio Code.
 
-# Coding Style Guidelines
+#### Lessons Learned
 
-> NOTE: most of the linting is handled by clang-format-15
+Through the development process, the team gained valuable insights:
 
-## Naming things
+- Teensy 4.1 is highly efficient for rapid code development.
+- KX134 accelerometer is exceptionally capable, measuring up to 64g's of acceleration.
+- BNO055's sensor fusion algorithms aren't suitable for rockets due to their dependency on downward acceleration being 9.81m/s^2.
+- BMI088 worked well, but its non-standard header pins posed challenges for breadboard testing.
+- MS5611 and BMP280 performed effectively.
+- 32kBytes of FRAM storage proved barely sufficient for minimal rocket data, even with data compression.
+- MAX31855 reliably operated, even with thermocouples from different suppliers.
+- RFM95W LoRa Radios functioned well, though integrating libraries into PlatformIO presented some difficulties.
+- Servo motors are unsuitable for parachute deployment systems.
+- Modularization was vital, with the main program containing only essential components.
 
-- ALL names follow the snake_case convention this includes everything from functions to files
+Thank you for your interest in the Rocket Autonomy System project. Together, we can push the boundaries of rocket technology and contribute to the advancement of autonomous rocket systems.
 
-### Variables
-
-- every variable must have a default value to prevent undefined behaviour!
-
-- constants must be upper case
-
-```
-    #define A_CONST 100
-    int BCONST = 12.34f
-```
-
-### Header files
-
-These are broad guidelines and **NOT** rules, break them if it doesn't make sense
-
-We classify headers into 4 types
-
-1. Package
-    A set of functions that serve a common function, eg: a statistics package
-    prefixed with a "package_"
-
-2. Debug
-    Functions associated with easy debugging, eg: I2C Scanner, these are only
-    activated or in use when a directive or variable is enabled, prefixed with
-    a "debug_"
-
-3. Sensor
-    Functions that serve as a wrapper/API for sensors, sensors include
-    peripherals like memory and sensors like acceleration. tldr; anything that
-    has a hardware component that the flight computer interacts with is a 
-    sensor, prefixed with a "sensor_"
-
-4. Organisational/Misc
-    Some headers are just for storing default variables or macros and fall
-    under this categories, need not be prefixed.
-
-**NOTE:** Other naming scheme maybe applied if it makes sense, for example, the 
-    header file containing the enum definition for the statemachine is called
-    statemachine_t.h as the _t suffix denotes type by convention.
-
-### Source files
-
-They should be named similar to their respective header files that expose the API function calls
-
-Should also adhere to the header file(s) naming convention
-
----
 <p align="center"> <img src = https://i.imgur.com/jnRxNR3.png> </img> </p>
